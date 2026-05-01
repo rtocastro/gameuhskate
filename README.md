@@ -4,12 +4,12 @@ A mobile-first React/Vite web app for tracking games of **SKATE**, the skateboar
 
 ## Deployed Site
 
-**Live App:** `[Add Render deployed link here]`
+**Live App:** `[https://gameuhskate.onrender.com]`
 
 Example once deployed:
 
 ```md
-https://placeholderformyapp.onrender.com
+https://gameuhskate.onrender.com
 ```
 
 ## Project Status
@@ -96,13 +96,13 @@ Players enter how many people are joining, add each player's name, and the app r
 Clone the repository:
 
 ```bash
-git clone [Add GitHub repo link here]
+git clone [https://github.com/rtocastro/gameuhskate]
 ```
 
 Navigate into the project folder:
 
 ```bash
-cd [project-folder-name]
+cd [gameuhskate]
 ```
 
 Install dependencies:
