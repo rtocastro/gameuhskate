@@ -1,16 +1,172 @@
-# React + Vite
+# SKATE Game Tracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A mobile-first React/Vite web app for tracking games of **SKATE**, the skateboarding version of HORSE. The app is designed to help skaters keep score, randomize starting order, track missed attempts, and declare a winner without interrupting the actual session.
 
-Currently, two official plugins are available:
+## Deployed Site
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+**Live App:** `[Add Render deployed link here]`
 
-## React Compiler
+Example once deployed:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```md
+https://placeholderformyapp.onrender.com
+```
 
-## Expanding the ESLint configuration
+## Project Status
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+This project is currently in early prototype development. The first version focuses on building the core gameplay flow and score-tracking logic before adding the final visual style, animations, branding, and polish.
+
+## Built With
+
+* React
+* Vite
+* JSX
+* CSS
+* JavaScript
+
+## App Concept
+
+The app tracks games of **SKATE**, where players take turns setting tricks and attempting each other's tricks.
+
+When a player misses an attempted trick, they receive a letter from the word **SKATE**. Once a player has all five letters, they are eliminated. The last remaining player wins.
+
+## Core Game Modes
+
+### Flip Coin Mode
+
+A 1-on-1 game mode.
+
+Players enter their names, receive either heads or tails, and the app performs a digital coin flip. The winner of the coin toss gets the first chance to set a trick.
+
+### Flip Boards Mode
+
+A multiplayer game mode for 2 to 10 players.
+
+Players enter how many people are joining, add each player's name, and the app randomly assigns the skating order. The order determines who gets the first opportunity to set a trick and how turns rotate throughout the game.
+
+## Current Features
+
+* Mobile-first landing screen
+* Tap-to-start flow
+* Game mode selection
+* 1-on-1 coin flip setup
+* Multiplayer board-flip setup
+* Random player order generation
+* SKATE letter tracking
+* Crossed-out letters for missed attempts
+* Player elimination after five missed attempts
+* Winner screen
+* Restart game option
+* Placeholder external link button
+
+## Planned Features
+
+* Skate/punk/video-game inspired visual design
+* Stronger transition animations between screens
+* Landing screen loop or video background
+* Coin flip animation
+* Board flip animation
+* Sound effects
+* Improved game-state feedback
+* Better winner screen animation
+* Custom app name and branding
+* Optional trick history log
+* Optional session history
+* Optional local storage support
+
+## Basic Gameplay Flow
+
+1. User opens the app.
+2. Landing screen appears.
+3. User taps anywhere to begin.
+4. User chooses either:
+
+   * **Flip Coin** for a 1-on-1 game
+   * **Flip Boards** for a multiplayer game
+5. Players enter their names.
+6. The app determines the starting order.
+7. Players take turns trying to set tricks.
+8. Once a trick is set, the other players attempt it.
+9. Missed attempts add letters from **SKATE**.
+10. Players are eliminated after receiving all five letters.
+11. The final remaining player is declared the winner.
+
+## Installation
+
+Clone the repository:
+
+```bash
+git clone [Add GitHub repo link here]
+```
+
+Navigate into the project folder:
+
+```bash
+cd [project-folder-name]
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+## Available Scripts
+
+### Start development server
+
+```bash
+npm run dev
+```
+
+### Build for production
+
+```bash
+npm run build
+```
+
+### Preview production build locally
+
+```bash
+npm run preview
+```
+
+## Deployment Notes
+
+This app is intended to be deployed on Render as a static site.
+
+Suggested Render settings:
+
+```txt
+Build Command: npm run build
+Publish Directory: dist
+```
+
+After deployment, replace the placeholder at the top of this README with the live Render URL.
+
+## Future Visual Direction
+
+The final style direction will lean into a mix of:
+
+* Skateboarding culture
+* Arcade/game UI energy
+* Punk-inspired graphics
+* High-contrast textures
+* Fast transition effects
+* Gritty but clean mobile-first design
+
+The goal is for the app to feel useful during a real skate session while still having enough personality to feel like a game.
+
+## Author
+
+Created by Rick Torres.
+
+## License
+
+This project is currently for personal and portfolio use. A license can be added later if the project becomes public or open source.
