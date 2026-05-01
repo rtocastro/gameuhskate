@@ -4,6 +4,31 @@ import "./App.css";
 const LETTERS = ["S", "K", "A", "T", "E"];
 const MAX_PLAYERS = 10;
 
+function playSound(type = "click") {
+  const audioContext = new AudioContext();
+  const oscillator = audioContext.createOscillator();
+  const gain = audioContext.createGain();
+
+  const sounds = {
+    click: 220,
+    flip: 440,
+    win: 660,
+    miss: 140,
+  };
+
+  oscillator.frequency.value = sounds[type] || 220;
+  oscillator.type = "square";
+
+  gain.gain.setValueAtTime(0.05, audioContext.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.12);
+
+  oscillator.connect(gain);
+  gain.connect(audioContext.destination);
+
+  oscillator.start();
+  oscillator.stop(audioContext.currentTime + 0.12);
+}
+
 function shuffle(array) {
   return [...array]
     .map((value) => ({ value, sort: Math.random() }))
@@ -62,6 +87,9 @@ function App() {
   }
 
   function chooseMode(nextMode) {
+    playSound("click");
+
+
     setMode(nextMode);
     if (nextMode === "coin") {
       setNames(["", ""]);
@@ -85,6 +113,9 @@ function App() {
   }
 
   function flipCoin() {
+
+    playSound("flip");
+
     const result = Math.random() < 0.5 ? "heads" : "tails";
     const winningId = coinAssignments[result];
     const winningIndex = players.findIndex((player) => player.id === winningId);
@@ -144,14 +175,20 @@ function App() {
   }
 
   function setterMissed() {
+    playSound("miss");
+
     setCurrentIndex(nextActiveIndex());
   }
 
   function setterLanded() {
+    playSound("click");
+
     startAttemptRound(currentPlayer);
   }
 
   function resolveAttempt(success) {
+    playSound(success ? "click" : "miss");
+
     const attemptingPlayer = currentPlayer;
     let updatedPlayers = players;
     let updatedPlacements = placements;
@@ -199,6 +236,7 @@ function App() {
       setWinner(remaining[0]);
       setSetterId(null);
       setAttemptQueue([]);
+      playSound("win");
       setScreen("winner");
       return;
     }
@@ -228,7 +266,13 @@ function App() {
   return (
     <main className={`app screen-${screen}`}>
       {screen === "landing" && (
-        <section className="landing" onClick={() => setScreen("modeSelect")}>
+        <section
+          className="landing"
+          onClick={() => {
+            playSound("click");
+            setScreen("modeSelect");
+          }}
+        >
           <div className="heroLoop">
             <div className="scanlines" />
             <h1>GAME<br />-UH-<br />SKATE</h1>
@@ -376,13 +420,13 @@ function App() {
           <div className="winnerButtons">
             <button className="primaryButton" onClick={resetAll}>Play Another Game?</button>
             <a className="linkButton" href="https://www.instagram.com/witchcountyspellcasters/" target="_blank" rel="noreferrer" onClick={resetAll}>
-              Click Here
+              WCSC
             </a>
           </div>
         </section>
       )}
 
-      
+
     </main>
   );
 }

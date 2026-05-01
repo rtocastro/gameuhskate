@@ -602,6 +602,130 @@ input:focus {
   }
 }
 
+/* EXTRA GAME FEEL */
+
+.app {
+  position: relative;
+}
+
+.app::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at center, transparent 55%, rgba(0, 0, 0, 0.45)),
+    repeating-radial-gradient(
+      circle at center,
+      rgba(255, 255, 255, 0.015) 0px,
+      rgba(255, 255, 255, 0.015) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+  mix-blend-mode: overlay;
+  z-index: 999;
+}
+
+.horizontalScreen,
+.portraitScreen,
+.landing {
+  animation: glitchScreenIn 0.35s ease both;
+}
+
+button,
+.linkButton {
+  position: relative;
+  overflow: hidden;
+}
+
+button::after,
+.linkButton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.22);
+  transform: translateX(-120%) skewX(-20deg);
+  transition: transform 0.35s ease;
+}
+
+button:active::after,
+.linkButton:active::after {
+  transform: translateX(120%) skewX(-20deg);
+}
+
+button:active,
+.linkButton:active {
+  transform: translate(3px, 3px) scale(0.96);
+}
+
+.heroLoop {
+  animation: slowZoom 9s ease-in-out infinite alternate;
+}
+
+.heroLoop:active h1 {
+  animation: glitchNudge 0.25s infinite steps(1);
+}
+
+.scoreRow.active {
+  animation: activePulse 1.1s ease-in-out infinite alternate;
+}
+
+.winnerScreen h1 {
+  animation: winnerPop 0.7s cubic-bezier(.2, 1.4, .4, 1) both, glitchNudge 2s infinite steps(1);
+}
+
+@keyframes glitchScreenIn {
+  0% {
+    opacity: 0;
+    filter: blur(8px) contrast(180%);
+    transform: scale(1.03) translateY(12px);
+  }
+
+  45% {
+    opacity: 1;
+    filter: blur(1px) contrast(140%);
+    transform: scale(0.99) translateY(-2px);
+  }
+
+  100% {
+    opacity: 1;
+    filter: blur(0) contrast(100%);
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes slowZoom {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(1.025);
+  }
+}
+
+@keyframes activePulse {
+  from {
+    box-shadow: 0 0 20px rgba(0, 255, 180, 0.1);
+  }
+
+  to {
+    box-shadow: 0 0 35px rgba(0, 255, 180, 0.28);
+  }
+}
+
+@keyframes winnerPop {
+  from {
+    opacity: 0;
+    transform: scale(0.72) rotate(-2deg);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
 /* RESPONSIVE */
 
 @media (min-width: 900px) {
