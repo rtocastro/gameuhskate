@@ -4,6 +4,7 @@ import "./App.css";
 const LETTERS = ["S", "K", "A", "T", "E"];
 const MAX_PLAYERS = 10;
 
+ 
 function playSound(type = "click") {
   const audioContext = new AudioContext();
   const oscillator = audioContext.createOscillator();
@@ -60,6 +61,9 @@ function App() {
   const [placements, setPlacements] = useState([]);
   const [coinAssignments, setCoinAssignments] = useState(null);
   const [coinWinnerId, setCoinWinnerId] = useState(null);
+   const [isTransitioning, setIsTransitioning] = useState(false);
+
+
 
   const activePlayers = useMemo(
     () => players.filter((player) => !player.eliminated),
@@ -86,6 +90,18 @@ function App() {
     setCoinWinnerId(null);
   }
 
+  function goToScreen(nextScreen) {
+  setIsTransitioning(true);
+
+  setTimeout(() => {
+    setScreen(nextScreen);
+  }, 120);
+
+  setTimeout(() => {
+    setIsTransitioning(false);
+  }, 420);
+}
+
   function chooseMode(nextMode) {
     playSound("click");
 
@@ -93,11 +109,11 @@ function App() {
     setMode(nextMode);
     if (nextMode === "coin") {
       setNames(["", ""]);
-      setScreen("coinNames");
+      goToScreen("coinNames");
     } else {
       setPlayerCount(2);
       setNames(["", ""]);
-      setScreen("boardCount");
+      goToScreen("boardCount");
     }
   }
 
@@ -109,7 +125,7 @@ function App() {
 
     setPlayers(nextPlayers);
     setCoinAssignments(assignments);
-    setScreen("coinFlip");
+    goToScreen("coinFlip");
   }
 
   function flipCoin() {
@@ -122,7 +138,7 @@ function App() {
 
     setCoinWinnerId(winningId);
     setCurrentIndex(winningIndex);
-    setScreen("coinResult");
+    goToScreen("coinResult");
 
     setTimeout(() => {
       setScreen("game");
@@ -131,7 +147,7 @@ function App() {
 
   function confirmBoardCount() {
     setNames(Array.from({ length: playerCount }, () => ""));
-    setScreen("boardNames");
+    goToScreen("boardNames");
   }
 
   function confirmBoardNames() {
@@ -143,10 +159,10 @@ function App() {
 
     setPlayers(randomized);
     setCurrentIndex(0);
-    setScreen("boardOrder");
+    goToScreen("boardOrder");
 
     setTimeout(() => {
-      setScreen("game");
+      goToScreen("game");
     }, 3000);
   }
 
@@ -237,7 +253,7 @@ function App() {
       setSetterId(null);
       setAttemptQueue([]);
       playSound("win");
-      setScreen("winner");
+      goToScreen("winner");
       return;
     }
 
@@ -264,13 +280,13 @@ function App() {
   }
 
   return (
-    <main className={`app screen-${screen}`}>
+    <main className={`app screen-${screen} ${isTransitioning ? "isTransitioning" : ""}`}>
       {screen === "landing" && (
         <section
           className="landing"
           onClick={() => {
             playSound("click");
-            setScreen("modeSelect");
+            goToScreen("modeSelect");;
           }}
         >
           <div className="heroLoop">

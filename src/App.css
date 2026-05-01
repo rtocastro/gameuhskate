@@ -726,6 +726,162 @@ button:active,
   }
 }
 
+/* GLITCH / VHS SCREEN TRANSITION */
+
+.app.isTransitioning::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(255, 0, 92, 0.28) 18%,
+      transparent 32%,
+      rgba(0, 255, 180, 0.22) 55%,
+      transparent 72%
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.2) 0px,
+      rgba(255, 255, 255, 0.2) 2px,
+      transparent 2px,
+      transparent 7px
+    );
+  animation: vhsGlitchCut 0.42s steps(2) both;
+  mix-blend-mode: screen;
+}
+
+@keyframes vhsGlitchCut {
+  0% {
+    opacity: 0;
+    transform: translateX(-8%);
+    filter: blur(8px);
+  }
+
+  25% {
+    opacity: 1;
+    transform: translateX(6%);
+    filter: blur(2px) contrast(180%);
+  }
+
+  55% {
+    opacity: 0.85;
+    transform: translateX(-3%);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(0);
+    filter: blur(0);
+  }
+}
+
+/* LANDING EXTRA LIFE */
+
+.heroLoop {
+  transform-origin: center;
+}
+
+.landing:active .heroLoop {
+  animation: landingTapShake 0.22s steps(2);
+}
+
+.heroLoop h1::after {
+  content: "GAME -UH- SKATE";
+  position: absolute;
+  inset: 0;
+  color: rgba(0, 255, 180, 0.35);
+  transform: translate(4px, -3px);
+  z-index: -1;
+  clip-path: inset(40% 0 35% 0);
+  animation: titleSlice 2.8s infinite steps(1);
+}
+
+@keyframes landingTapShake {
+  0% {
+    transform: scale(1.025) translate(0, 0);
+  }
+
+  35% {
+    transform: scale(1.03) translate(-4px, 2px);
+  }
+
+  70% {
+    transform: scale(1.02) translate(3px, -2px);
+  }
+
+  100% {
+    transform: scale(1.025) translate(0, 0);
+  }
+}
+
+@keyframes titleSlice {
+  0%,
+  88%,
+  100% {
+    clip-path: inset(40% 0 35% 0);
+    transform: translate(4px, -3px);
+  }
+
+  89% {
+    clip-path: inset(10% 0 70% 0);
+    transform: translate(-8px, 2px);
+  }
+
+  91% {
+    clip-path: inset(65% 0 10% 0);
+    transform: translate(7px, -1px);
+  }
+}
+
+/* BUTTON IMPACT FEEDBACK */
+
+button,
+.linkButton {
+  isolation: isolate;
+}
+
+button::before,
+.linkButton::before {
+  content: "";
+  position: absolute;
+  inset: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 999px;
+  background: rgba(0, 255, 180, 0.35);
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  z-index: -1;
+}
+
+button:active::before,
+.linkButton:active::before {
+  animation: buttonRipple 0.42s ease-out;
+}
+
+button:active,
+.linkButton:active {
+  filter: brightness(1.2) saturate(1.35);
+}
+
+@keyframes buttonRipple {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 0.8;
+  }
+
+  100% {
+    width: 260%;
+    height: 260%;
+    opacity: 0;
+  }
+}
+
 /* RESPONSIVE */
 
 @media (min-width: 900px) {
