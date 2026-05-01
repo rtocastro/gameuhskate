@@ -230,7 +230,7 @@ function App() {
         <section className="landing" onClick={() => setScreen("modeSelect")}>
           <div className="heroLoop">
             <div className="scanlines" />
-            <h1>SKATE<br />TRACKER</h1>
+            <h1>GAME<br />-UH-<br />SKATE</h1>
             <p>Tap anywhere to begin</p>
           </div>
         </section>
