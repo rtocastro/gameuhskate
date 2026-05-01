@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import "./App.css";
 
 const LETTERS = ["S", "K", "A", "T", "E"];
 const MAX_PLAYERS = 10;
@@ -381,7 +382,7 @@ function App() {
         </section>
       )}
 
-      <style>{styles}</style>
+      
     </main>
   );
 }
@@ -396,69 +397,5 @@ function SkateLetters({ count }) {
   );
 }
 
-const styles = `
-  * { box-sizing: border-box; }
-  body { margin: 0; background: #080808; color: #f6f1e8; font-family: Inter, system-ui, sans-serif; }
-  button, input, a { font: inherit; }
-  button { cursor: pointer; }
-  .app { min-height: 100vh; overflow: hidden; background: radial-gradient(circle at top, #252525, #050505 65%); }
-  .landing { min-height: 100vh; display: grid; place-items: center; text-align: center; cursor: pointer; }
-  .heroLoop { position: relative; width: 100%; min-height: 100vh; display: grid; place-items: center; padding: 2rem; background: linear-gradient(135deg, #111, #242424, #0a0a0a); overflow: hidden; }
-  .heroLoop:before { content: ""; position: absolute; inset: -30%; background: conic-gradient(from 90deg, transparent, rgba(255,255,255,.12), transparent); animation: spin 8s linear infinite; }
-  .scanlines { position: absolute; inset: 0; background: repeating-linear-gradient(to bottom, rgba(255,255,255,.04), rgba(255,255,255,.04) 1px, transparent 1px, transparent 5px); mix-blend-mode: overlay; }
-  .heroLoop h1 { position: relative; font-size: clamp(3rem, 16vw, 9rem); line-height: .85; letter-spacing: -.08em; margin: 0; text-transform: uppercase; }
-  .heroLoop p { position: absolute; bottom: 2.5rem; letter-spacing: .08em; text-transform: uppercase; opacity: .75; }
-  .portraitScreen { min-height: 100vh; display: grid; grid-template-rows: 1fr 1fr; gap: 1rem; padding: 1rem; }
-  .modeCard { border: 1px solid rgba(255,255,255,.15); color: #f6f1e8; border-radius: 28px; padding: 2rem; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; text-align: left; background: rgba(255,255,255,.06); box-shadow: 0 18px 70px rgba(0,0,0,.4); transition: transform .25s ease, background .25s ease; }
-  .modeCard:hover { transform: scale(.98); background: rgba(255,255,255,.1); }
-  .modeCard strong { font-size: clamp(2.5rem, 12vw, 6rem); text-transform: uppercase; line-height: .9; letter-spacing: -.06em; }
-  .modeCard em { margin-top: 1rem; opacity: .75; font-style: normal; }
-  .miniLabel { margin-bottom: 1rem; text-transform: uppercase; letter-spacing: .14em; opacity: .65; }
-  .horizontalScreen { min-height: 100vh; display: grid; padding: 1.25rem; animation: pageIn .45s ease both; }
-  .setupScreen, .centerScreen { place-items: center; text-align: center; gap: 1rem; }
-  .setupScreen h2, .centerScreen h2 { font-size: clamp(2.5rem, 8vw, 5.5rem); line-height: .9; margin: 0; text-transform: uppercase; letter-spacing: -.05em; }
-  .nameGrid { width: min(950px, 100%); display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: .9rem; }
-  .twoCol { grid-template-columns: repeat(2, minmax(180px, 1fr)); }
-  label { display: grid; gap: .4rem; text-align: left; color: rgba(246,241,232,.75); text-transform: uppercase; font-size: .78rem; letter-spacing: .1em; }
-  input { width: 100%; border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.08); color: #fff; border-radius: 16px; padding: 1rem; outline: none; }
-  .numberInput { max-width: 220px; font-size: 3rem; text-align: center; }
-  .primaryButton, .coinButton, .successButton, .missButton, .linkButton { border: 0; border-radius: 999px; padding: 1rem 1.4rem; text-decoration: none; color: #090909; background: #f6f1e8; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; }
-  .coinButton { width: 150px; height: 150px; border-radius: 50%; animation: coinPulse 1.5s ease infinite; }
-  .coinAssignments { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
-  .resultScreen h2 { font-size: clamp(3rem, 12vw, 8rem); }
-  .orderScreen ol { columns: 2; list-style-position: inside; font-size: 1.2rem; text-align: left; }
-  .gameScreen { grid-template-columns: minmax(260px, 38%) 1fr; gap: 1rem; align-items: stretch; }
-  .scoreboard, .turnPanel { border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06); border-radius: 28px; padding: 1rem; }
-  .scoreboard { display: grid; gap: .5rem; align-content: start; overflow: auto; }
-  .scoreRow { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .8rem; border-radius: 18px; background: rgba(255,255,255,.06); }
-  .scoreRow.active { outline: 2px solid rgba(255,255,255,.65); }
-  .scoreRow.out { filter: grayscale(1); opacity: .35; }
-  .letters { display: inline-flex; gap: .15rem; font-size: 1.35rem; font-weight: 900; letter-spacing: .03em; }
-  .crossed { position: relative; opacity: .45; }
-  .crossed:after { content: ""; position: absolute; left: -2px; right: -2px; top: 50%; height: 3px; background: currentColor; transform: rotate(-12deg); }
-  .turnPanel { display: grid; place-items: center; text-align: center; }
-  .turnLabel { text-transform: uppercase; letter-spacing: .18em; opacity: .65; }
-  .turnPanel h2 { font-size: clamp(3rem, 10vw, 8rem); line-height: .85; margin: 0; text-transform: uppercase; letter-spacing: -.07em; }
-  .actionPanel { display: flex; flex-wrap: wrap; justify-content: center; gap: .8rem; }
-  .successButton { background: #f6f1e8; }
-  .missButton { background: #2a2a2a; color: #f6f1e8; border: 1px solid rgba(255,255,255,.16); }
-  .winnerScreen { place-items: center; text-align: center; background: radial-gradient(circle, rgba(255,255,255,.16), transparent 55%); }
-  .winnerScreen h1 { font-size: clamp(4rem, 16vw, 11rem); line-height: .78; margin: 0; letter-spacing: -.09em; text-transform: uppercase; }
-  .winnerScreen h2 { margin: 0; text-transform: uppercase; letter-spacing: .2em; }
-  .winnerButtons { display: flex; gap: .8rem; flex-wrap: wrap; justify-content: center; margin-top: 1rem; }
-  .linkButton { background: transparent; color: #f6f1e8; border: 1px solid rgba(255,255,255,.2); }
-  .placements { opacity: .75; }
-  .scrollable { overflow-y: auto; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  @keyframes pageIn { from { opacity: 0; transform: translateY(24px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
-  @keyframes coinPulse { 0%, 100% { transform: rotateY(0deg) scale(1); } 50% { transform: rotateY(180deg) scale(1.05); } }
- @media (orientation: portrait) { .horizontalScreen { min-height: 100dvh; width: 100%; }
-    .gameScreen { grid-template-columns: 1fr; overflow-y: auto; }
-    .turnPanel h2 { font-size: clamp(2.5rem, 14vw, 5rem); }
-  }
-  @media (min-width: 900px) {
-    .portraitScreen { grid-template-columns: 1fr 1fr; grid-template-rows: none; }
-  }
-`;
 
 export default App;
