@@ -452,8 +452,7 @@ const styles = `
   @keyframes spin { to { transform: rotate(360deg); } }
   @keyframes pageIn { from { opacity: 0; transform: translateY(24px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
   @keyframes coinPulse { 0%, 100% { transform: rotateY(0deg) scale(1); } 50% { transform: rotateY(180deg) scale(1.05); } }
-  @media (orientation: portrait) {
-    .horizontalScreen { min-height: 100vh; width: 100vw; }
+ @media (orientation: portrait) { .horizontalScreen { min-height: 100dvh; width: 100%; }
     .gameScreen { grid-template-columns: 1fr; overflow-y: auto; }
     .turnPanel h2 { font-size: clamp(2.5rem, 14vw, 5rem); }
   }
