@@ -267,12 +267,15 @@ function App() {
       return;
     }
 
-    const setterIndex = updatedPlayers.findIndex((player) => player.id === setterId);
-    const nextIndex = nextActiveIndex(setterIndex, []);
+const setterIndex = updatedPlayers.findIndex((player) => player.id === setterId);
 
-    setSetterId(null);
-    setAttemptQueue([]);
-    setCurrentIndex(nextIndex);
+setSetterId(null);
+setAttemptQueue([]);
+
+// After everyone attempts the set trick,
+// control goes back to the original setter.
+// The setter only loses control when they fail to set.
+setCurrentIndex(setterIndex);
   }
 
   function updateName(index, value) {
