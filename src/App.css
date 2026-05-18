@@ -537,6 +537,189 @@ input:focus {
   overflow-y: auto;
 }
 
+/* EASY MODE */
+
+.modePromptScreen {
+  padding: 1.25rem;
+}
+
+.promptButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.helperText {
+  max-width: 42ch;
+  margin: 0;
+  opacity: 0.72;
+  line-height: 1.5;
+}
+
+.easyModeScreen {
+  width: 100%;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 0, 92, 0.16), transparent 30%),
+    radial-gradient(circle at 80% 80%, rgba(0, 255, 180, 0.14), transparent 32%),
+    #050505;
+}
+
+.easyModeScreen::before {
+  content: "";
+  position: absolute;
+  inset: 50% 0 auto 0;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(246, 241, 232, 0.65),
+    transparent
+  );
+  box-shadow:
+    0 0 18px rgba(0, 255, 180, 0.45),
+    0 0 30px rgba(255, 0, 92, 0.35);
+  z-index: 2;
+}
+
+.easyPlayerZone {
+  position: relative;
+  display: grid;
+  align-items: center;
+  padding: 1.2rem;
+  overflow: hidden;
+  border: 1px solid rgba(246, 241, 232, 0.08);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.065), transparent),
+    repeating-linear-gradient(
+      -15deg,
+      rgba(255, 255, 255, 0.025) 0px,
+      rgba(255, 255, 255, 0.025) 2px,
+      transparent 2px,
+      transparent 10px
+    );
+}
+
+.easyPlayerZone:first-child {
+  align-items: start;
+}
+
+.easyPlayerZone:last-child {
+  align-items: end;
+}
+
+.easyPlayerZone:active {
+  filter: brightness(1.25) saturate(1.2);
+}
+
+.easyPlayerZone.out {
+  filter: grayscale(1);
+  opacity: 0.35;
+}
+
+.easyPlayerInfo {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.easyPlayerZone:first-child .easyPlayerInfo {
+  justify-items: start;
+  align-self: start;
+}
+
+.easyPlayerZone:last-child .easyPlayerInfo {
+  justify-items: end;
+  align-self: end;
+}
+
+.easyPlayerInfo h2 {
+  margin: 0;
+  font-size: clamp(2.7rem, 13vw, 8rem);
+  line-height: 0.82;
+  text-transform: uppercase;
+  letter-spacing: -0.08em;
+  text-shadow:
+    4px 4px 0 #ff005c,
+    -3px -3px 0 rgba(0, 255, 180, 0.75);
+}
+
+.easyPlayerInfo .letters {
+  font-size: clamp(2rem, 9vw, 5rem);
+}
+
+.easyUndoButton {
+  position: absolute;
+  z-index: 5;
+  bottom: 1rem;
+  left: 1rem;
+  border: 1px solid rgba(246, 241, 232, 0.22);
+  border-radius: 999px;
+  padding: 0.7rem 1rem;
+  background: rgba(0, 0, 0, 0.45);
+  color: #f6f1e8;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.easyPlayerZone:last-child .easyUndoButton {
+  top: 1rem;
+  right: 1rem;
+  bottom: auto;
+  left: auto;
+}
+
+.tapHint {
+  position: absolute;
+  z-index: 1;
+  right: 1rem;
+  bottom: 1rem;
+  max-width: 24ch;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(246, 241, 232, 0.38);
+  text-align: right;
+}
+
+.easyPlayerZone:last-child .tapHint {
+  top: 1rem;
+  left: 1rem;
+  right: auto;
+  bottom: auto;
+  text-align: left;
+}
+
+@media (orientation: landscape), (min-width: 900px) {
+  .easyModeScreen {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: none;
+  }
+
+  .easyModeScreen::before {
+    inset: 0 auto 0 50%;
+    width: 2px;
+    height: auto;
+  }
+
+  .easyPlayerZone:first-child .easyPlayerInfo {
+    justify-items: start;
+    align-self: start;
+  }
+
+  .easyPlayerZone:last-child .easyPlayerInfo {
+    justify-items: end;
+    align-self: end;
+  }
+}
+
 /* ANIMATIONS */
 
 @keyframes spin {

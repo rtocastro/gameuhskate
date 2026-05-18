@@ -4,7 +4,7 @@ import "./App.css";
 const LETTERS = ["S", "K", "A", "T", "E"];
 const MAX_PLAYERS = 10;
 
- 
+
 function playSound(type = "click") {
   const audioContext = new AudioContext();
   const oscillator = audioContext.createOscillator();
@@ -61,8 +61,8 @@ function App() {
   const [placements, setPlacements] = useState([]);
   const [coinAssignments, setCoinAssignments] = useState(null);
   const [coinWinnerId, setCoinWinnerId] = useState(null);
-   const [isTransitioning, setIsTransitioning] = useState(false);
-
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [pendingStartIndex, setPendingStartIndex] = useState(0);
 
 
   const activePlayers = useMemo(
@@ -91,16 +91,16 @@ function App() {
   }
 
   function goToScreen(nextScreen) {
-  setIsTransitioning(true);
+    setIsTransitioning(true);
 
-  setTimeout(() => {
-    setScreen(nextScreen);
-  }, 120);
+    setTimeout(() => {
+      setScreen(nextScreen);
+    }, 120);
 
-  setTimeout(() => {
-    setIsTransitioning(false);
-  }, 420);
-}
+    setTimeout(() => {
+      setIsTransitioning(false);
+    }, 420);
+  }
 
   function chooseMode(nextMode) {
     playSound("click");
@@ -141,7 +141,7 @@ function App() {
     goToScreen("coinResult");
 
     setTimeout(() => {
-      setScreen("game");
+      promptGameMode(winningIndex);
     }, 2500);
   }
 
@@ -159,10 +159,10 @@ function App() {
 
     setPlayers(randomized);
     setCurrentIndex(0);
-    goToScreen("boardOrder");
+    setScreen("boardOrder");
 
     setTimeout(() => {
-      goToScreen("game");
+      setScreen("game");
     }, 3000);
   }
 
@@ -267,19 +267,78 @@ function App() {
       return;
     }
 
-const setterIndex = updatedPlayers.findIndex((player) => player.id === setterId);
+    const setterIndex = updatedPlayers.findIndex((player) => player.id === setterId);
 
-setSetterId(null);
-setAttemptQueue([]);
+    setSetterId(null);
+    setAttemptQueue([]);
 
-// After everyone attempts the set trick,
-// control goes back to the original setter.
-// The setter only loses control when they fail to set.
-setCurrentIndex(setterIndex);
+    // After everyone attempts the set trick,
+    // control goes back to the original setter.
+    // The setter only loses control when they fail to set.
+    setCurrentIndex(setterIndex);
   }
 
   function updateName(index, value) {
     setNames((current) => current.map((name, i) => (i === index ? value : name)));
+  }
+
+  function promptGameMode(startIndex = 0) {
+    setPendingStartIndex(startIndex);
+    goToScreen("modePrompt");
+  }
+
+  function startRegularMode() {
+    setCurrentIndex(pendingStartIndex);
+    goToScreen("game");
+  }
+
+  function startEasyMode() {
+    setCurrentIndex(pendingStartIndex);
+    goToScreen("easyMode");
+  }
+
+  function giveEasyLetter(playerId) {
+    playSound("miss");
+
+    const updatedPlayers = players.map((player) => {
+      if (player.id !== playerId || player.eliminated) return player;
+
+      const newLetters = Math.min(player.letters + 1, LETTERS.length);
+
+      return {
+        ...player,
+        letters: newLetters,
+        eliminated: newLetters >= LETTERS.length,
+      };
+    });
+
+    const remaining = updatedPlayers.filter((player) => !player.eliminated);
+
+    setPlayers(updatedPlayers);
+
+    if (remaining.length === 1) {
+      playSound("win");
+      setWinner(remaining[0]);
+      goToScreen("winner");
+    }
+  }
+
+  function undoEasyLetter(playerId) {
+    playSound("click");
+
+    setPlayers((currentPlayers) =>
+      currentPlayers.map((player) => {
+        if (player.id !== playerId) return player;
+
+        const newLetters = Math.max(player.letters - 1, 0);
+
+        return {
+          ...player,
+          letters: newLetters,
+          eliminated: false,
+        };
+      })
+    );
   }
 
   return (
@@ -387,6 +446,58 @@ setCurrentIndex(setterIndex);
           </ol>
         </section>
       )}
+
+{screen === "modePrompt" && (
+  <section className="horizontalScreen centerScreen modePromptScreen">
+    <p className="miniLabel">Choose Game Style</p>
+    <h2>Easy Mode?</h2>
+
+    <div className="promptButtons">
+      <button className="successButton" onClick={startEasyMode}>
+        Easy Mode
+      </button>
+
+      <button className="missButton" onClick={startRegularMode}>
+        Regular Mode
+      </button>
+    </div>
+
+    <p className="helperText">
+      Easy Mode only tracks SKATE letters. Turns and trick calls happen outside the app.
+    </p>
+  </section>
+)}
+
+{screen === "easyMode" && players.length === 2 && (
+  <section className="easyModeScreen">
+    {players.map((player) => (
+      <div
+        key={player.id}
+        className={`easyPlayerZone ${player.eliminated ? "out" : ""}`}
+        onClick={() => giveEasyLetter(player.id)}
+      >
+        <div className="easyPlayerInfo">
+          <h2>{player.name}</h2>
+          <SkateLetters count={player.letters} />
+        </div>
+
+        <button
+          className="easyUndoButton"
+          onClick={(event) => {
+            event.stopPropagation();
+            undoEasyLetter(player.id);
+          }}
+        >
+          Undo Letter
+        </button>
+
+        <span className="tapHint">
+          Tap this side to give {player.name} a letter
+        </span>
+      </div>
+    ))}
+  </section>
+)}
 
       {screen === "game" && currentPlayer && (
         <section className="horizontalScreen gameScreen">
