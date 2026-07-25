@@ -537,186 +537,220 @@ input:focus {
   overflow-y: auto;
 }
 
-/* EASY MODE */
-
-.modePromptScreen {
-  padding: 1.25rem;
-}
-
-.promptButtons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: center;
-}
-
-.helperText {
-  max-width: 42ch;
-  margin: 0;
-  opacity: 0.72;
-  line-height: 1.5;
-}
+/* ========================================
+   EASY / SCOREKEEPER MODE
+======================================== */
 
 .easyModeScreen {
   width: 100%;
   min-height: 100dvh;
   display: grid;
-  grid-template-rows: 1fr 1fr;
-  position: relative;
-  overflow: hidden;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: minmax(145px, 1fr);
+  gap: 2px;
+  padding: 2px;
+  overflow-y: auto;
   background:
-    radial-gradient(circle at 20% 20%, rgba(255, 0, 92, 0.16), transparent 30%),
-    radial-gradient(circle at 80% 80%, rgba(0, 255, 180, 0.14), transparent 32%),
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(255, 0, 92, 0.14),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 80% 80%,
+      rgba(0, 255, 180, 0.12),
+      transparent 32%
+    ),
     #050505;
 }
 
-.easyModeScreen::before {
-  content: "";
-  position: absolute;
-  inset: 50% 0 auto 0;
-  height: 2px;
-  background: linear-gradient(
-    to right,
-    transparent,
-    rgba(246, 241, 232, 0.65),
-    transparent
-  );
-  box-shadow:
-    0 0 18px rgba(0, 255, 180, 0.45),
-    0 0 30px rgba(255, 0, 92, 0.35);
-  z-index: 2;
-}
-
 .easyPlayerZone {
+  min-width: 0;
+  min-height: 145px;
   position: relative;
-  display: grid;
-  align-items: center;
-  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.65rem;
+  padding: 0.85rem;
   overflow: hidden;
-  border: 1px solid rgba(246, 241, 232, 0.08);
+  cursor: pointer;
+  touch-action: manipulation;
+  border: 1px solid rgba(246, 241, 232, 0.12);
   background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.065), transparent),
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.065),
+      rgba(255, 255, 255, 0.015)
+    ),
     repeating-linear-gradient(
       -15deg,
-      rgba(255, 255, 255, 0.025) 0px,
+      rgba(255, 255, 255, 0.025) 0,
       rgba(255, 255, 255, 0.025) 2px,
       transparent 2px,
       transparent 10px
     );
-}
-
-.easyPlayerZone:first-child {
-  align-items: start;
-}
-
-.easyPlayerZone:last-child {
-  align-items: end;
+  transition:
+    transform 120ms ease,
+    filter 120ms ease,
+    opacity 120ms ease;
 }
 
 .easyPlayerZone:active {
-  filter: brightness(1.25) saturate(1.2);
+  transform: scale(0.98);
+  filter: brightness(1.3) saturate(1.2);
 }
 
 .easyPlayerZone.out {
+  opacity: 0.32;
   filter: grayscale(1);
-  opacity: 0.35;
+  pointer-events: none;
 }
 
 .easyPlayerInfo {
-  position: relative;
-  z-index: 2;
-  display: grid;
-  gap: 0.5rem;
-}
-
-.easyPlayerZone:first-child .easyPlayerInfo {
-  justify-items: start;
-  align-self: start;
-}
-
-.easyPlayerZone:last-child .easyPlayerInfo {
-  justify-items: end;
-  align-self: end;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
 }
 
 .easyPlayerInfo h2 {
+  width: 100%;
   margin: 0;
-  font-size: clamp(2.7rem, 13vw, 8rem);
-  line-height: 0.82;
+  overflow: hidden;
+  font-size: clamp(1.35rem, 6vw, 2.4rem);
+  line-height: 0.95;
+  letter-spacing: -0.055em;
   text-transform: uppercase;
-  letter-spacing: -0.08em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   text-shadow:
-    4px 4px 0 #ff005c,
-    -3px -3px 0 rgba(0, 255, 180, 0.75);
+    2px 2px 0 #ff005c,
+    -2px -2px 0 rgba(0, 255, 180, 0.8);
 }
 
 .easyPlayerInfo .letters {
-  font-size: clamp(2rem, 9vw, 5rem);
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.1em;
+  font-size: clamp(1.4rem, 7vw, 2.75rem);
+  line-height: 1;
 }
 
 .easyUndoButton {
-  position: absolute;
-  z-index: 5;
-  bottom: 1rem;
-  left: 1rem;
-  border: 1px solid rgba(246, 241, 232, 0.22);
+  position: static;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0;
+  padding: 0.48rem 0.7rem;
+  border: 1px solid rgba(246, 241, 232, 0.25);
   border-radius: 999px;
-  padding: 0.7rem 1rem;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.48);
   color: #f6f1e8;
+  font-size: clamp(0.58rem, 2.4vw, 0.76rem);
   font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0.055em;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  box-shadow: none;
 }
 
-.easyPlayerZone:last-child .easyUndoButton {
-  top: 1rem;
-  right: 1rem;
-  bottom: auto;
-  left: auto;
+.easyUndoButton:active {
+  transform: scale(0.95);
 }
 
 .tapHint {
-  position: absolute;
-  z-index: 1;
-  right: 1rem;
-  bottom: 1rem;
-  max-width: 24ch;
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: rgba(246, 241, 232, 0.38);
-  text-align: right;
-}
-
-.easyPlayerZone:last-child .tapHint {
-  top: 1rem;
-  left: 1rem;
-  right: auto;
-  bottom: auto;
+  position: static;
+  display: block;
+  max-width: 100%;
+  margin-top: auto;
+  font-size: clamp(0.48rem, 2vw, 0.68rem);
+  line-height: 1.3;
+  letter-spacing: 0.08em;
   text-align: left;
+  text-transform: uppercase;
+  color: rgba(246, 241, 232, 0.42);
 }
 
-@media (orientation: landscape), (min-width: 900px) {
+/* Two-player mode keeps the larger split-screen appearance */
+
+.easyPlayerCount-2 {
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  overflow: hidden;
+}
+
+.easyPlayerCount-2 .easyPlayerZone {
+  min-height: 0;
+  padding: 1.15rem;
+}
+
+.easyPlayerCount-2 .easyPlayerInfo h2 {
+  font-size: clamp(2.4rem, 12vw, 6rem);
+}
+
+.easyPlayerCount-2 .easyPlayerInfo .letters {
+  font-size: clamp(2rem, 9vw, 4.5rem);
+}
+
+/* Three players: one wide card followed by two cards */
+
+.easyPlayerCount-3 .easyPlayerZone:first-child {
+  grid-column: 1 / -1;
+}
+
+/* Mobile adjustments for larger groups */
+
+@media (max-width: 600px) {
   .easyModeScreen {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: none;
+    grid-template-columns: 1fr;
+    grid-auto-rows: minmax(155px, auto);
+    gap: 1px;
+    padding: 0;
   }
 
-  .easyModeScreen::before {
-    inset: 0 auto 0 50%;
-    width: 2px;
-    height: auto;
+  .easyPlayerZone {
+    min-height: 155px;
+    padding: 0.85rem 1rem;
   }
 
-  .easyPlayerZone:first-child .easyPlayerInfo {
-    justify-items: start;
-    align-self: start;
+  .easyPlayerInfo h2 {
+    font-size: clamp(1.75rem, 10vw, 3rem);
   }
 
-  .easyPlayerZone:last-child .easyPlayerInfo {
-    justify-items: end;
-    align-self: end;
+  .easyPlayerInfo .letters {
+    font-size: clamp(1.65rem, 9vw, 2.8rem);
+  }
+
+  .easyPlayerCount-2 {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+  }
+
+  .easyPlayerCount-3 .easyPlayerZone:first-child {
+    grid-column: auto;
+  }
+}
+
+/* Landscape phones and desktop */
+
+@media (orientation: landscape), (min-width: 700px) {
+  .easyModeScreen {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: minmax(180px, 1fr);
+  }
+
+  .easyPlayerCount-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: 1fr;
+  }
+
+  .easyPlayerInfo h2 {
+    font-size: clamp(1.8rem, 5vw, 4rem);
+  }
+
+  .easyPlayerInfo .letters {
+    font-size: clamp(1.6rem, 4vw, 3.25rem);
   }
 }
 
