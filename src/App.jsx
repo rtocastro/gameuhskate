@@ -151,7 +151,10 @@ function App() {
   }
 
   function confirmBoardNames() {
-    const namedPlayers = names.map((name, index) => createPlayer(name, index));
+    const namedPlayers = names.map((name, index) =>
+      createPlayer(name, index)
+    );
+
     const randomized = shuffle(namedPlayers).map((player, index) => ({
       ...player,
       order: index,
@@ -159,406 +162,430 @@ function App() {
 
     setPlayers(randomized);
     setCurrentIndex(0);
-    setScreen("boardOrder");
+    goToScreen("boardOrder");
 
     setTimeout(() => {
-      setScreen("game");
+      promptGameMode(0);
     }, 3000);
   }
 
-  function nextActiveIndex(fromIndex = currentIndex, excludedIds = []) {
-    const total = players.length;
-    for (let offset = 1; offset <= total; offset++) {
-      const nextIndex = (fromIndex + offset) % total;
-      const player = players[nextIndex];
-      if (player && !player.eliminated && !excludedIds.includes(player.id)) {
-        return nextIndex;
-      }
+
+function nextActiveIndex(fromIndex = currentIndex, excludedIds = []) {
+  const total = players.length;
+  for (let offset = 1; offset <= total; offset++) {
+    const nextIndex = (fromIndex + offset) % total;
+    const player = players[nextIndex];
+    if (player && !player.eliminated && !excludedIds.includes(player.id)) {
+      return nextIndex;
     }
-    return fromIndex;
+  }
+  return fromIndex;
+}
+
+function startAttemptRound(setterPlayer) {
+  const setterIndex = players.findIndex(
+    (player) => player.id === setterPlayer.id
+  );
+
+  const queue = [];
+
+  // Begin with the player immediately after the setter,
+  // continue through the list, and wrap back to the beginning.
+  for (let offset = 1; offset < players.length; offset++) {
+    const nextIndex = (setterIndex + offset) % players.length;
+    const nextPlayer = players[nextIndex];
+
+    if (nextPlayer && !nextPlayer.eliminated) {
+      queue.push(nextPlayer.id);
+    }
   }
 
-  function startAttemptRound(setterPlayer) {
-    const queue = players
-      .filter((player) => !player.eliminated && player.id !== setterPlayer.id)
-      .sort((a, b) => a.order - b.order)
-      .map((player) => player.id);
+  setSetterId(setterPlayer.id);
+  setAttemptQueue(queue);
 
-    setSetterId(setterPlayer.id);
-    setAttemptQueue(queue);
-    const firstAttemptIndex = players.findIndex((player) => player.id === queue[0]);
+  if (queue.length > 0) {
+    const firstAttemptIndex = players.findIndex(
+      (player) => player.id === queue[0]
+    );
+
     setCurrentIndex(firstAttemptIndex);
   }
+}
 
-  function setterMissed() {
-    playSound("miss");
+function setterMissed() {
+  playSound("miss");
 
-    setCurrentIndex(nextActiveIndex());
-  }
+  setCurrentIndex(nextActiveIndex());
+}
 
-  function setterLanded() {
-    playSound("click");
+function setterLanded() {
+  playSound("click");
 
-    startAttemptRound(currentPlayer);
-  }
+  startAttemptRound(currentPlayer);
+}
 
-  function resolveAttempt(success) {
-    playSound(success ? "click" : "miss");
+function resolveAttempt(success) {
+  playSound(success ? "click" : "miss");
 
-    const attemptingPlayer = currentPlayer;
-    let updatedPlayers = players;
-    let updatedPlacements = placements;
+  const attemptingPlayer = currentPlayer;
+  let updatedPlayers = players;
+  let updatedPlacements = placements;
 
-    if (!success) {
-      updatedPlayers = players.map((player) => {
-        if (player.id !== attemptingPlayer.id) return player;
-        const newLetters = Math.min(player.letters + 1, LETTERS.length);
-        const nowOut = newLetters >= LETTERS.length;
-        return {
-          ...player,
-          letters: newLetters,
-          eliminated: nowOut,
-          eliminatedPlace: nowOut ? null : player.eliminatedPlace,
-        };
-      });
+  if (!success) {
+    updatedPlayers = players.map((player) => {
+      if (player.id !== attemptingPlayer.id) return player;
+      const newLetters = Math.min(player.letters + 1, LETTERS.length);
+      const nowOut = newLetters >= LETTERS.length;
+      return {
+        ...player,
+        letters: newLetters,
+        eliminated: nowOut,
+        eliminatedPlace: nowOut ? null : player.eliminatedPlace,
+      };
+    });
 
-      const eliminatedPlayer = updatedPlayers.find(
-        (player) => player.id === attemptingPlayer.id && player.eliminated && player.eliminatedPlace === null
+    const eliminatedPlayer = updatedPlayers.find(
+      (player) => player.id === attemptingPlayer.id && player.eliminated && player.eliminatedPlace === null
+    );
+
+    if (eliminatedPlayer) {
+      updatedPlacements = [
+        {
+          ...eliminatedPlayer,
+          eliminatedPlace: updatedPlayers.filter((player) => !player.eliminated).length + 1,
+        },
+        ...updatedPlacements,
+      ];
+
+      updatedPlayers = updatedPlayers.map((player) =>
+        player.id === eliminatedPlayer.id
+          ? { ...player, eliminatedPlace: updatedPlayers.filter((p) => !p.eliminated).length + 1 }
+          : player
       );
-
-      if (eliminatedPlayer) {
-        updatedPlacements = [
-          {
-            ...eliminatedPlayer,
-            eliminatedPlace: updatedPlayers.filter((player) => !player.eliminated).length + 1,
-          },
-          ...updatedPlacements,
-        ];
-
-        updatedPlayers = updatedPlayers.map((player) =>
-          player.id === eliminatedPlayer.id
-            ? { ...player, eliminatedPlace: updatedPlayers.filter((p) => !p.eliminated).length + 1 }
-            : player
-        );
-      }
     }
+  }
 
-    const remaining = updatedPlayers.filter((player) => !player.eliminated);
+  const remaining = updatedPlayers.filter((player) => !player.eliminated);
 
-    setPlayers(updatedPlayers);
-    setPlacements(updatedPlacements);
+  setPlayers(updatedPlayers);
+  setPlacements(updatedPlacements);
 
-    if (remaining.length === 1) {
-      setWinner(remaining[0]);
-      setSetterId(null);
-      setAttemptQueue([]);
-      playSound("win");
-      goToScreen("winner");
-      return;
-    }
-
-    const remainingQueue = attemptQueue.filter((id) => id !== attemptingPlayer.id);
-
-    if (remainingQueue.length > 0) {
-      const nextId = remainingQueue[0];
-      const nextIndex = updatedPlayers.findIndex((player) => player.id === nextId);
-      setAttemptQueue(remainingQueue);
-      setCurrentIndex(nextIndex);
-      return;
-    }
-
-    const setterIndex = updatedPlayers.findIndex((player) => player.id === setterId);
-
+  if (remaining.length === 1) {
+    setWinner(remaining[0]);
     setSetterId(null);
     setAttemptQueue([]);
-
-    // After everyone attempts the set trick,
-    // control goes back to the original setter.
-    // The setter only loses control when they fail to set.
-    setCurrentIndex(setterIndex);
+    playSound("win");
+    goToScreen("winner");
+    return;
   }
 
-  function updateName(index, value) {
-    setNames((current) => current.map((name, i) => (i === index ? value : name)));
+  const remainingQueue = attemptQueue.filter((id) => id !== attemptingPlayer.id);
+
+  if (remainingQueue.length > 0) {
+    const nextId = remainingQueue[0];
+    const nextIndex = updatedPlayers.findIndex((player) => player.id === nextId);
+    setAttemptQueue(remainingQueue);
+    setCurrentIndex(nextIndex);
+    return;
   }
 
-  function promptGameMode(startIndex = 0) {
-    setPendingStartIndex(startIndex);
-    goToScreen("modePrompt");
+  const setterIndex = updatedPlayers.findIndex((player) => player.id === setterId);
+
+  setSetterId(null);
+  setAttemptQueue([]);
+
+  // After everyone attempts the set trick,
+  // control goes back to the original setter.
+  // The setter only loses control when they fail to set.
+  setCurrentIndex(setterIndex);
+}
+
+function updateName(index, value) {
+  setNames((current) => current.map((name, i) => (i === index ? value : name)));
+}
+
+function promptGameMode(startIndex = 0) {
+  setPendingStartIndex(startIndex);
+  goToScreen("modePrompt");
+}
+
+function startRegularMode() {
+  setCurrentIndex(pendingStartIndex);
+  goToScreen("game");
+}
+
+function startEasyMode() {
+  setCurrentIndex(pendingStartIndex);
+  goToScreen("easyMode");
+}
+
+function giveEasyLetter(playerId) {
+  playSound("miss");
+
+  const updatedPlayers = players.map((player) => {
+    if (player.id !== playerId || player.eliminated) return player;
+
+    const newLetters = Math.min(player.letters + 1, LETTERS.length);
+
+    return {
+      ...player,
+      letters: newLetters,
+      eliminated: newLetters >= LETTERS.length,
+    };
+  });
+
+  const remaining = updatedPlayers.filter((player) => !player.eliminated);
+
+  setPlayers(updatedPlayers);
+
+  if (remaining.length === 1) {
+    playSound("win");
+    setWinner(remaining[0]);
+    goToScreen("winner");
   }
+}
 
-  function startRegularMode() {
-    setCurrentIndex(pendingStartIndex);
-    goToScreen("game");
-  }
+function undoEasyLetter(playerId) {
+  playSound("click");
 
-  function startEasyMode() {
-    setCurrentIndex(pendingStartIndex);
-    goToScreen("easyMode");
-  }
+  setPlayers((currentPlayers) =>
+    currentPlayers.map((player) => {
+      if (player.id !== playerId) return player;
 
-  function giveEasyLetter(playerId) {
-    playSound("miss");
-
-    const updatedPlayers = players.map((player) => {
-      if (player.id !== playerId || player.eliminated) return player;
-
-      const newLetters = Math.min(player.letters + 1, LETTERS.length);
+      const newLetters = Math.max(player.letters - 1, 0);
 
       return {
         ...player,
         letters: newLetters,
-        eliminated: newLetters >= LETTERS.length,
+        eliminated: false,
       };
-    });
+    })
+  );
+}
 
-    const remaining = updatedPlayers.filter((player) => !player.eliminated);
-
-    setPlayers(updatedPlayers);
-
-    if (remaining.length === 1) {
-      playSound("win");
-      setWinner(remaining[0]);
-      goToScreen("winner");
-    }
-  }
-
-  function undoEasyLetter(playerId) {
-    playSound("click");
-
-    setPlayers((currentPlayers) =>
-      currentPlayers.map((player) => {
-        if (player.id !== playerId) return player;
-
-        const newLetters = Math.max(player.letters - 1, 0);
-
-        return {
-          ...player,
-          letters: newLetters,
-          eliminated: false,
-        };
-      })
-    );
-  }
-
-  return (
-    <main className={`app screen-${screen} ${isTransitioning ? "isTransitioning" : ""}`}>
-      {screen === "landing" && (
-        <section
-          className="landing"
-          onClick={() => {
-            playSound("click");
-            goToScreen("modeSelect");;
-          }}
-        >
-          <div className="heroLoop">
-            <div className="scanlines" />
-            <h1>GAME<br />-UH-<br />SKATE</h1>
-            <p>Tap anywhere to begin</p>
-          </div>
-        </section>
-      )}
-
-      {screen === "modeSelect" && (
-        <section className="modeSelect portraitScreen">
-          <button className="modeCard coinCard" onClick={() => chooseMode("coin")}>
-            <span className="miniLabel">1 vs 1</span>
-            <strong>Flip Coin</strong>
-            <em>Heads or tails decides who sets first.</em>
-          </button>
-
-          <button className="modeCard boardCard" onClick={() => chooseMode("boards")}>
-            <span className="miniLabel">2–10 Players</span>
-            <strong>Flip Boards</strong>
-            <em>Randomized order for a full session.</em>
-          </button>
-        </section>
-      )}
-
-      {screen === "coinNames" && (
-        <section className="horizontalScreen setupScreen">
-          <h2>Enter Skaters</h2>
-          <div className="nameGrid twoCol">
-            {[0, 1].map((index) => (
-              <label key={index}>
-                Player {index + 1}
-                <input value={names[index]} onChange={(e) => updateName(index, e.target.value)} placeholder={`Skater ${index + 1}`} />
-              </label>
-            ))}
-          </div>
-          <button className="primaryButton" onClick={confirmCoinNames}>Confirm Names</button>
-        </section>
-      )}
-
-      {screen === "coinFlip" && (
-        <section className="horizontalScreen centerScreen">
-          <h2>Coin Flip</h2>
-          <div className="coinAssignments">
-            <p><strong>Heads:</strong> {players.find((p) => p.id === coinAssignments?.heads)?.name}</p>
-            <p><strong>Tails:</strong> {players.find((p) => p.id === coinAssignments?.tails)?.name}</p>
-          </div>
-          <button className="coinButton" onClick={flipCoin}>Flip Coin</button>
-        </section>
-      )}
-
-      {screen === "coinResult" && (
-        <section className="horizontalScreen centerScreen resultScreen">
-          <p>First Set Goes To</p>
-          <h2>{players.find((player) => player.id === coinWinnerId)?.name}</h2>
-        </section>
-      )}
-
-      {screen === "boardCount" && (
-        <section className="horizontalScreen setupScreen">
-          <h2>How Many Joining?</h2>
-          <input
-            className="numberInput"
-            type="number"
-            min="2"
-            max={MAX_PLAYERS}
-            value={playerCount}
-            onChange={(e) => setPlayerCount(Math.max(2, Math.min(MAX_PLAYERS, Number(e.target.value))))}
-          />
-          <button className="primaryButton" onClick={confirmBoardCount}>Confirm Count</button>
-        </section>
-      )}
-
-      {screen === "boardNames" && (
-        <section className="horizontalScreen setupScreen scrollable">
-          <h2>Enter Skater Names</h2>
-          <div className="nameGrid">
-            {names.map((name, index) => (
-              <label key={index}>
-                Player {index + 1}
-                <input value={name} onChange={(e) => updateName(index, e.target.value)} placeholder={`Skater ${index + 1}`} />
-              </label>
-            ))}
-          </div>
-          <button className="primaryButton" onClick={confirmBoardNames}>Flip Boards</button>
-        </section>
-      )}
-
-      {screen === "boardOrder" && (
-        <section className="horizontalScreen centerScreen orderScreen">
-          <h2>Board Order</h2>
-          <ol>
-            {players.map((player, index) => <li key={player.id}>{index + 1}. {player.name}</li>)}
-          </ol>
-        </section>
-      )}
-
-{screen === "modePrompt" && (
-  <section className="horizontalScreen centerScreen modePromptScreen">
-    <p className="miniLabel">Choose Game Style</p>
-    <h2>Easy Mode?</h2>
-
-    <div className="promptButtons">
-      <button className="successButton" onClick={startEasyMode}>
-        Easy Mode
-      </button>
-
-      <button className="missButton" onClick={startRegularMode}>
-        Regular Mode
-      </button>
-    </div>
-
-    <p className="helperText">
-      Easy Mode only tracks SKATE letters. Turns and trick calls happen outside the app.
-    </p>
-  </section>
-)}
-
-{screen === "easyMode" && players.length === 2 && (
-  <section className="easyModeScreen">
-    {players.map((player) => (
-      <div
-        key={player.id}
-        className={`easyPlayerZone ${player.eliminated ? "out" : ""}`}
-        onClick={() => giveEasyLetter(player.id)}
+return (
+  <main className={`app screen-${screen} ${isTransitioning ? "isTransitioning" : ""}`}>
+    {screen === "landing" && (
+      <section
+        className="landing"
+        onClick={() => {
+          playSound("click");
+          goToScreen("modeSelect");;
+        }}
       >
-        <div className="easyPlayerInfo">
-          <h2>{player.name}</h2>
-          <SkateLetters count={player.letters} />
+        <div className="heroLoop">
+          <div className="scanlines" />
+          <h1>GAME<br />-UH-<br />SKATE</h1>
+          <p>Tap anywhere to begin</p>
         </div>
+      </section>
+    )}
 
-        <button
-          className="easyUndoButton"
-          onClick={(event) => {
-            event.stopPropagation();
-            undoEasyLetter(player.id);
-          }}
-        >
-          Undo Letter
+    {screen === "modeSelect" && (
+      <section className="modeSelect portraitScreen">
+        <button className="modeCard coinCard" onClick={() => chooseMode("coin")}>
+          <span className="miniLabel">1 vs 1</span>
+          <strong>Flip Coin</strong>
+          <em>Heads or tails decides who sets first.</em>
         </button>
 
-        <span className="tapHint">
-          Tap this side to give {player.name} a letter
-        </span>
-      </div>
-    ))}
-  </section>
-)}
+        <button className="modeCard boardCard" onClick={() => chooseMode("boards")}>
+          <span className="miniLabel">2–10 Players</span>
+          <strong>Flip Boards</strong>
+          <em>Randomized order for a full session.</em>
+        </button>
+      </section>
+    )}
 
-      {screen === "game" && currentPlayer && (
-        <section className="horizontalScreen gameScreen">
-          <aside className="scoreboard">
-            {players.map((player, index) => (
-              <div key={player.id} className={`scoreRow ${player.eliminated ? "out" : ""} ${index === currentIndex ? "active" : ""}`}>
-                <span>{player.name}</span>
-                <SkateLetters count={player.letters} />
-              </div>
-            ))}
-          </aside>
+    {screen === "coinNames" && (
+      <section className="horizontalScreen setupScreen">
+        <h2>Enter Skaters</h2>
+        <div className="nameGrid twoCol">
+          {[0, 1].map((index) => (
+            <label key={index}>
+              Player {index + 1}
+              <input value={names[index]} onChange={(e) => updateName(index, e.target.value)} placeholder={`Skater ${index + 1}`} />
+            </label>
+          ))}
+        </div>
+        <button className="primaryButton" onClick={confirmCoinNames}>Confirm Names</button>
+      </section>
+    )}
 
-          <section className="turnPanel">
-            <p className="turnLabel">Current Turn</p>
-            <h2>{currentPlayer.name}</h2>
+    {screen === "coinFlip" && (
+      <section className="horizontalScreen centerScreen">
+        <h2>Coin Flip</h2>
+        <div className="coinAssignments">
+          <p><strong>Heads:</strong> {players.find((p) => p.id === coinAssignments?.heads)?.name}</p>
+          <p><strong>Tails:</strong> {players.find((p) => p.id === coinAssignments?.tails)?.name}</p>
+        </div>
+        <button className="coinButton" onClick={flipCoin}>Flip Coin</button>
+      </section>
+    )}
 
-            {settingTrick && (
-              <div className="actionPanel">
-                <p>Try to set a trick.</p>
-                <button className="successButton" onClick={setterLanded}>Landed / Set Trick</button>
-                <button className="missButton" onClick={setterMissed}>Did Not Land</button>
-              </div>
-            )}
+    {screen === "coinResult" && (
+      <section className="horizontalScreen centerScreen resultScreen">
+        <p>First Set Goes To</p>
+        <h2>{players.find((player) => player.id === coinWinnerId)?.name}</h2>
+      </section>
+    )}
 
-            {attemptingTrick && (
-              <div className="actionPanel">
-                <p>Attempting <strong>{setter?.name}</strong>'s trick.</p>
-                <button className="successButton" onClick={() => resolveAttempt(true)}>Landed Attempt</button>
-                <button className="missButton" onClick={() => resolveAttempt(false)}>Missed Attempt</button>
-              </div>
-            )}
-          </section>
-        </section>
-      )}
+    {screen === "boardCount" && (
+      <section className="horizontalScreen setupScreen">
+        <h2>How Many Joining?</h2>
+        <input
+          className="numberInput"
+          type="number"
+          min="2"
+          max={MAX_PLAYERS}
+          value={playerCount}
+          onChange={(e) => setPlayerCount(Math.max(2, Math.min(MAX_PLAYERS, Number(e.target.value))))}
+        />
+        <button className="primaryButton" onClick={confirmBoardCount}>Confirm Count</button>
+      </section>
+    )}
 
-      {screen === "winner" && winner && (
-        <section className="horizontalScreen winnerScreen">
-          <p>Game Winner</p>
-          <h1>{winner.name}</h1>
-          <h2>You Won</h2>
+    {screen === "boardNames" && (
+      <section className="horizontalScreen setupScreen scrollable">
+        <h2>Enter Skater Names</h2>
+        <div className="nameGrid">
+          {names.map((name, index) => (
+            <label key={index}>
+              Player {index + 1}
+              <input value={name} onChange={(e) => updateName(index, e.target.value)} placeholder={`Skater ${index + 1}`} />
+            </label>
+          ))}
+        </div>
+        <button className="primaryButton" onClick={confirmBoardNames}>Flip Boards</button>
+      </section>
+    )}
 
-          {mode === "boards" && placements.length > 0 && (
-            <div className="placements">
-              {placements.slice(0, 3).map((player, index) => (
-                <p key={player.id}>{index + 2}{index === 0 ? "nd" : index === 1 ? "rd" : "th"} Place: {player.name}</p>
-              ))}
+    {screen === "boardOrder" && (
+      <section className="horizontalScreen centerScreen orderScreen">
+        <h2>Board Order</h2>
+        <ol>
+          {players.map((player) => (
+            <li key={player.id}>{player.name}</li>
+          ))}
+        </ol>
+      </section>
+    )}
+
+    {screen === "modePrompt" && (
+      <section className="horizontalScreen centerScreen modePromptScreen">
+        <p className="miniLabel">Choose Game Style</p>
+        <h2>Easy Mode?</h2>
+
+        <div className="promptButtons">
+          <button className="successButton" onClick={startEasyMode}>
+            Easy Mode
+          </button>
+
+          <button className="missButton" onClick={startRegularMode}>
+            Regular Mode
+          </button>
+        </div>
+
+        <p className="helperText">
+          Easy Mode only tracks SKATE letters. Turns and trick calls happen outside the app.
+        </p>
+      </section>
+    )}
+
+    {screen === "easyMode" && players.length >= 2 && (
+      <section
+        className={`easyModeScreen easyPlayerCount-${players.length}`}
+        style={{ "--easy-player-count": players.length }}
+      >
+        {players.map((player) => (
+          <div
+            key={player.id}
+            className={`easyPlayerZone ${player.eliminated ? "out" : ""}`}
+            onClick={() => giveEasyLetter(player.id)}
+          >
+            <div className="easyPlayerInfo">
+              <h2>{player.name}</h2>
+              <SkateLetters count={player.letters} />
+            </div>
+
+            <button
+              className="easyUndoButton"
+              onClick={(event) => {
+                event.stopPropagation();
+                undoEasyLetter(player.id);
+              }}
+            >
+              Undo Letter
+            </button>
+
+            <span className="tapHint">
+              Tap this side to give {player.name} a letter
+            </span>
+          </div>
+        ))}
+      </section>
+    )}
+
+    {screen === "game" && currentPlayer && (
+      <section className="horizontalScreen gameScreen">
+        <aside className="scoreboard">
+          {players.map((player, index) => (
+            <div key={player.id} className={`scoreRow ${player.eliminated ? "out" : ""} ${index === currentIndex ? "active" : ""}`}>
+              <span>{player.name}</span>
+              <SkateLetters count={player.letters} />
+            </div>
+          ))}
+        </aside>
+
+        <section className="turnPanel">
+          <p className="turnLabel">Current Turn</p>
+          <h2>{currentPlayer.name}</h2>
+
+          {settingTrick && (
+            <div className="actionPanel">
+              <p>Try to set a trick.</p>
+              <button className="successButton" onClick={setterLanded}>Landed / Set Trick</button>
+              <button className="missButton" onClick={setterMissed}>Did Not Land</button>
             </div>
           )}
 
-          <div className="winnerButtons">
-            <button className="primaryButton" onClick={resetAll}>Play Another Game?</button>
-            <a className="linkButton" href="https://www.instagram.com/witchcountyspellcasters/" target="_blank" rel="noreferrer" onClick={resetAll}>
-              WCSC
-            </a>
-          </div>
+          {attemptingTrick && (
+            <div className="actionPanel">
+              <p>Attempting <strong>{setter?.name}</strong>'s trick.</p>
+              <button className="successButton" onClick={() => resolveAttempt(true)}>Landed Attempt</button>
+              <button className="missButton" onClick={() => resolveAttempt(false)}>Missed Attempt</button>
+            </div>
+          )}
         </section>
-      )}
+      </section>
+    )}
+
+    {screen === "winner" && winner && (
+      <section className="horizontalScreen winnerScreen">
+        <p>Game Winner</p>
+        <h1>{winner.name}</h1>
+        <h2>You Won</h2>
+
+        {mode === "boards" && placements.length > 0 && (
+          <div className="placements">
+            {placements.slice(0, 3).map((player, index) => (
+              <p key={player.id}>{index + 2}{index === 0 ? "nd" : index === 1 ? "rd" : "th"} Place: {player.name}</p>
+            ))}
+          </div>
+        )}
+
+        <div className="winnerButtons">
+          <button className="primaryButton" onClick={resetAll}>Play Another Game?</button>
+          <a className="linkButton" href="https://www.instagram.com/witchcountyspellcasters/" target="_blank" rel="noreferrer" onClick={resetAll}>
+            WCSC
+          </a>
+        </div>
+      </section>
+    )}
 
 
-    </main>
-  );
+  </main>
+);
 }
 
 function SkateLetters({ count }) {
