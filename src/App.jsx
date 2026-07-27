@@ -425,7 +425,7 @@ return (
 
     {screen === "coinResult" && (
       <section className="horizontalScreen centerScreen resultScreen">
-        <p>First Set Goes To</p>
+        <p>First Trick Goes To</p>
         <h2>{players.find((player) => player.id === coinWinnerId)?.name}</h2>
       </section>
     )}
