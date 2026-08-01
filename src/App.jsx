@@ -343,61 +343,61 @@ function App() {
   }
 
   function giveTournamentLetter(playerId) {
-  playSound("miss");
+    playSound("miss");
 
-  const updatedPlayers = players.map((player) => {
-    if (player.id !== playerId || player.eliminated) {
-      return player;
-    }
-
-    const newLetters = Math.min(
-      player.letters + 1,
-      LETTERS.length
-    );
-
-    return {
-      ...player,
-      letters: newLetters,
-      eliminated: newLetters >= LETTERS.length,
-    };
-  });
-
-  const remainingPlayers = updatedPlayers.filter(
-    (player) => !player.eliminated
-  );
-
-  setPlayers(updatedPlayers);
-
-  if (remainingPlayers.length === 1) {
-    const matchWinner = remainingPlayers[0];
-
-    playSound("win");
-    finishTournamentMatch(matchWinner);
-  }
-}
-
-function undoTournamentLetter(playerId) {
-  playSound("click");
-
-  setPlayers((currentPlayers) =>
-    currentPlayers.map((player) => {
-      if (player.id !== playerId) {
+    const updatedPlayers = players.map((player) => {
+      if (player.id !== playerId || player.eliminated) {
         return player;
       }
 
-      const newLetters = Math.max(
-        player.letters - 1,
-        0
+      const newLetters = Math.min(
+        player.letters + 1,
+        LETTERS.length
       );
 
       return {
         ...player,
         letters: newLetters,
-        eliminated: false,
+        eliminated: newLetters >= LETTERS.length,
       };
-    })
-  );
-}
+    });
+
+    const remainingPlayers = updatedPlayers.filter(
+      (player) => !player.eliminated
+    );
+
+    setPlayers(updatedPlayers);
+
+    if (remainingPlayers.length === 1) {
+      const matchWinner = remainingPlayers[0];
+
+      playSound("win");
+      finishTournamentMatch(matchWinner);
+    }
+  }
+
+  function undoTournamentLetter(playerId) {
+    playSound("click");
+
+    setPlayers((currentPlayers) =>
+      currentPlayers.map((player) => {
+        if (player.id !== playerId) {
+          return player;
+        }
+
+        const newLetters = Math.max(
+          player.letters - 1,
+          0
+        );
+
+        return {
+          ...player,
+          letters: newLetters,
+          eliminated: false,
+        };
+      })
+    );
+  }
 
 
   function setterMissed() {
@@ -776,30 +776,86 @@ function undoTournamentLetter(playerId) {
                 : "Final Bracket"}
           </h2>
 
-          <div className="tournamentBracket">
-            {tournamentMatches.map((match) => (
-              <div className="tournamentMatch" key={match.id}>
-                <p className="matchLabel">
-                  Match {match.matchNumber}
-                </p>
+          <div
+            className={`tournamentBracket tournamentBracket-${tournamentRound}`}
+          >
+            {tournamentMatches.map((match, index) => {
+              const player1Won =
+                match.winner?.id === match.player1?.id;
 
-                <div className="matchPlayer">
-                  {match.player1?.name || "TBD"}
-                </div>
+              const player2Won =
+                match.winner?.id === match.player2?.id;
 
-                <span className="matchVersus">VS</span>
+              return (
+                <article
+                  className={`tournamentMatch ${match.winner ? "isComplete" : "isPending"
+                    }`}
+                  key={match.id}
+                  style={{ "--match-index": index }}
+                >
+                  <div className="matchRail" aria-hidden="true" />
 
-                <div className="matchPlayer">
-                  {match.player2?.name || "TBD"}
-                </div>
+                  <header className="matchHeader">
+                    <span className="matchNumber">
+                      {String(match.matchNumber).padStart(2, "0")}
+                    </span>
 
-                {match.winner && (
-                  <p className="matchWinner">
-                    Winner: {match.winner.name}
-                  </p>
-                )}
-              </div>
-            ))}
+                    <span className="matchStatus">
+                      {match.winner ? "Complete" : "Waiting"}
+                    </span>
+                  </header>
+
+                  <div className="matchPlayers">
+                    <div
+                      className={`matchPlayerSlot ${player1Won ? "isWinner" : ""
+                        } ${match.winner && !player1Won ? "isLoser" : ""
+                        }`}
+                    >
+                      <span className="playerSeed">
+                        {index * 2 + 1}
+                      </span>
+
+                      <span className="playerName">
+                        {match.player1?.name || "TBD"}
+                      </span>
+
+                      {player1Won && (
+                        <span className="winnerMark">ADV</span>
+                      )}
+                    </div>
+
+                    <div className="matchDivider">
+                      <span>VS</span>
+                    </div>
+
+                    <div
+                      className={`matchPlayerSlot ${player2Won ? "isWinner" : ""
+                        } ${match.winner && !player2Won ? "isLoser" : ""
+                        }`}
+                    >
+                      <span className="playerSeed">
+                        {index * 2 + 2}
+                      </span>
+
+                      <span className="playerName">
+                        {match.player2?.name || "TBD"}
+                      </span>
+
+                      {player2Won && (
+                        <span className="winnerMark">ADV</span>
+                      )}
+                    </div>
+                  </div>
+
+                  {match.winner && (
+                    <footer className="matchAdvance">
+                      <span>Advancing</span>
+                      <strong>{match.winner.name}</strong>
+                    </footer>
+                  )}
+                </article>
+              );
+            })}
           </div>
 
           {tournamentMatches.some((match) => !match.winner) ? (
@@ -871,53 +927,52 @@ function undoTournamentLetter(playerId) {
         </section>
       )}
 
-{screen === "tournamentMatch" && activeTournamentMatch && players.length === 2 && (
-  <section className="tournamentEasyMatchScreen">
-    <header className="tournamentMatchHeader">
-      <p className="miniLabel">Tournament Mode</p>
+      {screen === "tournamentMatch" && activeTournamentMatch && players.length === 2 && (
+        <section className="tournamentEasyMatchScreen">
+          <header className="tournamentMatchHeader">
+            <p className="miniLabel">Tournament Mode</p>
 
-      <h2>
-        {tournamentRound === "quarterfinal"
-          ? "Quarterfinal"
-          : tournamentRound === "semifinal"
-          ? "Semifinal"
-          : "Final"}{" "}
-        Match {currentTournamentMatch + 1} of {tournamentMatches.length}
-      </h2>
-    </header>
+            <h2>
+              {tournamentRound === "quarterfinal"
+                ? "Quarterfinal"
+                : tournamentRound === "semifinal"
+                  ? "Semifinal"
+                  : "Final"}{" "}
+              Match {currentTournamentMatch + 1} of {tournamentMatches.length}
+            </h2>
+          </header>
 
-    <div className="tournamentEasyPlayers">
-      {players.map((player) => (
-        <div
-          key={player.id}
-          className={`tournamentEasyPlayer ${
-            player.eliminated ? "out" : ""
-          }`}
-          onClick={() => giveTournamentLetter(player.id)}
-        >
-          <div className="tournamentEasyPlayerInfo">
-            <h3>{player.name}</h3>
-            <SkateLetters count={player.letters} />
+          <div className="tournamentEasyPlayers">
+            {players.map((player) => (
+              <div
+                key={player.id}
+                className={`tournamentEasyPlayer ${player.eliminated ? "out" : ""
+                  }`}
+                onClick={() => giveTournamentLetter(player.id)}
+              >
+                <div className="tournamentEasyPlayerInfo">
+                  <h3>{player.name}</h3>
+                  <SkateLetters count={player.letters} />
+                </div>
+
+                <button
+                  className="easyUndoButton"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    undoTournamentLetter(player.id);
+                  }}
+                >
+                  Undo Letter
+                </button>
+
+                <span className="tapHint">
+                  Tap this side to give {player.name} a letter
+                </span>
+              </div>
+            ))}
           </div>
-
-          <button
-            className="easyUndoButton"
-            onClick={(event) => {
-              event.stopPropagation();
-              undoTournamentLetter(player.id);
-            }}
-          >
-            Undo Letter
-          </button>
-
-          <span className="tapHint">
-            Tap this side to give {player.name} a letter
-          </span>
-        </div>
-      ))}
-    </div>
-  </section>
-)}
+        </section>
+      )}
 
       {screen === "game" && currentPlayer && (
         <section className="horizontalScreen gameScreen">
@@ -954,33 +1009,33 @@ function undoTournamentLetter(playerId) {
       )}
 
       {screen === "tournamentChampion" && winner && (
-  <section className="horizontalScreen winnerScreen tournamentChampionScreen">
-    <p className="miniLabel">Game-Uh-Skate Tournament</p>
+        <section className="horizontalScreen winnerScreen tournamentChampionScreen">
+          <p className="miniLabel">Game-Uh-Skate Tournament</p>
 
-    <h2>Tournament Champion</h2>
+          <h2>Tournament Champion</h2>
 
-    <h1>{winner.name}</h1>
+          <h1>{winner.name}</h1>
 
-    <p className="championMessage">
-      Winner of the eight-skater bracket
-    </p>
+          <p className="championMessage">
+            Winner of the eight-skater bracket
+          </p>
 
-    <div className="winnerButtons">
-      <button className="primaryButton" onClick={resetAll}>
-        Start Another Tournament
-      </button>
+          <div className="winnerButtons">
+            <button className="primaryButton" onClick={resetAll}>
+              Start Another Tournament
+            </button>
 
-      <a
-        className="linkButton"
-        href="https://www.instagram.com/witchcountyspellcasters/"
-        target="_blank"
-        rel="noreferrer"
-      >
-        WCSC
-      </a>
-    </div>
-  </section>
-)}
+            <a
+              className="linkButton"
+              href="https://www.instagram.com/witchcountyspellcasters/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              WCSC
+            </a>
+          </div>
+        </section>
+      )}
 
       {screen === "tournamentMatchWinner" && winner && (
         <section className="horizontalScreen centerScreen resultScreen">

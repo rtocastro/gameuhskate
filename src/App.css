@@ -1348,6 +1348,347 @@ button:active,
   }
 }
 
+/* ========================================
+   TOURNAMENT BRACKET
+======================================== */
+
+.tournamentBracketScreen {
+  align-content: start;
+  gap: 1.25rem;
+  overflow-y: auto;
+  background:
+    radial-gradient(circle at 15% 15%, rgba(255, 0, 92, 0.16), transparent 28%),
+    radial-gradient(circle at 85% 85%, rgba(0, 255, 180, 0.12), transparent 30%),
+    #050505;
+}
+
+.tournamentBracketScreen > h2 {
+  margin: 0;
+  font-size: clamp(2.4rem, 8vw, 5.5rem);
+  line-height: 0.88;
+  letter-spacing: -0.06em;
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow:
+    3px 3px 0 rgba(255, 0, 92, 0.75),
+    -2px -2px 0 rgba(0, 255, 180, 0.55);
+}
+
+.tournamentBracket {
+  width: min(1100px, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: 1rem;
+}
+
+.tournamentMatch {
+  --rail-color: rgba(246, 241, 232, 0.18);
+
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(246, 241, 232, 0.14);
+  border-radius: 24px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.075), transparent 55%),
+    rgba(255, 255, 255, 0.035);
+  box-shadow:
+    0 18px 55px rgba(0, 0, 0, 0.42),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.025);
+  animation: bracketMatchIn 0.42s ease both;
+  animation-delay: calc(var(--match-index) * 70ms);
+}
+
+.tournamentMatch.isComplete {
+  --rail-color: rgba(0, 255, 180, 0.85);
+
+  border-color: rgba(0, 255, 180, 0.35);
+  box-shadow:
+    0 0 32px rgba(0, 255, 180, 0.12),
+    0 18px 55px rgba(0, 0, 0, 0.42);
+}
+
+.matchRail {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 5px;
+  background: var(--rail-color);
+  box-shadow: 0 0 18px var(--rail-color);
+}
+
+.matchHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.8rem 1rem 0.7rem 1.25rem;
+  border-bottom: 1px solid rgba(246, 241, 232, 0.08);
+}
+
+.matchNumber,
+.matchStatus {
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.matchNumber {
+  color: rgba(246, 241, 232, 0.75);
+}
+
+.matchStatus {
+  color: rgba(246, 241, 232, 0.38);
+}
+
+.isComplete .matchStatus {
+  color: rgba(0, 255, 180, 0.9);
+}
+
+.matchPlayers {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: stretch;
+  min-height: 118px;
+}
+
+.matchPlayerSlot {
+  min-width: 0;
+  display: grid;
+  align-content: center;
+  gap: 0.35rem;
+  padding: 1rem;
+  transition:
+    opacity 180ms ease,
+    filter 180ms ease,
+    background 180ms ease;
+}
+
+.matchPlayerSlot:first-child {
+  text-align: right;
+}
+
+.matchPlayerSlot:last-child {
+  text-align: left;
+}
+
+.playerSeed {
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  color: rgba(246, 241, 232, 0.35);
+}
+
+.playerName {
+  overflow: hidden;
+  font-size: clamp(1.35rem, 5vw, 2.8rem);
+  font-weight: 950;
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.matchPlayerSlot.isWinner {
+  background:
+    radial-gradient(circle at center, rgba(0, 255, 180, 0.12), transparent 70%);
+}
+
+.matchPlayerSlot.isWinner .playerName {
+  color: #f6f1e8;
+  text-shadow:
+    2px 2px 0 #ff005c,
+    -2px -2px 0 rgba(0, 255, 180, 0.85);
+}
+
+.matchPlayerSlot.isLoser {
+  opacity: 0.28;
+  filter: grayscale(1);
+}
+
+.winnerMark {
+  width: fit-content;
+  padding: 0.28rem 0.5rem;
+  border: 1px solid rgba(0, 255, 180, 0.5);
+  border-radius: 999px;
+  color: rgba(0, 255, 180, 0.95);
+  font-size: 0.58rem;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+}
+
+.matchPlayerSlot:first-child .winnerMark {
+  justify-self: end;
+}
+
+.matchPlayerSlot:last-child .winnerMark {
+  justify-self: start;
+}
+
+.matchDivider {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 56px;
+}
+
+.matchDivider::before {
+  content: "";
+  position: absolute;
+  inset: 14px 50% 14px auto;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(246, 241, 232, 0.2),
+    transparent
+  );
+}
+
+.matchDivider span {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(246, 241, 232, 0.2);
+  border-radius: 50%;
+  background: #080808;
+  font-size: 0.65rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+}
+
+.matchAdvance {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.7rem 1rem;
+  border-top: 1px solid rgba(0, 255, 180, 0.16);
+  background: rgba(0, 255, 180, 0.045);
+  animation: advancingReveal 0.45s ease both;
+}
+
+.matchAdvance span {
+  color: rgba(246, 241, 232, 0.48);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.matchAdvance strong {
+  color: rgba(0, 255, 180, 0.95);
+  text-transform: uppercase;
+}
+
+.tournamentBracketScreen > .primaryButton {
+  justify-self: center;
+  margin-bottom: 1rem;
+}
+
+@keyframes bracketMatchIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes advancingReveal {
+  from {
+    opacity: 0;
+    transform: translateX(-14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Phone layout */
+
+@media (max-width: 600px) {
+  .tournamentBracketScreen {
+    padding: 1rem;
+  }
+
+  .tournamentBracket {
+    gap: 0.8rem;
+  }
+
+  .matchPlayers {
+    grid-template-columns: 1fr;
+  }
+
+  .matchPlayerSlot:first-child,
+  .matchPlayerSlot:last-child {
+    text-align: left;
+  }
+
+  .matchPlayerSlot {
+    min-height: 76px;
+    padding: 0.85rem 1rem;
+  }
+
+  .matchDivider {
+    width: 100%;
+    height: 34px;
+  }
+
+  .matchDivider::before {
+    inset: 50% 1rem auto 1rem;
+    width: auto;
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      rgba(246, 241, 232, 0.2),
+      transparent
+    );
+  }
+
+  .matchDivider span {
+    width: 34px;
+    height: 34px;
+  }
+
+  .matchPlayerSlot:first-child .winnerMark,
+  .matchPlayerSlot:last-child .winnerMark {
+    justify-self: start;
+  }
+
+  .playerName {
+    font-size: clamp(1.65rem, 9vw, 2.6rem);
+  }
+}
+
+/* Tablet / projector */
+
+@media (min-width: 900px) {
+  .tournamentBracket {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tournamentBracket-final {
+    grid-template-columns: minmax(420px, 680px);
+    justify-content: center;
+  }
+
+  .tournamentMatch {
+    min-height: 220px;
+  }
+
+  .matchPlayers {
+    min-height: 145px;
+  }
+}
+
 /* RESPONSIVE */
 
 @media (min-width: 900px) {
