@@ -69,6 +69,7 @@ function App() {
   const [currentTournamentMatch, setCurrentTournamentMatch] = useState(0);
   const [tournamentRound, setTournamentRound] = useState("quarterfinal");
   const [roundIntro, setRoundIntro] = useState(null);
+  const [lastCompletedMatchId, setLastCompletedMatchId] = useState(null);
 
   const activeTournamentMatch =
     tournamentMatches[currentTournamentMatch];
@@ -105,6 +106,7 @@ function App() {
     setTournamentMatches([]);
     setCurrentTournamentMatch(0);
     setTournamentRound("quarterfinal");
+    setLastCompletedMatchId(null);
   }
 
   function goToScreen(nextScreen) {
@@ -332,23 +334,33 @@ function App() {
     goToScreen("tournamentMatch");
   }
 
-  function finishTournamentMatch(matchWinner) {
-    const updatedMatches = tournamentMatches.map((match, index) =>
+function finishTournamentMatch(matchWinner) {
+  const completedMatch =
+    tournamentMatches[currentTournamentMatch];
+
+  const updatedMatches = tournamentMatches.map(
+    (match, index) =>
       index === currentTournamentMatch
         ? {
-          ...match,
-          winner: matchWinner,
-        }
+            ...match,
+            winner: matchWinner,
+          }
         : match
-    );
+  );
 
-    setTournamentMatches(updatedMatches);
-    setWinner(matchWinner);
-    setSetterId(null);
-    setAttemptQueue([]);
+  setTournamentMatches(updatedMatches);
+  setLastCompletedMatchId(completedMatch?.id ?? null);
+  setWinner(matchWinner);
+  setSetterId(null);
+  setAttemptQueue([]);
 
-    goToScreen("tournamentMatchWinner");
+  if (tournamentRound === "final") {
+    goToScreen("tournamentChampion");
+    return;
   }
+
+  goToScreen("tournamentMatchWinner");
+}
 
   function giveTournamentLetter(playerId) {
     playSound("miss");
@@ -756,12 +768,14 @@ function App() {
 
               <button
                 className="easyUndoButton"
+                aria-label={`Undo letter for ${player.name}`}
+                title="Undo letter"
                 onClick={(event) => {
                   event.stopPropagation();
-                  undoEasyLetter(player.id);
+                  undoTournamentLetter(player.id);
                 }}
               >
-                Undo Letter
+                <span aria-hidden="true">↶</span>
               </button>
 
               <span className="tapHint">
@@ -819,10 +833,14 @@ function App() {
 
               const isNextMatch = index === nextMatchIndex;
 
+              const isLatestWinner =
+                match.id === lastCompletedMatchId;
+
               return (
                 <article
                   className={`tournamentMatch ${match.winner ? "isComplete" : "isPending"
-                    } ${isNextMatch ? "isNextMatch" : ""}`}
+                    } ${isNextMatch ? "isNextMatch" : ""} ${isLatestWinner ? "isLatestWinner" : ""
+                    }`}
                   key={match.id}
                   style={{ "--match-index": index }}
                 >
@@ -1080,28 +1098,28 @@ function App() {
         </section>
       )}
 
-{screen === "tournamentMatchWinner" && winner && (
-  <section className="horizontalScreen centerScreen resultScreen">
-    <p className="miniLabel">
-      {tournamentRound === "quarterfinal"
-        ? "Quarterfinal"
-        : tournamentRound === "semifinal"
-        ? "Semifinal"
-        : "Final"}{" "}
-      Match {currentTournamentMatch + 1} Complete
-    </p>
+      {screen === "tournamentMatchWinner" && winner && (
+        <section className="horizontalScreen centerScreen resultScreen">
+          <p className="miniLabel">
+            {tournamentRound === "quarterfinal"
+              ? "Quarterfinal"
+              : tournamentRound === "semifinal"
+                ? "Semifinal"
+                : "Final"}{" "}
+            Match {currentTournamentMatch + 1} Complete
+          </p>
 
-    <h2>{winner.name}</h2>
-    <p>Advances to the next round</p>
+          <h2>{winner.name}</h2>
+          <p>Advances to the next round</p>
 
-    <button
-      className="primaryButton"
-      onClick={() => goToScreen("tournamentBracket")}
-    >
-      View Updated Bracket
-    </button>
-  </section>
-)}
+          <button
+            className="primaryButton"
+            onClick={() => goToScreen("tournamentBracket")}
+          >
+            View Updated Bracket
+          </button>
+        </section>
+      )}
 
       {screen === "winner" && winner && (
         <section className="horizontalScreen winnerScreen">
