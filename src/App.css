@@ -1689,6 +1689,79 @@ button:active,
   }
 }
 
+/* TOURNAMENT ROUND INTRO */
+
+.tournamentRoundIntroScreen {
+  position: relative;
+  min-height: 100dvh;
+  place-items: center;
+  align-content: center;
+  gap: 1rem;
+  overflow: hidden;
+  text-align: center;
+  cursor: pointer;
+  background:
+    radial-gradient(circle, rgba(0, 255, 180, 0.14), transparent 42%),
+    radial-gradient(circle at 20% 20%, rgba(255, 0, 92, 0.2), transparent 30%),
+    repeating-linear-gradient(
+      -15deg,
+      #050505 0,
+      #050505 14px,
+      #0d0d0d 14px,
+      #0d0d0d 28px
+    );
+}
+
+.tournamentRoundIntroScreen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.05) 0,
+    rgba(255, 255, 255, 0.05) 1px,
+    transparent 1px,
+    transparent 6px
+  );
+  pointer-events: none;
+}
+
+.tournamentRoundIntroScreen h1 {
+  position: relative;
+  margin: 0;
+  font-size: clamp(4rem, 18vw, 13rem);
+  line-height: 0.75;
+  letter-spacing: -0.1em;
+  text-transform: uppercase;
+  text-shadow:
+    7px 7px 0 #ff005c,
+    -5px -5px 0 rgba(0, 255, 180, 0.85);
+  animation:
+    tournamentTitleDrop 0.65s cubic-bezier(0.2, 1.5, 0.4, 1) both,
+    glitchNudge 2s infinite steps(1);
+}
+
+.tournamentRoundIntroScreen > p:last-child {
+  position: relative;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  opacity: 0.55;
+}
+
+@keyframes tournamentTitleDrop {
+  from {
+    opacity: 0;
+    transform: translateY(-80px) rotate(-3deg) scale(1.15);
+    filter: blur(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(-1deg) scale(1);
+    filter: blur(0);
+  }
+}
+
 /* RESPONSIVE */
 
 @media (min-width: 900px) {

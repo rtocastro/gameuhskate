@@ -68,6 +68,7 @@ function App() {
   const [tournamentMatches, setTournamentMatches] = useState([]);
   const [currentTournamentMatch, setCurrentTournamentMatch] = useState(0);
   const [tournamentRound, setTournamentRound] = useState("quarterfinal");
+  const [roundIntro, setRoundIntro] = useState(null);
 
   const activeTournamentMatch =
     tournamentMatches[currentTournamentMatch];
@@ -227,6 +228,11 @@ function App() {
       setCurrentIndex(firstAttemptIndex);
     }
   }
+
+function showRoundIntro(round) {
+  setRoundIntro(round);
+  goToScreen("tournamentRoundIntro");
+}
 
   function advanceTournamentRound() {
     const roundComplete = tournamentMatches.every(
@@ -763,6 +769,25 @@ function App() {
           ))}
         </section>
       )}
+
+      {screen === "tournamentRoundIntro" && roundIntro && (
+  <section
+    className="horizontalScreen tournamentRoundIntroScreen"
+    onClick={() => goToScreen("tournamentBracket")}
+  >
+    <p className="miniLabel">Game-Uh-Skate Tournament</p>
+
+    <h1>
+      {roundIntro === "quarterfinal"
+        ? "Quarterfinals"
+        : roundIntro === "semifinal"
+        ? "Semifinals"
+        : "The Final"}
+    </h1>
+
+    <p>Tap anywhere to view the bracket</p>
+  </section>
+)}
 
       {screen === "tournamentBracket" && (
         <section className="horizontalScreen tournamentBracketScreen">
