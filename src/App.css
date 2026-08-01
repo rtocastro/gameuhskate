@@ -1099,6 +1099,255 @@ button:active,
   }
 }
 
+/* ========================================
+   TOURNAMENT EASY MATCH MODE
+======================================== */
+
+.tournamentEasyMatchScreen {
+  width: 100%;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(255, 0, 92, 0.16),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 80% 80%,
+      rgba(0, 255, 180, 0.14),
+      transparent 32%
+    ),
+    #050505;
+}
+
+.tournamentMatchHeader {
+  position: relative;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  gap: 0.35rem;
+  padding: 0.9rem 1rem;
+  text-align: center;
+  border-bottom: 1px solid rgba(246, 241, 232, 0.14);
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(12px);
+}
+
+.tournamentMatchHeader .miniLabel {
+  margin: 0;
+}
+
+.tournamentMatchHeader h2 {
+  margin: 0;
+  font-size: clamp(1.3rem, 6vw, 2.8rem);
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
+  text-shadow:
+    2px 2px 0 rgba(255, 0, 92, 0.8),
+    -2px -2px 0 rgba(0, 255, 180, 0.65);
+}
+
+.tournamentEasyPlayers {
+  position: relative;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+}
+
+.tournamentEasyPlayers::after {
+  content: "VS";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 8;
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border: 2px solid rgba(246, 241, 232, 0.7);
+  border-radius: 50%;
+  background: #050505;
+  color: #f6f1e8;
+  font-size: 0.82rem;
+  font-weight: 950;
+  letter-spacing: 0.1em;
+  transform: translate(-50%, -50%) rotate(-5deg);
+  box-shadow:
+    3px 3px 0 #ff005c,
+    -3px -3px 0 rgba(0, 255, 180, 0.9);
+  pointer-events: none;
+}
+
+.tournamentEasyPlayer {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: 1fr auto auto;
+  gap: 0.8rem;
+  padding: 1.2rem;
+  overflow: hidden;
+  cursor: pointer;
+  touch-action: manipulation;
+  border: 1px solid rgba(246, 241, 232, 0.08);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.07),
+      transparent 60%
+    ),
+    repeating-linear-gradient(
+      -14deg,
+      rgba(255, 255, 255, 0.025) 0,
+      rgba(255, 255, 255, 0.025) 2px,
+      transparent 2px,
+      transparent 11px
+    );
+  transition:
+    transform 120ms ease,
+    filter 120ms ease,
+    opacity 200ms ease;
+}
+
+.tournamentEasyPlayer:first-child {
+  border-bottom-color: rgba(255, 0, 92, 0.45);
+}
+
+.tournamentEasyPlayer:last-child {
+  border-top-color: rgba(0, 255, 180, 0.4);
+}
+
+.tournamentEasyPlayer::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  opacity: 0;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.28),
+    transparent 55%
+  );
+  transform: scale(0.2);
+  transition:
+    transform 220ms ease,
+    opacity 220ms ease;
+  pointer-events: none;
+}
+
+.tournamentEasyPlayer:active {
+  transform: scale(0.985);
+  filter: brightness(1.28) saturate(1.25);
+}
+
+.tournamentEasyPlayer:active::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.tournamentEasyPlayer.out {
+  opacity: 0.26;
+  filter: grayscale(1);
+  pointer-events: none;
+}
+
+.tournamentEasyPlayerInfo {
+  position: relative;
+  z-index: 2;
+  align-self: center;
+  display: grid;
+  place-items: center;
+  gap: 0.9rem;
+  min-width: 0;
+  text-align: center;
+}
+
+.tournamentEasyPlayerInfo h3 {
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+  font-size: clamp(2.5rem, 14vw, 6.5rem);
+  line-height: 0.82;
+  letter-spacing: -0.08em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-shadow:
+    4px 4px 0 #ff005c,
+    -3px -3px 0 rgba(0, 255, 180, 0.82);
+}
+
+.tournamentEasyPlayerInfo .letters {
+  display: flex;
+  justify-content: center;
+  gap: 0.12em;
+  font-size: clamp(2rem, 10vw, 4.5rem);
+  line-height: 1;
+}
+
+.tournamentEasyPlayer .easyUndoButton {
+  position: relative;
+  z-index: 4;
+  justify-self: center;
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 0;
+}
+
+.tournamentEasyPlayer .easyUndoButton::before {
+  content: "↶";
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.tournamentEasyPlayer .tapHint {
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  text-align: center;
+  font-size: clamp(0.55rem, 2.4vw, 0.72rem);
+  letter-spacing: 0.1em;
+  color: rgba(246, 241, 232, 0.42);
+}
+
+/* Landscape phones, tablets and desktop */
+
+@media (orientation: landscape), (min-width: 760px) {
+  .tournamentEasyMatchScreen {
+    grid-template-rows: auto 1fr;
+  }
+
+  .tournamentEasyPlayers {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: 1fr;
+  }
+
+  .tournamentEasyPlayer:first-child {
+    border-right-color: rgba(255, 0, 92, 0.45);
+    border-bottom-color: rgba(246, 241, 232, 0.08);
+  }
+
+  .tournamentEasyPlayer:last-child {
+    border-left-color: rgba(0, 255, 180, 0.4);
+    border-top-color: rgba(246, 241, 232, 0.08);
+  }
+
+  .tournamentEasyPlayerInfo h3 {
+    font-size: clamp(3rem, 8vw, 8rem);
+  }
+
+  .tournamentEasyPlayerInfo .letters {
+    font-size: clamp(2.5rem, 5vw, 5rem);
+  }
+}
+
 /* RESPONSIVE */
 
 @media (min-width: 900px) {

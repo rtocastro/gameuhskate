@@ -342,6 +342,63 @@ function App() {
     goToScreen("tournamentMatchWinner");
   }
 
+  function giveTournamentLetter(playerId) {
+  playSound("miss");
+
+  const updatedPlayers = players.map((player) => {
+    if (player.id !== playerId || player.eliminated) {
+      return player;
+    }
+
+    const newLetters = Math.min(
+      player.letters + 1,
+      LETTERS.length
+    );
+
+    return {
+      ...player,
+      letters: newLetters,
+      eliminated: newLetters >= LETTERS.length,
+    };
+  });
+
+  const remainingPlayers = updatedPlayers.filter(
+    (player) => !player.eliminated
+  );
+
+  setPlayers(updatedPlayers);
+
+  if (remainingPlayers.length === 1) {
+    const matchWinner = remainingPlayers[0];
+
+    playSound("win");
+    finishTournamentMatch(matchWinner);
+  }
+}
+
+function undoTournamentLetter(playerId) {
+  playSound("click");
+
+  setPlayers((currentPlayers) =>
+    currentPlayers.map((player) => {
+      if (player.id !== playerId) {
+        return player;
+      }
+
+      const newLetters = Math.max(
+        player.letters - 1,
+        0
+      );
+
+      return {
+        ...player,
+        letters: newLetters,
+        eliminated: false,
+      };
+    })
+  );
+}
+
 
   function setterMissed() {
     playSound("miss");
@@ -814,78 +871,53 @@ function App() {
         </section>
       )}
 
-      {screen === "tournamentMatch" && activeTournamentMatch && currentPlayer && (
-        <section className="horizontalScreen gameScreen tournamentMatchScreen">
-          <aside className="scoreboard">
-            {players.map((player, index) => (
-              <div
-                key={player.id}
-                className={`scoreRow ${player.eliminated ? "out" : ""
-                  } ${index === currentIndex ? "active" : ""}`}
-              >
-                <span>{player.name}</span>
-                <SkateLetters count={player.letters} />
-              </div>
-            ))}
-          </aside>
+{screen === "tournamentMatch" && activeTournamentMatch && players.length === 2 && (
+  <section className="tournamentEasyMatchScreen">
+    <header className="tournamentMatchHeader">
+      <p className="miniLabel">Tournament Mode</p>
 
-          <section className="turnPanel">
-            <p className="miniLabel">
-              {tournamentRound === "quarterfinal"
-                ? "Quarterfinal"
-                : tournamentRound === "semifinal"
-                  ? "Semifinal"
-                  : "Final"}{" "}
-              Match {currentTournamentMatch + 1} of {tournamentMatches.length}
-            </p>
+      <h2>
+        {tournamentRound === "quarterfinal"
+          ? "Quarterfinal"
+          : tournamentRound === "semifinal"
+          ? "Semifinal"
+          : "Final"}{" "}
+        Match {currentTournamentMatch + 1} of {tournamentMatches.length}
+      </h2>
+    </header>
 
-            <p className="turnLabel">Current Turn</p>
-            <h2>{currentPlayer.name}</h2>
+    <div className="tournamentEasyPlayers">
+      {players.map((player) => (
+        <div
+          key={player.id}
+          className={`tournamentEasyPlayer ${
+            player.eliminated ? "out" : ""
+          }`}
+          onClick={() => giveTournamentLetter(player.id)}
+        >
+          <div className="tournamentEasyPlayerInfo">
+            <h3>{player.name}</h3>
+            <SkateLetters count={player.letters} />
+          </div>
 
-            {settingTrick && (
-              <div className="actionPanel">
-                <p>Try to set a trick.</p>
+          <button
+            className="easyUndoButton"
+            onClick={(event) => {
+              event.stopPropagation();
+              undoTournamentLetter(player.id);
+            }}
+          >
+            Undo Letter
+          </button>
 
-                <button
-                  className="successButton"
-                  onClick={setterLanded}
-                >
-                  Landed / Set Trick
-                </button>
-
-                <button
-                  className="missButton"
-                  onClick={setterMissed}
-                >
-                  Did Not Land
-                </button>
-              </div>
-            )}
-
-            {attemptingTrick && (
-              <div className="actionPanel">
-                <p>
-                  Attempting <strong>{setter?.name}</strong>'s trick.
-                </p>
-
-                <button
-                  className="successButton"
-                  onClick={() => resolveAttempt(true)}
-                >
-                  Landed Attempt
-                </button>
-
-                <button
-                  className="missButton"
-                  onClick={() => resolveAttempt(false)}
-                >
-                  Missed Attempt
-                </button>
-              </div>
-            )}
-          </section>
-        </section>
-      )}
+          <span className="tapHint">
+            Tap this side to give {player.name} a letter
+          </span>
+        </div>
+      ))}
+    </div>
+  </section>
+)}
 
       {screen === "game" && currentPlayer && (
         <section className="horizontalScreen gameScreen">
