@@ -1762,6 +1762,51 @@ button:active,
   }
 }
 
+/* NEXT TO SKATE */
+
+.tournamentMatch.isNextMatch {
+  border-color: rgba(255, 0, 92, 0.55);
+  box-shadow:
+    0 0 28px rgba(255, 0, 92, 0.2),
+    0 0 60px rgba(0, 255, 180, 0.08),
+    0 18px 55px rgba(0, 0, 0, 0.45);
+  animation:
+    bracketMatchIn 0.42s ease both,
+    nextMatchPulse 1.5s ease-in-out infinite alternate;
+}
+
+.tournamentMatch.isNextMatch .matchRail {
+  background: linear-gradient(
+    to bottom,
+    #ff005c,
+    rgba(0, 255, 180, 0.9)
+  );
+  box-shadow:
+    0 0 14px rgba(255, 0, 92, 0.8),
+    0 0 25px rgba(0, 255, 180, 0.45);
+}
+
+.tournamentMatch.isNextMatch .matchStatus {
+  color: #f6f1e8;
+}
+
+.tournamentMatch.isNextMatch .matchStatus::before {
+  content: "NEXT • ";
+  color: #ff005c;
+}
+
+@keyframes nextMatchPulse {
+  from {
+    transform: translateY(0);
+    filter: brightness(1);
+  }
+
+  to {
+    transform: translateY(-3px);
+    filter: brightness(1.12);
+  }
+}
+
 /* RESPONSIVE */
 
 @media (min-width: 900px) {

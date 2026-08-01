@@ -229,10 +229,10 @@ function App() {
     }
   }
 
-function showRoundIntro(round) {
-  setRoundIntro(round);
-  goToScreen("tournamentRoundIntro");
-}
+  function showRoundIntro(round) {
+    setRoundIntro(round);
+    goToScreen("tournamentRoundIntro");
+  }
 
   function advanceTournamentRound() {
     const roundComplete = tournamentMatches.every(
@@ -272,6 +272,7 @@ function showRoundIntro(round) {
       setTournamentRound("semifinal");
       setCurrentTournamentMatch(0);
       setWinner(null);
+      showRoundIntro("semifinal");
 
       return;
     }
@@ -295,6 +296,7 @@ function showRoundIntro(round) {
       setTournamentRound("final");
       setCurrentTournamentMatch(0);
       setWinner(null);
+      showRoundIntro("final");
     }
   }
 
@@ -548,7 +550,7 @@ function showRoundIntro(round) {
   function startTournamentMode() {
     setGameMode("tournament");
     generateTournament(players);
-    goToScreen("tournamentBracket");
+    showRoundIntro("quarterfinal");
   }
 
 
@@ -771,23 +773,23 @@ function showRoundIntro(round) {
       )}
 
       {screen === "tournamentRoundIntro" && roundIntro && (
-  <section
-    className="horizontalScreen tournamentRoundIntroScreen"
-    onClick={() => goToScreen("tournamentBracket")}
-  >
-    <p className="miniLabel">Game-Uh-Skate Tournament</p>
+        <section
+          className="horizontalScreen tournamentRoundIntroScreen"
+          onClick={() => goToScreen("tournamentBracket")}
+        >
+          <p className="miniLabel">Game-Uh-Skate Tournament</p>
 
-    <h1>
-      {roundIntro === "quarterfinal"
-        ? "Quarterfinals"
-        : roundIntro === "semifinal"
-        ? "Semifinals"
-        : "The Final"}
-    </h1>
+          <h1>
+            {roundIntro === "quarterfinal"
+              ? "Quarterfinals"
+              : roundIntro === "semifinal"
+                ? "Semifinals"
+                : "The Final"}
+          </h1>
 
-    <p>Tap anywhere to view the bracket</p>
-  </section>
-)}
+          <p>Tap anywhere to view the bracket</p>
+        </section>
+      )}
 
       {screen === "tournamentBracket" && (
         <section className="horizontalScreen tournamentBracketScreen">
@@ -811,10 +813,16 @@ function showRoundIntro(round) {
               const player2Won =
                 match.winner?.id === match.player2?.id;
 
+              const nextMatchIndex = tournamentMatches.findIndex(
+                (tournamentMatch) => !tournamentMatch.winner
+              );
+
+              const isNextMatch = index === nextMatchIndex;
+
               return (
                 <article
                   className={`tournamentMatch ${match.winner ? "isComplete" : "isPending"
-                    }`}
+                    } ${isNextMatch ? "isNextMatch" : ""}`}
                   key={match.id}
                   style={{ "--match-index": index }}
                 >
