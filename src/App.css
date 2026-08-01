@@ -1807,6 +1807,123 @@ button:active,
   }
 }
 
+/* WINNER ADVANCEMENT ANIMATION */
+
+.matchAdvance {
+  position: relative;
+  overflow: hidden;
+}
+
+.matchAdvance::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 255, 180, 0.28),
+    rgba(255, 255, 255, 0.16),
+    transparent
+  );
+  transform: translateX(-120%);
+  animation: advanceRailFlash 0.7s ease-out both;
+  pointer-events: none;
+}
+
+.advanceLabel,
+.advanceWinner,
+.advanceArrow {
+  position: relative;
+  z-index: 1;
+}
+
+.advanceLabel {
+  color: rgba(246, 241, 232, 0.48);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.advanceWinner {
+  color: rgba(0, 255, 180, 0.98);
+  text-transform: uppercase;
+  text-shadow:
+    2px 2px 0 rgba(255, 0, 92, 0.75),
+    0 0 14px rgba(0, 255, 180, 0.5);
+  animation: winnerSlideIn 0.5s cubic-bezier(0.2, 1.2, 0.35, 1) both;
+}
+
+.advanceArrow {
+  color: #f6f1e8;
+  font-size: 1.1rem;
+  font-weight: 900;
+  animation: advanceArrowPulse 0.9s ease-in-out infinite alternate;
+}
+
+.tournamentMatch.isComplete .matchRail {
+  animation: completedRailFlash 0.75s ease-out both;
+}
+
+@keyframes winnerSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-34px) skewX(-8deg);
+    filter: blur(4px);
+  }
+
+  65% {
+    opacity: 1;
+    transform: translateX(5px) skewX(2deg);
+    filter: blur(0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0) skewX(0);
+  }
+}
+
+@keyframes advanceRailFlash {
+  from {
+    transform: translateX(-120%);
+  }
+
+  to {
+    transform: translateX(120%);
+  }
+}
+
+@keyframes completedRailFlash {
+  0% {
+    box-shadow: 0 0 6px rgba(0, 255, 180, 0.25);
+    filter: brightness(1);
+  }
+
+  45% {
+    box-shadow:
+      0 0 24px rgba(0, 255, 180, 0.9),
+      0 0 42px rgba(255, 0, 92, 0.4);
+    filter: brightness(1.45);
+  }
+
+  100% {
+    box-shadow: 0 0 18px rgba(0, 255, 180, 0.55);
+    filter: brightness(1);
+  }
+}
+
+@keyframes advanceArrowPulse {
+  from {
+    transform: translateX(0);
+    opacity: 0.55;
+  }
+
+  to {
+    transform: translateX(5px);
+    opacity: 1;
+  }
+}
+
 /* RESPONSIVE */
 
 @media (min-width: 900px) {

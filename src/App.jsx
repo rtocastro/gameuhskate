@@ -882,8 +882,18 @@ function App() {
 
                   {match.winner && (
                     <footer className="matchAdvance">
-                      <span>Advancing</span>
-                      <strong>{match.winner.name}</strong>
+                      <span className="advanceLabel">Advancing</span>
+
+                      <strong
+                        className="advanceWinner"
+                        key={`${match.id}-${match.winner.id}`}
+                      >
+                        {match.winner.name}
+                      </strong>
+
+                      <span className="advanceArrow" aria-hidden="true">
+                        →
+                      </span>
                     </footer>
                   )}
                 </article>
@@ -1070,69 +1080,28 @@ function App() {
         </section>
       )}
 
-      {screen === "tournamentMatchWinner" && winner && (
-        <section className="horizontalScreen centerScreen resultScreen">
-          <p className="miniLabel">
-            Quarterfinal Match {currentTournamentMatch + 1} Complete
-          </p>
+{screen === "tournamentMatchWinner" && winner && (
+  <section className="horizontalScreen centerScreen resultScreen">
+    <p className="miniLabel">
+      {tournamentRound === "quarterfinal"
+        ? "Quarterfinal"
+        : tournamentRound === "semifinal"
+        ? "Semifinal"
+        : "Final"}{" "}
+      Match {currentTournamentMatch + 1} Complete
+    </p>
 
-          <h2>{winner.name}</h2>
-          <p>Advances to the next round</p>
+    <h2>{winner.name}</h2>
+    <p>Advances to the next round</p>
 
-          <button
-            className="primaryButton"
-            onClick={() => {
-              const nextMatchIndex = tournamentMatches.findIndex(
-                (match) => !match.winner
-              );
-
-              if (nextMatchIndex === -1) {
-                goToScreen("tournamentBracket");
-                return;
-              }
-
-              const match = tournamentMatches[nextMatchIndex];
-
-              const freshMatchPlayers = [
-                {
-                  ...match.player1,
-                  letters: 0,
-                  eliminated: false,
-                  eliminatedPlace: null,
-                  order: 0,
-                },
-                {
-                  ...match.player2,
-                  letters: 0,
-                  eliminated: false,
-                  eliminatedPlace: null,
-                  order: 1,
-                },
-              ];
-
-              setCurrentTournamentMatch(nextMatchIndex);
-              setPlayers(freshMatchPlayers);
-              setCurrentIndex(0);
-              setSetterId(null);
-              setAttemptQueue([]);
-              setWinner(null);
-              setPlacements([]);
-
-              goToScreen("tournamentMatch");
-            }}
-          >
-            {tournamentMatches.some((match) => !match.winner)
-              ? `Start Match ${tournamentMatches.findIndex((match) => !match.winner) + 1
-              } of ${tournamentMatches.length}`
-              : `View Completed ${tournamentRound === "quarterfinal"
-                ? "Quarterfinals"
-                : tournamentRound === "semifinal"
-                  ? "Semifinals"
-                  : "Final"
-              }`}
-          </button>
-        </section>
-      )}
+    <button
+      className="primaryButton"
+      onClick={() => goToScreen("tournamentBracket")}
+    >
+      View Updated Bracket
+    </button>
+  </section>
+)}
 
       {screen === "winner" && winner && (
         <section className="horizontalScreen winnerScreen">
