@@ -817,107 +817,29 @@ function finishTournamentMatch(matchWinner) {
                 : "Final Bracket"}
           </h2>
 
-          <div
-            className={`tournamentBracket tournamentBracket-${tournamentRound}`}
-          >
-            {tournamentMatches.map((match, index) => {
-              const player1Won =
-                match.winner?.id === match.player1?.id;
+<div
+  className={`tournamentBracket tournamentBracket-${tournamentRound}`}
+>
+  {tournamentMatches.map((match, index) => {
+    const nextMatchIndex = tournamentMatches.findIndex(
+      (item) => !item.winner
+    );
 
-              const player2Won =
-                match.winner?.id === match.player2?.id;
+    const isNextMatch = index === nextMatchIndex;
+    const isLatestWinner =
+      match.id === lastCompletedMatchId;
 
-              const nextMatchIndex = tournamentMatches.findIndex(
-                (tournamentMatch) => !tournamentMatch.winner
-              );
-
-              const isNextMatch = index === nextMatchIndex;
-
-              const isLatestWinner =
-                match.id === lastCompletedMatchId;
-
-              return (
-                <article
-                  className={`tournamentMatch ${match.winner ? "isComplete" : "isPending"
-                    } ${isNextMatch ? "isNextMatch" : ""} ${isLatestWinner ? "isLatestWinner" : ""
-                    }`}
-                  key={match.id}
-                  style={{ "--match-index": index }}
-                >
-                  <div className="matchRail" aria-hidden="true" />
-
-                  <header className="matchHeader">
-                    <span className="matchNumber">
-                      {String(match.matchNumber).padStart(2, "0")}
-                    </span>
-
-                    <span className="matchStatus">
-                      {match.winner ? "Complete" : "Waiting"}
-                    </span>
-                  </header>
-
-                  <div className="matchPlayers">
-                    <div
-                      className={`matchPlayerSlot ${player1Won ? "isWinner" : ""
-                        } ${match.winner && !player1Won ? "isLoser" : ""
-                        }`}
-                    >
-                      <span className="playerSeed">
-                        {index * 2 + 1}
-                      </span>
-
-                      <span className="playerName">
-                        {match.player1?.name || "TBD"}
-                      </span>
-
-                      {player1Won && (
-                        <span className="winnerMark">ADV</span>
-                      )}
-                    </div>
-
-                    <div className="matchDivider">
-                      <span>VS</span>
-                    </div>
-
-                    <div
-                      className={`matchPlayerSlot ${player2Won ? "isWinner" : ""
-                        } ${match.winner && !player2Won ? "isLoser" : ""
-                        }`}
-                    >
-                      <span className="playerSeed">
-                        {index * 2 + 2}
-                      </span>
-
-                      <span className="playerName">
-                        {match.player2?.name || "TBD"}
-                      </span>
-
-                      {player2Won && (
-                        <span className="winnerMark">ADV</span>
-                      )}
-                    </div>
-                  </div>
-
-                  {match.winner && (
-                    <footer className="matchAdvance">
-                      <span className="advanceLabel">Advancing</span>
-
-                      <strong
-                        className="advanceWinner"
-                        key={`${match.id}-${match.winner.id}`}
-                      >
-                        {match.winner.name}
-                      </strong>
-
-                      <span className="advanceArrow" aria-hidden="true">
-                        →
-                      </span>
-                    </footer>
-                  )}
-                </article>
-              );
-            })}
-          </div>
+    return (
+      <TournamentMatchCard
+        key={match.id}
+        match={match}
+        index={index}
+        isNextMatch={isNextMatch}
+        isLatestWinner={isLatestWinner}
+      />
+    );
+  })}
+</div>
 
           {tournamentMatches.some((match) => !match.winner) ? (
             <button
@@ -1146,6 +1068,110 @@ function finishTournamentMatch(matchWinner) {
 
 
     </main>
+  );
+}
+
+function TournamentMatchCard({
+  match,
+  index,
+  isNextMatch,
+  isLatestWinner,
+}) {
+  const player1Won =
+    match.winner?.id === match.player1?.id;
+
+  const player2Won =
+    match.winner?.id === match.player2?.id;
+
+  return (
+    <article
+      className={`tournamentMatch ${
+        match.winner ? "isComplete" : "isPending"
+      } ${isNextMatch ? "isNextMatch" : ""} ${
+        isLatestWinner ? "isLatestWinner" : ""
+      }`}
+      style={{ "--match-index": index }}
+    >
+      <div className="matchRail" aria-hidden="true" />
+
+      <header className="matchHeader">
+        <span className="matchNumber">
+          {String(match.matchNumber).padStart(2, "0")}
+        </span>
+
+        <span className="matchStatus">
+          {match.winner ? "Complete" : "Waiting"}
+        </span>
+      </header>
+
+      <div className="matchPlayers">
+        <div
+          className={`matchPlayerSlot ${
+            player1Won ? "isWinner" : ""
+          } ${
+            match.winner && !player1Won ? "isLoser" : ""
+          }`}
+        >
+          <span className="playerSeed">
+            {index * 2 + 1}
+          </span>
+
+          <span className="playerName">
+            {match.player1?.name || "TBD"}
+          </span>
+
+          {player1Won && (
+            <span className="winnerMark">ADV</span>
+          )}
+        </div>
+
+        <div className="matchDivider">
+          <span>VS</span>
+        </div>
+
+        <div
+          className={`matchPlayerSlot ${
+            player2Won ? "isWinner" : ""
+          } ${
+            match.winner && !player2Won ? "isLoser" : ""
+          }`}
+        >
+          <span className="playerSeed">
+            {index * 2 + 2}
+          </span>
+
+          <span className="playerName">
+            {match.player2?.name || "TBD"}
+          </span>
+
+          {player2Won && (
+            <span className="winnerMark">ADV</span>
+          )}
+        </div>
+      </div>
+
+      {match.winner && (
+        <footer className="matchAdvance">
+          <span className="advanceLabel">
+            Advancing
+          </span>
+
+          <strong
+            className="advanceWinner"
+            key={`${match.id}-${match.winner.id}`}
+          >
+            {match.winner.name}
+          </strong>
+
+          <span
+            className="advanceArrow"
+            aria-hidden="true"
+          >
+            →
+          </span>
+        </footer>
+      )}
+    </article>
   );
 }
 
