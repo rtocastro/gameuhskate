@@ -71,6 +71,12 @@ function App() {
   const [roundIntro, setRoundIntro] = useState(null);
   const [lastCompletedMatchId, setLastCompletedMatchId] = useState(null);
 
+  const [tournamentHistory, setTournamentHistory] = useState({
+  quarterfinal: [],
+  semifinal: [],
+  final: [],
+});
+
   const activeTournamentMatch =
     tournamentMatches[currentTournamentMatch];
 
@@ -107,6 +113,11 @@ function App() {
     setCurrentTournamentMatch(0);
     setTournamentRound("quarterfinal");
     setLastCompletedMatchId(null);
+    setTournamentHistory({
+  quarterfinal: [],
+  semifinal: [],
+  final: [],
+});
   }
 
   function goToScreen(nextScreen) {
@@ -275,6 +286,10 @@ function App() {
       setCurrentTournamentMatch(0);
       setWinner(null);
       showRoundIntro("semifinal");
+      setTournamentHistory((currentHistory) => ({
+  ...currentHistory,
+  semifinal: semifinalMatches,
+}));
 
       return;
     }
@@ -299,6 +314,10 @@ function App() {
       setCurrentTournamentMatch(0);
       setWinner(null);
       showRoundIntro("final");
+      setTournamentHistory((currentHistory) => ({
+  ...currentHistory,
+  final: finalMatch,
+}));
     }
   }
 
@@ -353,6 +372,10 @@ function finishTournamentMatch(matchWinner) {
   setWinner(matchWinner);
   setSetterId(null);
   setAttemptQueue([]);
+  setTournamentHistory((currentHistory) => ({
+  ...currentHistory,
+  [tournamentRound]: updatedMatches,
+}));
 
   if (tournamentRound === "final") {
     goToScreen("tournamentChampion");
@@ -535,29 +558,40 @@ function finishTournamentMatch(matchWinner) {
     goToScreen("easyMode");
   }
 
-  function generateTournament(tournamentPlayers) {
-    if (tournamentPlayers.length !== 8) {
-      console.error("Tournament Mode requires exactly 8 players.");
-      return;
-    }
-
-    const quarterfinalMatches = [];
-
-    for (let index = 0; index < tournamentPlayers.length; index += 2) {
-      quarterfinalMatches.push({
-        id: `quarterfinal-${index / 2 + 1}`,
-        round: "quarterfinal",
-        matchNumber: index / 2 + 1,
-        player1: tournamentPlayers[index],
-        player2: tournamentPlayers[index + 1],
-        winner: null,
-      });
-    }
-
-    setTournamentMatches(quarterfinalMatches);
-    setCurrentTournamentMatch(0);
-    setTournamentRound("quarterfinal");
+function generateTournament(tournamentPlayers) {
+  if (tournamentPlayers.length !== 8) {
+    console.error("Tournament Mode requires exactly 8 players.");
+    return;
   }
+
+  const quarterfinalMatches = [];
+
+  for (
+    let index = 0;
+    index < tournamentPlayers.length;
+    index += 2
+  ) {
+    quarterfinalMatches.push({
+      id: `quarterfinal-${index / 2 + 1}`,
+      round: "quarterfinal",
+      matchNumber: index / 2 + 1,
+      player1: tournamentPlayers[index],
+      player2: tournamentPlayers[index + 1],
+      winner: null,
+    });
+  }
+
+  setTournamentMatches(quarterfinalMatches);
+
+  setTournamentHistory({
+    quarterfinal: quarterfinalMatches,
+    semifinal: [],
+    final: [],
+  });
+
+  setCurrentTournamentMatch(0);
+  setTournamentRound("quarterfinal");
+}
 
   function startTournamentMode() {
     setGameMode("tournament");
