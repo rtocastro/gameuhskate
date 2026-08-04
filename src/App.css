@@ -2248,6 +2248,108 @@ button:active,
   }
 }
 
+/* ========================================
+   PLAYER COUNT STEPPER
+======================================== */
+
+.playerCountStepper {
+  width: min(430px, 100%);
+  display: grid;
+  grid-template-columns: 88px minmax(130px, 1fr) 88px;
+  align-items: stretch;
+  gap: 0.8rem;
+}
+
+.countStepButton {
+  min-height: 104px;
+  padding: 0;
+  border: 1px solid rgba(246, 241, 232, 0.2);
+  border-radius: 24px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.1),
+      transparent
+    ),
+    #101010;
+  color: #f6f1e8;
+  font-size: 3.5rem;
+  font-weight: 950;
+  line-height: 1;
+  box-shadow:
+    4px 4px 0 rgba(255, 0, 92, 0.85),
+    -3px -3px 0 rgba(0, 255, 180, 0.75);
+  touch-action: manipulation;
+}
+
+.countStepButton:active:not(:disabled) {
+  transform: translate(3px, 3px) scale(0.96);
+}
+
+.countStepButton:disabled {
+  opacity: 0.24;
+  filter: grayscale(1);
+  cursor: not-allowed;
+}
+
+.playerCountDisplay {
+  position: relative;
+  min-width: 0;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 0.2rem;
+  min-height: 104px;
+  overflow: hidden;
+  border: 1px solid rgba(246, 241, 232, 0.16);
+  border-radius: 24px;
+  background:
+    radial-gradient(
+      circle,
+      rgba(0, 255, 180, 0.13),
+      transparent 70%
+    ),
+    rgba(255, 255, 255, 0.055);
+  box-shadow: inset 0 0 28px rgba(0, 0, 0, 0.42);
+}
+
+.playerCountDisplay strong {
+  font-size: clamp(3rem, 12vw, 5.5rem);
+  line-height: 0.75;
+  text-shadow:
+    3px 3px 0 #ff005c,
+    -2px -2px 0 rgba(0, 255, 180, 0.85);
+}
+
+.playerCountDisplay span {
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+@media (max-width: 430px) {
+  .playerCountStepper {
+    grid-template-columns: 72px minmax(110px, 1fr) 72px;
+    gap: 0.55rem;
+  }
+
+  .countStepButton,
+  .playerCountDisplay {
+    min-height: 88px;
+  }
+
+  .countStepButton {
+    font-size: 2.8rem;
+    border-radius: 20px;
+  }
+
+  .playerCountDisplay {
+    border-radius: 20px;
+  }
+}
+
 /* RESPONSIVE */
 
 @media (min-width: 900px) {

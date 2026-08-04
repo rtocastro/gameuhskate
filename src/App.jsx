@@ -72,10 +72,10 @@ function App() {
   const [lastCompletedMatchId, setLastCompletedMatchId] = useState(null);
 
   const [tournamentHistory, setTournamentHistory] = useState({
-  quarterfinal: [],
-  semifinal: [],
-  final: [],
-});
+    quarterfinal: [],
+    semifinal: [],
+    final: [],
+  });
 
   const activeTournamentMatch =
     tournamentMatches[currentTournamentMatch];
@@ -114,10 +114,10 @@ function App() {
     setTournamentRound("quarterfinal");
     setLastCompletedMatchId(null);
     setTournamentHistory({
-  quarterfinal: [],
-  semifinal: [],
-  final: [],
-});
+      quarterfinal: [],
+      semifinal: [],
+      final: [],
+    });
   }
 
   function goToScreen(nextScreen) {
@@ -287,9 +287,9 @@ function App() {
       setWinner(null);
       showRoundIntro("semifinal");
       setTournamentHistory((currentHistory) => ({
-  ...currentHistory,
-  semifinal: semifinalMatches,
-}));
+        ...currentHistory,
+        semifinal: semifinalMatches,
+      }));
 
       return;
     }
@@ -315,9 +315,9 @@ function App() {
       setWinner(null);
       showRoundIntro("final");
       setTournamentHistory((currentHistory) => ({
-  ...currentHistory,
-  final: finalMatch,
-}));
+        ...currentHistory,
+        final: finalMatch,
+      }));
     }
   }
 
@@ -353,37 +353,37 @@ function App() {
     goToScreen("tournamentMatch");
   }
 
-function finishTournamentMatch(matchWinner) {
-  const completedMatch =
-    tournamentMatches[currentTournamentMatch];
+  function finishTournamentMatch(matchWinner) {
+    const completedMatch =
+      tournamentMatches[currentTournamentMatch];
 
-  const updatedMatches = tournamentMatches.map(
-    (match, index) =>
-      index === currentTournamentMatch
-        ? {
+    const updatedMatches = tournamentMatches.map(
+      (match, index) =>
+        index === currentTournamentMatch
+          ? {
             ...match,
             winner: matchWinner,
           }
-        : match
-  );
+          : match
+    );
 
-  setTournamentMatches(updatedMatches);
-  setLastCompletedMatchId(completedMatch?.id ?? null);
-  setWinner(matchWinner);
-  setSetterId(null);
-  setAttemptQueue([]);
-  setTournamentHistory((currentHistory) => ({
-  ...currentHistory,
-  [tournamentRound]: updatedMatches,
-}));
+    setTournamentMatches(updatedMatches);
+    setLastCompletedMatchId(completedMatch?.id ?? null);
+    setWinner(matchWinner);
+    setSetterId(null);
+    setAttemptQueue([]);
+    setTournamentHistory((currentHistory) => ({
+      ...currentHistory,
+      [tournamentRound]: updatedMatches,
+    }));
 
-  if (tournamentRound === "final") {
-    goToScreen("tournamentChampion");
-    return;
+    if (tournamentRound === "final") {
+      goToScreen("tournamentChampion");
+      return;
+    }
+
+    goToScreen("tournamentMatchWinner");
   }
-
-  goToScreen("tournamentMatchWinner");
-}
 
   function giveTournamentLetter(playerId) {
     playSound("miss");
@@ -558,40 +558,40 @@ function finishTournamentMatch(matchWinner) {
     goToScreen("easyMode");
   }
 
-function generateTournament(tournamentPlayers) {
-  if (tournamentPlayers.length !== 8) {
-    console.error("Tournament Mode requires exactly 8 players.");
-    return;
-  }
+  function generateTournament(tournamentPlayers) {
+    if (tournamentPlayers.length !== 8) {
+      console.error("Tournament Mode requires exactly 8 players.");
+      return;
+    }
 
-  const quarterfinalMatches = [];
+    const quarterfinalMatches = [];
 
-  for (
-    let index = 0;
-    index < tournamentPlayers.length;
-    index += 2
-  ) {
-    quarterfinalMatches.push({
-      id: `quarterfinal-${index / 2 + 1}`,
-      round: "quarterfinal",
-      matchNumber: index / 2 + 1,
-      player1: tournamentPlayers[index],
-      player2: tournamentPlayers[index + 1],
-      winner: null,
+    for (
+      let index = 0;
+      index < tournamentPlayers.length;
+      index += 2
+    ) {
+      quarterfinalMatches.push({
+        id: `quarterfinal-${index / 2 + 1}`,
+        round: "quarterfinal",
+        matchNumber: index / 2 + 1,
+        player1: tournamentPlayers[index],
+        player2: tournamentPlayers[index + 1],
+        winner: null,
+      });
+    }
+
+    setTournamentMatches(quarterfinalMatches);
+
+    setTournamentHistory({
+      quarterfinal: quarterfinalMatches,
+      semifinal: [],
+      final: [],
     });
+
+    setCurrentTournamentMatch(0);
+    setTournamentRound("quarterfinal");
   }
-
-  setTournamentMatches(quarterfinalMatches);
-
-  setTournamentHistory({
-    quarterfinal: quarterfinalMatches,
-    semifinal: [],
-    final: [],
-  });
-
-  setCurrentTournamentMatch(0);
-  setTournamentRound("quarterfinal");
-}
 
   function startTournamentMode() {
     setGameMode("tournament");
@@ -716,14 +716,47 @@ function generateTournament(tournamentPlayers) {
       {screen === "boardCount" && (
         <section className="horizontalScreen setupScreen">
           <h2>How Many Joining?</h2>
-          <input
-            className="numberInput"
-            type="number"
-            min="2"
-            max={MAX_PLAYERS}
-            value={playerCount}
-            onChange={(e) => setPlayerCount(Math.max(2, Math.min(MAX_PLAYERS, Number(e.target.value))))}
-          />
+          <div
+            className="playerCountStepper"
+            aria-label="Select number of players"
+          >
+            <button
+              type="button"
+              className="countStepButton"
+              aria-label="Remove one player"
+              disabled={playerCount <= 2}
+              onClick={() => {
+                playSound("click");
+
+                setPlayerCount((currentCount) =>
+                  Math.max(2, currentCount - 1)
+                );
+              }}
+            >
+              −
+            </button>
+
+            <div className="playerCountDisplay" aria-live="polite">
+              <strong>{playerCount}</strong>
+              <span>Skaters</span>
+            </div>
+
+            <button
+              type="button"
+              className="countStepButton"
+              aria-label="Add one player"
+              disabled={playerCount >= MAX_PLAYERS}
+              onClick={() => {
+                playSound("click");
+
+                setPlayerCount((currentCount) =>
+                  Math.min(MAX_PLAYERS, currentCount + 1)
+                );
+              }}
+            >
+              +
+            </button>
+          </div>
           <button className="primaryButton" onClick={confirmBoardCount}>Confirm Count</button>
         </section>
       )}
@@ -851,31 +884,31 @@ function generateTournament(tournamentPlayers) {
                 : "Final Bracket"}
           </h2>
 
-<div className="tournamentBracketColumns">
-  <TournamentRoundColumn
-    title="Quarterfinals"
-    round="quarterfinal"
-    matches={tournamentHistory.quarterfinal}
-    activeRound={tournamentRound}
-    lastCompletedMatchId={lastCompletedMatchId}
-  />
+          <div className="tournamentBracketColumns">
+            <TournamentRoundColumn
+              title="Quarterfinals"
+              round="quarterfinal"
+              matches={tournamentHistory.quarterfinal}
+              activeRound={tournamentRound}
+              lastCompletedMatchId={lastCompletedMatchId}
+            />
 
-  <TournamentRoundColumn
-    title="Semifinals"
-    round="semifinal"
-    matches={tournamentHistory.semifinal}
-    activeRound={tournamentRound}
-    lastCompletedMatchId={lastCompletedMatchId}
-  />
+            <TournamentRoundColumn
+              title="Semifinals"
+              round="semifinal"
+              matches={tournamentHistory.semifinal}
+              activeRound={tournamentRound}
+              lastCompletedMatchId={lastCompletedMatchId}
+            />
 
-  <TournamentRoundColumn
-    title="Final"
-    round="final"
-    matches={tournamentHistory.final}
-    activeRound={tournamentRound}
-    lastCompletedMatchId={lastCompletedMatchId}
-  />
-</div>
+            <TournamentRoundColumn
+              title="Final"
+              round="final"
+              matches={tournamentHistory.final}
+              activeRound={tournamentRound}
+              lastCompletedMatchId={lastCompletedMatchId}
+            />
+          </div>
 
           {tournamentMatches.some((match) => !match.winner) ? (
             <button
@@ -1120,9 +1153,8 @@ function TournamentRoundColumn({
 
   return (
     <section
-      className={`bracketRoundColumn bracketRoundColumn-${round} ${
-        activeRound === round ? "isActiveRound" : ""
-      } ${matches.length === 0 ? "isLockedRound" : ""}`}
+      className={`bracketRoundColumn bracketRoundColumn-${round} ${activeRound === round ? "isActiveRound" : ""
+        } ${matches.length === 0 ? "isLockedRound" : ""}`}
     >
       <header className="bracketRoundHeader">
         <span>{title}</span>
@@ -1137,32 +1169,31 @@ function TournamentRoundColumn({
       <div className="bracketRoundMatches">
         {matches.length > 0 ? (
           matches.map((match, index) => (
-  <div
-    className={`bracketMatchNode ${
-      match.winner ? "hasWinner" : ""
-    }`}
-    key={match.id}
-  >
-    <TournamentMatchCard
-      match={match}
-      index={index}
-      isNextMatch={
-        activeRound === round &&
-        index === nextMatchIndex
-      }
-      isLatestWinner={
-        match.id === lastCompletedMatchId
-      }
-    />
+            <div
+              className={`bracketMatchNode ${match.winner ? "hasWinner" : ""
+                }`}
+              key={match.id}
+            >
+              <TournamentMatchCard
+                match={match}
+                index={index}
+                isNextMatch={
+                  activeRound === round &&
+                  index === nextMatchIndex
+                }
+                isLatestWinner={
+                  match.id === lastCompletedMatchId
+                }
+              />
 
-    {round !== "final" && (
-      <span
-        className="bracketExitRail"
-        aria-hidden="true"
-      />
-    )}
-  </div>
-))
+              {round !== "final" && (
+                <span
+                  className="bracketExitRail"
+                  aria-hidden="true"
+                />
+              )}
+            </div>
+          ))
         ) : (
           <div className="lockedRoundPlaceholder">
             <span>Awaiting Winners</span>
@@ -1187,11 +1218,9 @@ function TournamentMatchCard({
 
   return (
     <article
-      className={`tournamentMatch ${
-        match.winner ? "isComplete" : "isPending"
-      } ${isNextMatch ? "isNextMatch" : ""} ${
-        isLatestWinner ? "isLatestWinner" : ""
-      }`}
+      className={`tournamentMatch ${match.winner ? "isComplete" : "isPending"
+        } ${isNextMatch ? "isNextMatch" : ""} ${isLatestWinner ? "isLatestWinner" : ""
+        }`}
       style={{ "--match-index": index }}
     >
       <div className="matchRail" aria-hidden="true" />
@@ -1208,11 +1237,9 @@ function TournamentMatchCard({
 
       <div className="matchPlayers">
         <div
-          className={`matchPlayerSlot ${
-            player1Won ? "isWinner" : ""
-          } ${
-            match.winner && !player1Won ? "isLoser" : ""
-          }`}
+          className={`matchPlayerSlot ${player1Won ? "isWinner" : ""
+            } ${match.winner && !player1Won ? "isLoser" : ""
+            }`}
         >
           <span className="playerSeed">
             {index * 2 + 1}
@@ -1232,11 +1259,9 @@ function TournamentMatchCard({
         </div>
 
         <div
-          className={`matchPlayerSlot ${
-            player2Won ? "isWinner" : ""
-          } ${
-            match.winner && !player2Won ? "isLoser" : ""
-          }`}
+          className={`matchPlayerSlot ${player2Won ? "isWinner" : ""
+            } ${match.winner && !player2Won ? "isLoser" : ""
+            }`}
         >
           <span className="playerSeed">
             {index * 2 + 2}
