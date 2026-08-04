@@ -787,35 +787,56 @@ function App() {
         </section>
       )}
 
-      {screen === "modePrompt" && (
-        <section className="horizontalScreen centerScreen modePromptScreen">
-          <p className="miniLabel">Choose Game Style</p>
-          <h2>Easy Mode?</h2>
+{screen === "modePrompt" && (
+  <section className="horizontalScreen centerScreen modePromptScreen">
+    <header className="modePromptHeader">
+      <p className="miniLabel">Choose Game Style</p>
+      <h2>Mode Select</h2>
+    </header>
 
-          <div className="promptButtons">
-            <button className="successButton" onClick={startEasyMode}>
-              Easy Mode
-            </button>
+    <div className="standardModeButtons">
+      <button
+        className="successButton modeSelectButton"
+        onClick={startEasyMode}
+      >
+        <strong>Easy Mode</strong>
+        <small>Letter tracking only</small>
+      </button>
 
-            <button className="missButton" onClick={startRegularMode}>
-              Regular Mode
-            </button>
+      <button
+        className="missButton modeSelectButton"
+        onClick={startRegularMode}
+      >
+        <strong>Regular Mode</strong>
+        <small>Full turns and trick attempts</small>
+      </button>
+    </div>
 
-            {players.length === 8 && mode === "boards" && (
-              <button
-                className="tournamentButton"
-                onClick={startTournamentMode}
-              >
-                Tournament Mode
-              </button>
-            )}
-          </div>
+    {players.length === 8 && mode === "boards" && (
+      <div className="eventModeSection">
+        <div className="eventModeDivider">
+          <span>Event Mode</span>
+        </div>
 
-          <p className="helperText">
-            Easy Mode only tracks SKATE letters. Turns and trick calls happen outside the app.
-          </p>
-        </section>
-      )}
+        <button
+          className="tournamentButton"
+          onClick={startTournamentMode}
+        >
+          <span className="tournamentButtonBadge">
+            8 Player
+          </span>
+
+          <strong>Tournament</strong>
+          <small>Single-elimination bracket</small>
+        </button>
+      </div>
+    )}
+
+    <p className="helperText">
+      Select the format that fits your session.
+    </p>
+  </section>
+)}
 
       {screen === "easyMode" && players.length >= 2 && (
         <section

@@ -2350,120 +2350,197 @@ button:active,
   }
 }
 
-/*========================================
-    TOURNAMENT MODE BUTTON
-========================================*/
+/* ========================================
+   MODE SELECT
+======================================== */
 
-.tournamentButton{
-    position:relative;
-    overflow:hidden;
-
-    width:min(420px,100%);
-
-    padding:1.2rem;
-
-    border:none;
-    border-radius:24px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #00ffd5,
-            #00b7ff,
-            #ff005c
-        );
-
-    color:white;
-
-    font-size:1.15rem;
-    font-weight:900;
-
-    letter-spacing:.08em;
-    text-transform:uppercase;
-
-    box-shadow:
-        0 0 30px rgba(0,255,213,.25),
-        0 0 60px rgba(255,0,92,.15);
-
-    transition:
-        transform .18s,
-        box-shadow .18s;
+.modePromptScreen {
+  align-content: center;
+  grid-template-rows: auto auto auto auto;
+  gap: 1.35rem;
+  padding-block: 2rem;
 }
 
-.tournamentButton:hover{
-
-    transform:
-        translateY(-3px)
-        scale(1.02);
-
-    box-shadow:
-        0 0 45px rgba(0,255,213,.4),
-        0 0 70px rgba(255,0,92,.25);
+.modePromptHeader {
+  display: grid;
+  place-items: center;
+  gap: 0.45rem;
 }
 
-.tournamentButton:active{
-
-    transform:
-        scale(.98);
-
+.modePromptHeader .miniLabel {
+  margin: 0;
 }
 
-.tournamentButton::before{
-
-    content:"";
-
-    position:absolute;
-
-    inset:0;
-
-    background:
-        linear-gradient(
-            110deg,
-            transparent,
-            rgba(255,255,255,.35),
-            transparent
-        );
-
-    transform:translateX(-140%);
-
-    animation:
-        tournamentSweep
-        2.8s
-        linear
-        infinite;
-
+.modePromptHeader h2 {
+  margin: 0;
 }
 
-@keyframes tournamentSweep{
-
-    from{
-
-        transform:
-            translateX(-140%);
-
-    }
-
-    to{
-
-        transform:
-            translateX(140%);
-
-    }
-
+.standardModeButtons {
+  width: min(430px, 100%);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
 }
 
-.tournamentButton small{
+.modeSelectButton {
+  min-width: 0;
+  min-height: 88px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 0.32rem;
+  padding: 0.9rem;
+}
 
-    display:block;
+.modeSelectButton strong {
+  font-size: 0.85rem;
+  line-height: 1;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
 
-    margin-top:.35rem;
+.modeSelectButton small {
+  font-size: 0.58rem;
+  line-height: 1.25;
+  letter-spacing: 0.06em;
+  opacity: 0.58;
+}
 
-    font-size:.65rem;
+.eventModeSection {
+  width: min(430px, 100%);
+  display: grid;
+  gap: 0.8rem;
+}
 
-    letter-spacing:.18em;
+.eventModeDivider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: rgba(246, 241, 232, 0.42);
+}
 
-    opacity:.8;
+.eventModeDivider::before,
+.eventModeDivider::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(246, 241, 232, 0.25)
+  );
+}
 
+.eventModeDivider::after {
+  background: linear-gradient(
+    90deg,
+    rgba(246, 241, 232, 0.25),
+    transparent
+  );
+}
+
+.eventModeDivider span {
+  font-size: 0.6rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.tournamentButton {
+  position: relative;
+  width: 100%;
+  min-height: 104px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 0.3rem;
+  overflow: hidden;
+  padding: 1.1rem;
+  border: 1px solid rgba(0, 255, 180, 0.55);
+  border-radius: 24px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(0, 255, 180, 0.09),
+      transparent 45%
+    ),
+    linear-gradient(
+      315deg,
+      rgba(255, 0, 92, 0.1),
+      transparent 45%
+    ),
+    #0b0b0b;
+  color: #f6f1e8;
+  box-shadow:
+    4px 4px 0 rgba(255, 0, 92, 0.82),
+    -3px -3px 0 rgba(0, 255, 180, 0.78),
+    0 0 28px rgba(0, 255, 180, 0.1);
+}
+
+.tournamentButton strong {
+  font-size: 1.15rem;
+  line-height: 1;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.tournamentButton small {
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+.tournamentButtonBadge {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.75rem;
+  padding: 0.28rem 0.45rem;
+  border: 1px solid rgba(255, 0, 92, 0.45);
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.5rem;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transform: rotate(3deg);
+}
+
+.tournamentButton:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0, 255, 180, 0.85);
+  box-shadow:
+    5px 5px 0 rgba(255, 0, 92, 0.9),
+    -4px -4px 0 rgba(0, 255, 180, 0.88),
+    0 0 38px rgba(0, 255, 180, 0.18);
+}
+
+.modePromptScreen .helperText {
+  max-width: 38ch;
+  margin: 0;
+  color: rgba(246, 241, 232, 0.48);
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 480px) {
+  .modePromptScreen {
+    gap: 1rem;
+    padding: 1.2rem 1rem;
+  }
+
+  .standardModeButtons {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+  }
+
+  .modeSelectButton {
+    min-height: 66px;
+  }
+
+  .tournamentButton {
+    min-height: 88px;
+  }
 }
 
 /* RESPONSIVE */
