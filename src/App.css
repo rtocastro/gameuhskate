@@ -2543,6 +2543,26 @@ button:active,
   }
 }
 
+.bracketBackButton {
+  justify-self: start;
+  padding: 0.7rem 1rem;
+  border: 1px solid rgba(246, 241, 232, 0.2);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.48);
+  color: #f6f1e8;
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  box-shadow:
+    3px 3px 0 rgba(255, 0, 92, 0.72),
+    -2px -2px 0 rgba(0, 255, 180, 0.68);
+}
+
+.bracketBackButton:hover {
+  transform: translateY(-2px);
+}
+
 /* RESPONSIVE */
 
 @media (min-width: 900px) {

@@ -70,6 +70,8 @@ function App() {
   const [tournamentRound, setTournamentRound] = useState("quarterfinal");
   const [roundIntro, setRoundIntro] = useState(null);
   const [lastCompletedMatchId, setLastCompletedMatchId] = useState(null);
+  const [viewingCompletedBracket, setViewingCompletedBracket] =
+    useState(false);
 
   const [tournamentHistory, setTournamentHistory] = useState({
     quarterfinal: [],
@@ -787,56 +789,56 @@ function App() {
         </section>
       )}
 
-{screen === "modePrompt" && (
-  <section className="horizontalScreen centerScreen modePromptScreen">
-    <header className="modePromptHeader">
-      <p className="miniLabel">Choose Game Style</p>
-      <h2>Mode Select</h2>
-    </header>
+      {screen === "modePrompt" && (
+        <section className="horizontalScreen centerScreen modePromptScreen">
+          <header className="modePromptHeader">
+            <p className="miniLabel">Choose Game Style</p>
+            <h2>Mode Select</h2>
+          </header>
 
-    <div className="standardModeButtons">
-      <button
-        className="successButton modeSelectButton"
-        onClick={startEasyMode}
-      >
-        <strong>Easy Mode</strong>
-        <small>Letter tracking only</small>
-      </button>
+          <div className="standardModeButtons">
+            <button
+              className="successButton modeSelectButton"
+              onClick={startEasyMode}
+            >
+              <strong>Easy Mode</strong>
+              <small>Letter tracking only</small>
+            </button>
 
-      <button
-        className="missButton modeSelectButton"
-        onClick={startRegularMode}
-      >
-        <strong>Regular Mode</strong>
-        <small>Full turns and trick attempts</small>
-      </button>
-    </div>
+            <button
+              className="missButton modeSelectButton"
+              onClick={startRegularMode}
+            >
+              <strong>Regular Mode</strong>
+              <small>Full turns and trick attempts</small>
+            </button>
+          </div>
 
-    {players.length === 8 && mode === "boards" && (
-      <div className="eventModeSection">
-        <div className="eventModeDivider">
-          <span>Event Mode</span>
-        </div>
+          {players.length === 8 && mode === "boards" && (
+            <div className="eventModeSection">
+              <div className="eventModeDivider">
+                <span>Event Mode</span>
+              </div>
 
-        <button
-          className="tournamentButton"
-          onClick={startTournamentMode}
-        >
-          <span className="tournamentButtonBadge">
-            8 Player
-          </span>
+              <button
+                className="tournamentButton"
+                onClick={startTournamentMode}
+              >
+                <span className="tournamentButtonBadge">
+                  8 Player
+                </span>
 
-          <strong>Tournament</strong>
-          <small>Single-elimination bracket</small>
-        </button>
-      </div>
-    )}
+                <strong>Tournament</strong>
+                <small>Single-elimination bracket</small>
+              </button>
+            </div>
+          )}
 
-    <p className="helperText">
-      Select the format that fits your session.
-    </p>
-  </section>
-)}
+          <p className="helperText">
+            Select the format that fits your session.
+          </p>
+        </section>
+      )}
 
       {screen === "easyMode" && players.length >= 2 && (
         <section
@@ -893,9 +895,23 @@ function App() {
         </section>
       )}
 
+
+
       {screen === "tournamentBracket" && (
         <section className="horizontalScreen tournamentBracketScreen">
           <p className="miniLabel">Tournament Mode</p>
+
+          {/* {viewingCompletedBracket && (
+            <button
+              className="bracketBackButton"
+              onClick={() => {
+                setViewingCompletedBracket(false);
+                goToScreen("tournamentChampion");
+              }}
+            >
+              ← Back to Champion
+            </button>
+          )} */}
 
           <h2>
             {tournamentRound === "quarterfinal"
@@ -1032,7 +1048,7 @@ function App() {
                   className="easyUndoButton"
                   onClick={(event) => {
                     event.stopPropagation();
-                    undoTournamentLetter(player.id);
+                    undoEasyLetter(player.id);
                   }}
                 >
                   Undo Letter
@@ -1094,6 +1110,17 @@ function App() {
           </p>
 
           <div className="winnerButtons">
+
+            <button
+              className="primaryButton"
+              onClick={() => {
+                setViewingCompletedBracket(true);
+                goToScreen("tournamentBracket");
+              }}
+            >
+              View Complete Bracket
+            </button>
+
             <button className="primaryButton" onClick={resetAll}>
               Start Another Tournament
             </button>
