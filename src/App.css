@@ -1838,10 +1838,58 @@ button:active,
 }
 
 .advanceLabel,
-.advanceWinner,
 .advanceArrow {
   position: relative;
   z-index: 1;
+}
+
+.advanceWinner{
+
+    position:relative;
+
+    display:inline-block;
+
+}
+
+.matchAdvanceAnimated
+.advanceWinner{
+
+    animation:
+
+        winnerPop
+        .65s
+        .25s
+        both;
+
+}
+
+@keyframes winnerPop{
+
+    0%{
+
+        transform:
+            scale(.8);
+
+        opacity:0;
+
+    }
+
+    70%{
+
+        transform:
+            scale(1.12);
+
+    }
+
+    100%{
+
+        transform:
+            scale(1);
+
+        opacity:1;
+
+    }
+
 }
 
 .advanceLabel {
@@ -2561,6 +2609,55 @@ button:active,
 
 .bracketBackButton:hover {
   transform: translateY(-2px);
+}
+
+/*========================================
+    MATCH ADVANCE CINEMATIC
+========================================*/
+
+.matchAdvanceAnimated{
+
+    animation:
+        advanceReveal
+        .9s
+        cubic-bezier(.18,.9,.22,1)
+        both;
+
+}
+
+@keyframes advanceReveal{
+
+    0%{
+
+        opacity:0;
+
+        transform:
+            translateX(-28px)
+            scale(.92);
+
+        filter:
+            blur(6px);
+
+    }
+
+    55%{
+
+        opacity:1;
+
+    }
+
+    100%{
+
+        opacity:1;
+
+        transform:
+            translateX(0)
+            scale(1);
+
+        filter:none;
+
+    }
+
 }
 
 /* RESPONSIVE */
