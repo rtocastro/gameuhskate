@@ -2350,6 +2350,122 @@ button:active,
   }
 }
 
+/*========================================
+    TOURNAMENT MODE BUTTON
+========================================*/
+
+.tournamentButton{
+    position:relative;
+    overflow:hidden;
+
+    width:min(420px,100%);
+
+    padding:1.2rem;
+
+    border:none;
+    border-radius:24px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #00ffd5,
+            #00b7ff,
+            #ff005c
+        );
+
+    color:white;
+
+    font-size:1.15rem;
+    font-weight:900;
+
+    letter-spacing:.08em;
+    text-transform:uppercase;
+
+    box-shadow:
+        0 0 30px rgba(0,255,213,.25),
+        0 0 60px rgba(255,0,92,.15);
+
+    transition:
+        transform .18s,
+        box-shadow .18s;
+}
+
+.tournamentButton:hover{
+
+    transform:
+        translateY(-3px)
+        scale(1.02);
+
+    box-shadow:
+        0 0 45px rgba(0,255,213,.4),
+        0 0 70px rgba(255,0,92,.25);
+}
+
+.tournamentButton:active{
+
+    transform:
+        scale(.98);
+
+}
+
+.tournamentButton::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+        linear-gradient(
+            110deg,
+            transparent,
+            rgba(255,255,255,.35),
+            transparent
+        );
+
+    transform:translateX(-140%);
+
+    animation:
+        tournamentSweep
+        2.8s
+        linear
+        infinite;
+
+}
+
+@keyframes tournamentSweep{
+
+    from{
+
+        transform:
+            translateX(-140%);
+
+    }
+
+    to{
+
+        transform:
+            translateX(140%);
+
+    }
+
+}
+
+.tournamentButton small{
+
+    display:block;
+
+    margin-top:.35rem;
+
+    font-size:.65rem;
+
+    letter-spacing:.18em;
+
+    opacity:.8;
+
+}
+
 /* RESPONSIVE */
 
 @media (min-width: 900px) {
