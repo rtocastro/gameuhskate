@@ -851,28 +851,30 @@ function generateTournament(tournamentPlayers) {
                 : "Final Bracket"}
           </h2>
 
-<div
-  className={`tournamentBracket tournamentBracket-${tournamentRound}`}
->
-  {tournamentMatches.map((match, index) => {
-    const nextMatchIndex = tournamentMatches.findIndex(
-      (item) => !item.winner
-    );
+<div className="tournamentBracketColumns">
+  <TournamentRoundColumn
+    title="Quarterfinals"
+    round="quarterfinal"
+    matches={tournamentHistory.quarterfinal}
+    activeRound={tournamentRound}
+    lastCompletedMatchId={lastCompletedMatchId}
+  />
 
-    const isNextMatch = index === nextMatchIndex;
-    const isLatestWinner =
-      match.id === lastCompletedMatchId;
+  <TournamentRoundColumn
+    title="Semifinals"
+    round="semifinal"
+    matches={tournamentHistory.semifinal}
+    activeRound={tournamentRound}
+    lastCompletedMatchId={lastCompletedMatchId}
+  />
 
-    return (
-      <TournamentMatchCard
-        key={match.id}
-        match={match}
-        index={index}
-        isNextMatch={isNextMatch}
-        isLatestWinner={isLatestWinner}
-      />
-    );
-  })}
+  <TournamentRoundColumn
+    title="Final"
+    round="final"
+    matches={tournamentHistory.final}
+    activeRound={tournamentRound}
+    lastCompletedMatchId={lastCompletedMatchId}
+  />
 </div>
 
           {tournamentMatches.some((match) => !match.winner) ? (
@@ -1102,6 +1104,59 @@ function generateTournament(tournamentPlayers) {
 
 
     </main>
+  );
+}
+
+function TournamentRoundColumn({
+  title,
+  round,
+  matches,
+  activeRound,
+  lastCompletedMatchId,
+}) {
+  const nextMatchIndex = matches.findIndex(
+    (match) => !match.winner
+  );
+
+  return (
+    <section
+      className={`bracketRoundColumn bracketRoundColumn-${round} ${
+        activeRound === round ? "isActiveRound" : ""
+      } ${matches.length === 0 ? "isLockedRound" : ""}`}
+    >
+      <header className="bracketRoundHeader">
+        <span>{title}</span>
+
+        <small>
+          {matches.length > 0
+            ? `${matches.filter((match) => match.winner).length}/${matches.length}`
+            : "Locked"}
+        </small>
+      </header>
+
+      <div className="bracketRoundMatches">
+        {matches.length > 0 ? (
+          matches.map((match, index) => (
+            <TournamentMatchCard
+              key={match.id}
+              match={match}
+              index={index}
+              isNextMatch={
+                activeRound === round &&
+                index === nextMatchIndex
+              }
+              isLatestWinner={
+                match.id === lastCompletedMatchId
+              }
+            />
+          ))
+        ) : (
+          <div className="lockedRoundPlaceholder">
+            <span>Awaiting Winners</span>
+          </div>
+        )}
+      </div>
+    </section>
   );
 }
 

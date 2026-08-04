@@ -1931,6 +1931,163 @@ button:active,
   }
 }
 
+/* ========================================
+   FULL TOURNAMENT BRACKET COLUMNS
+======================================== */
+
+.tournamentBracketColumns {
+  width: min(1600px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(280px, 1fr));
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+.bracketRoundColumn {
+  position: relative;
+  min-width: 0;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(246, 241, 232, 0.1);
+  border-radius: 28px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.05),
+      transparent 55%
+    ),
+    rgba(0, 0, 0, 0.2);
+  transition:
+    opacity 180ms ease,
+    filter 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.bracketRoundColumn.isActiveRound {
+  border-color: rgba(255, 0, 92, 0.42);
+  box-shadow:
+    0 0 32px rgba(255, 0, 92, 0.12),
+    0 0 48px rgba(0, 255, 180, 0.07);
+}
+
+.bracketRoundColumn.isLockedRound {
+  opacity: 0.34;
+  filter: grayscale(0.75);
+}
+
+.bracketRoundHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(246, 241, 232, 0.1);
+}
+
+.bracketRoundHeader span {
+  font-size: clamp(1.25rem, 2.5vw, 2.2rem);
+  font-weight: 950;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+
+.bracketRoundHeader small {
+  color: rgba(246, 241, 232, 0.45);
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.bracketRoundColumn.isActiveRound .bracketRoundHeader span {
+  text-shadow:
+    2px 2px 0 rgba(255, 0, 92, 0.75),
+    -2px -2px 0 rgba(0, 255, 180, 0.65);
+}
+
+.bracketRoundMatches {
+  min-height: 0;
+  display: grid;
+  gap: 1rem;
+  align-content: space-around;
+}
+
+.bracketRoundColumn-quarterfinal .bracketRoundMatches {
+  grid-template-rows: repeat(4, minmax(0, auto));
+}
+
+.bracketRoundColumn-semifinal .bracketRoundMatches {
+  grid-template-rows: repeat(2, minmax(0, auto));
+}
+
+.bracketRoundColumn-final .bracketRoundMatches {
+  grid-template-rows: minmax(0, auto);
+  align-content: center;
+}
+
+.lockedRoundPlaceholder {
+  min-height: 180px;
+  display: grid;
+  place-items: center;
+  border: 1px dashed rgba(246, 241, 232, 0.16);
+  border-radius: 22px;
+  background:
+    repeating-linear-gradient(
+      -15deg,
+      rgba(255, 255, 255, 0.025) 0,
+      rgba(255, 255, 255, 0.025) 2px,
+      transparent 2px,
+      transparent 12px
+    );
+}
+
+.lockedRoundPlaceholder span {
+  color: rgba(246, 241, 232, 0.3);
+  font-size: 0.67rem;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* Compact the cards inside the full bracket */
+
+.tournamentBracketColumns .tournamentMatch {
+  min-height: 0;
+}
+
+.tournamentBracketColumns .matchPlayers {
+  min-height: 96px;
+}
+
+.tournamentBracketColumns .playerName {
+  font-size: clamp(1rem, 2vw, 1.75rem);
+}
+
+/* Tablet and phone */
+
+@media (max-width: 1050px) {
+  .tournamentBracketColumns {
+    grid-template-columns: minmax(280px, 1fr);
+  }
+
+  .bracketRoundColumn {
+    padding: 0.85rem;
+  }
+
+  .bracketRoundColumn.isLockedRound {
+    min-height: 170px;
+  }
+
+  .bracketRoundMatches {
+    align-content: start;
+  }
+}
+
 /* RESPONSIVE */
 
 @media (min-width: 900px) {
