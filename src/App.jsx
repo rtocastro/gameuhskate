@@ -1137,19 +1137,32 @@ function TournamentRoundColumn({
       <div className="bracketRoundMatches">
         {matches.length > 0 ? (
           matches.map((match, index) => (
-            <TournamentMatchCard
-              key={match.id}
-              match={match}
-              index={index}
-              isNextMatch={
-                activeRound === round &&
-                index === nextMatchIndex
-              }
-              isLatestWinner={
-                match.id === lastCompletedMatchId
-              }
-            />
-          ))
+  <div
+    className={`bracketMatchNode ${
+      match.winner ? "hasWinner" : ""
+    }`}
+    key={match.id}
+  >
+    <TournamentMatchCard
+      match={match}
+      index={index}
+      isNextMatch={
+        activeRound === round &&
+        index === nextMatchIndex
+      }
+      isLatestWinner={
+        match.id === lastCompletedMatchId
+      }
+    />
+
+    {round !== "final" && (
+      <span
+        className="bracketExitRail"
+        aria-hidden="true"
+      />
+    )}
+  </div>
+))
         ) : (
           <div className="lockedRoundPlaceholder">
             <span>Awaiting Winners</span>

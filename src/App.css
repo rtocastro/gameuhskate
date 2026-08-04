@@ -2088,6 +2088,166 @@ button:active,
   }
 }
 
+/* ========================================
+   BRACKET CONNECTOR RAILS — PASS 1
+======================================== */
+
+.bracketMatchNode {
+  position: relative;
+  min-width: 0;
+}
+
+.bracketExitRail {
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  z-index: 4;
+  width: calc(1.5rem + 2px);
+  height: 2px;
+  background: rgba(246, 241, 232, 0.2);
+  transform: translateY(-50%);
+  transform-origin: left center;
+  pointer-events: none;
+}
+
+.bracketExitRail::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(246, 241, 232, 0.25);
+  transform: translateY(-50%);
+  box-shadow: 0 0 10px rgba(246, 241, 232, 0.14);
+}
+
+.bracketMatchNode.hasWinner .bracketExitRail {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 255, 180, 0.95),
+    rgba(255, 0, 92, 0.8)
+  );
+  box-shadow:
+    0 0 9px rgba(0, 255, 180, 0.65),
+    0 0 18px rgba(255, 0, 92, 0.24);
+  animation: bracketRailPowerOn 0.55s ease-out both;
+}
+
+.bracketMatchNode.hasWinner .bracketExitRail::after {
+  background: #f6f1e8;
+  box-shadow:
+    0 0 8px rgba(246, 241, 232, 0.9),
+    0 0 16px rgba(0, 255, 180, 0.75),
+    0 0 25px rgba(255, 0, 92, 0.45);
+}
+
+@keyframes bracketRailPowerOn {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) scaleX(0);
+    filter: brightness(2);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(-50%) scaleX(1);
+    filter: brightness(1);
+  }
+}
+
+/* Stacked layouts do not have horizontal space for rails */
+
+@media (max-width: 1050px) {
+  .bracketExitRail {
+    display: none;
+  }
+}
+
+/* ========================================
+   BRACKET CONNECTOR BRANCHES — PASS 2
+======================================== */
+
+@media (min-width: 1051px) {
+  .bracketRoundColumn-quarterfinal .bracketMatchNode,
+  .bracketRoundColumn-semifinal .bracketMatchNode {
+    position: relative;
+  }
+
+  .bracketRoundColumn-quarterfinal .bracketMatchNode:nth-child(odd)::after,
+  .bracketRoundColumn-semifinal .bracketMatchNode:nth-child(odd)::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: calc(100% + 1.5rem);
+    width: 2px;
+    height: calc(50% + 1rem);
+    background: rgba(246, 241, 232, 0.18);
+    box-shadow: 0 0 10px rgba(246, 241, 232, 0.08);
+    pointer-events: none;
+  }
+
+  .bracketRoundColumn-quarterfinal .bracketMatchNode:nth-child(even)::after,
+  .bracketRoundColumn-semifinal .bracketMatchNode:nth-child(even)::after {
+    content: "";
+    position: absolute;
+    bottom: 50%;
+    left: calc(100% + 1.5rem);
+    width: 2px;
+    height: calc(50% + 1rem);
+    background: rgba(246, 241, 232, 0.18);
+    box-shadow: 0 0 10px rgba(246, 241, 232, 0.08);
+    pointer-events: none;
+  }
+
+  .bracketRoundColumn-quarterfinal .bracketMatchNode:nth-child(odd)::before,
+  .bracketRoundColumn-semifinal .bracketMatchNode:nth-child(odd)::before {
+    content: "";
+    position: absolute;
+    top: calc(100% + 1rem);
+    left: calc(100% + 1.5rem);
+    z-index: 3;
+    width: 1.5rem;
+    height: 2px;
+    background: rgba(246, 241, 232, 0.18);
+    box-shadow: 0 0 10px rgba(246, 241, 232, 0.08);
+    pointer-events: none;
+  }
+
+  .bracketRoundColumn-quarterfinal
+    .bracketMatchNode:nth-child(odd).hasWinner::after,
+  .bracketRoundColumn-quarterfinal
+    .bracketMatchNode:nth-child(even).hasWinner::after,
+  .bracketRoundColumn-semifinal
+    .bracketMatchNode:nth-child(odd).hasWinner::after,
+  .bracketRoundColumn-semifinal
+    .bracketMatchNode:nth-child(even).hasWinner::after {
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 255, 180, 0.9),
+      rgba(255, 0, 92, 0.75)
+    );
+    box-shadow:
+      0 0 10px rgba(0, 255, 180, 0.55),
+      0 0 18px rgba(255, 0, 92, 0.22);
+  }
+
+  .bracketRoundColumn-quarterfinal
+    .bracketMatchNode:nth-child(odd).hasWinner::before,
+  .bracketRoundColumn-semifinal
+    .bracketMatchNode:nth-child(odd).hasWinner::before {
+    background: linear-gradient(
+      90deg,
+      rgba(0, 255, 180, 0.9),
+      rgba(255, 0, 92, 0.75)
+    );
+    box-shadow:
+      0 0 10px rgba(0, 255, 180, 0.55),
+      0 0 18px rgba(255, 0, 92, 0.22);
+  }
+}
+
 /* RESPONSIVE */
 
 @media (min-width: 900px) {
