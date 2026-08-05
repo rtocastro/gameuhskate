@@ -72,8 +72,8 @@ function App() {
   const [lastCompletedMatchId, setLastCompletedMatchId] = useState(null);
   const [viewingCompletedBracket, setViewingCompletedBracket] =
     useState(false);
-    const [bracketUpdateMessage, setBracketUpdateMessage] =
-  useState("");
+  const [bracketUpdateMessage, setBracketUpdateMessage] =
+    useState("");
 
   const [tournamentHistory, setTournamentHistory] = useState({
     quarterfinal: [],
@@ -82,21 +82,21 @@ function App() {
   });
 
   useEffect(() => {
-  if (
-    screen !== "tournamentBracket" ||
-    !lastCompletedMatchId
-  ) {
-    return;
-  }
+    if (
+      screen !== "tournamentBracket" ||
+      !lastCompletedMatchId
+    ) {
+      return;
+    }
 
-  const animationTimer = setTimeout(() => {
-    setLastCompletedMatchId(null);
-  }, 1800);
+    const animationTimer = setTimeout(() => {
+      setLastCompletedMatchId(null);
+    }, 1800);
 
-  return () => {
-    clearTimeout(animationTimer);
-  };
-}, [screen, lastCompletedMatchId]);
+    return () => {
+      clearTimeout(animationTimer);
+    };
+  }, [screen, lastCompletedMatchId]);
 
   const activeTournamentMatch =
     tournamentMatches[currentTournamentMatch];
@@ -140,6 +140,7 @@ function App() {
       final: [],
     });
     setBracketUpdateMessage("");
+    setViewingCompletedBracket(false);
   }
 
   function goToScreen(nextScreen) {
@@ -270,25 +271,24 @@ function App() {
   }
 
   function showUpdatedBracket() {
-  const completedRoundName =
-    tournamentRound === "quarterfinal"
-      ? "Quarterfinal"
-      : tournamentRound === "semifinal"
-      ? "Semifinal"
-      : "Final";
+    const completedRoundName =
+      tournamentRound === "quarterfinal"
+        ? "Quarterfinal"
+        : tournamentRound === "semifinal"
+          ? "Semifinal"
+          : "Final";
 
-  setBracketUpdateMessage(
-    `${completedRoundName} Match ${
-      currentTournamentMatch + 1
-    } Recorded`
-  );
+    setBracketUpdateMessage(
+      `${completedRoundName} Match ${currentTournamentMatch + 1
+      } Recorded`
+    );
 
-  goToScreen("tournamentBracketUpdating");
+    goToScreen("tournamentBracketUpdating");
 
-  setTimeout(() => {
-    goToScreen("tournamentBracket");
-  }, 850);
-}
+    setTimeout(() => {
+      goToScreen("tournamentBracket");
+    }, 850);
+  }
 
   function advanceTournamentRound() {
     const roundComplete = tournamentMatches.every(
@@ -937,34 +937,37 @@ function App() {
       )}
 
 
-{screen === "tournamentBracketUpdating" && (
-  <section className="horizontalScreen bracketUpdatingScreen">
-    <p className="miniLabel">
-      Game-Uh-Skate Tournament
-    </p>
+      {screen === "tournamentBracketUpdating" && (
+        <section className="horizontalScreen bracketUpdatingScreen">
+          <p className="miniLabel">
+            Game-Uh-Skate Tournament
+          </p>
 
-    <div className="bracketUpdatingContent">
-      <span className="updatingStatus">
-        Updating
-      </span>
+          <div className="bracketUpdatingContent">
+            <span className="updatingStatus">
+              Updating
+            </span>
 
-      <h1>Bracket</h1>
+            <h1>Bracket</h1>
 
-      <div
-        className="bracketLoadingRail"
-        aria-hidden="true"
-      >
-        <span />
-      </div>
+            <div
+              className="bracketLoadingRail"
+              aria-hidden="true"
+            >
+              <span />
+            </div>
 
-      <p>{bracketUpdateMessage}</p>
-    </div>
-  </section>
-)}
+            <p>{bracketUpdateMessage}</p>
+          </div>
+        </section>
+      )}
 
 
       {screen === "tournamentBracket" && (
-        <section className="horizontalScreen tournamentBracketScreen">
+        <section
+          className={`horizontalScreen tournamentBracketScreen ${viewingCompletedBracket ? "isBracketRecap" : ""
+            }`}
+        >
           <p className="miniLabel">Tournament Mode</p>
 
           {/* {viewingCompletedBracket && (
@@ -986,6 +989,42 @@ function App() {
                 ? "Semifinal Bracket"
                 : "Final Bracket"}
           </h2>
+
+          <div className="tournamentProgress">
+            {[
+              { key: "quarterfinal", label: "Quarterfinals" },
+              { key: "semifinal", label: "Semifinals" },
+              { key: "final", label: "Final" },
+            ].map((round, index) => {
+              const roundMatches = tournamentHistory[round.key];
+
+              const isComplete =
+                roundMatches.length > 0 &&
+                roundMatches.every((match) => match.winner);
+
+              const isActive = tournamentRound === round.key;
+
+              return (
+                <React.Fragment key={round.key}>
+                  <div
+                    className={`tournamentProgressStep ${isComplete ? "isComplete" : ""
+                      } ${isActive ? "isActive" : ""}`}
+                  >
+                    <span>{index + 1}</span>
+                    <strong>{round.label}</strong>
+                  </div>
+
+                  {index < 2 && (
+                    <div
+                      className={`tournamentProgressLine ${isComplete ? "isComplete" : ""
+                        }`}
+                      aria-hidden="true"
+                    />
+                  )}
+                </React.Fragment>
+              );
+            })}
+          </div>
 
           <div className="tournamentBracketColumns">
             <TournamentRoundColumn
@@ -1177,8 +1216,8 @@ function App() {
           <h2>Tournament Champion</h2>
 
           <div className="championEmblem" aria-hidden="true">
-  <span>★</span>
-</div>
+            <span>★</span>
+          </div>
 
           <h1>{winner.name}</h1>
 

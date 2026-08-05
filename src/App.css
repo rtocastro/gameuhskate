@@ -3344,3 +3344,183 @@ button:active,
     z-index: 20;
   }
 }
+
+/* ========================================
+   COMPLETED BRACKET RECAP
+======================================== */
+
+.tournamentBracketScreen.isBracketRecap {
+  background:
+    radial-gradient(
+      circle at 50% 15%,
+      rgba(246, 241, 232, 0.08),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 15% 25%,
+      rgba(255, 0, 92, 0.13),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 85% 80%,
+      rgba(0, 255, 180, 0.11),
+      transparent 32%
+    ),
+    #050505;
+}
+
+.tournamentBracketScreen.isBracketRecap > h2::after {
+  content: "Complete Tournament";
+  display: block;
+  margin-top: 0.65rem;
+  color: rgba(0, 255, 180, 0.78);
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-shadow: none;
+}
+
+.isBracketRecap .bracketRoundColumn {
+  opacity: 1;
+  filter: none;
+}
+
+.isBracketRecap .bracketRoundColumn.isLockedRound {
+  opacity: 1;
+  filter: none;
+}
+
+.isBracketRecap .tournamentMatch.isComplete {
+  border-color: rgba(0, 255, 180, 0.38);
+}
+
+.isBracketRecap .tournamentMatch.isNextMatch {
+  animation: none;
+}
+
+.isBracketRecap .bracketBackButton {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 0, 92, 0.12),
+      rgba(0, 255, 180, 0.1)
+    ),
+    rgba(0, 0, 0, 0.72);
+}
+
+/* ========================================
+   TOURNAMENT PROGRESS STRIP
+======================================== */
+
+.tournamentProgress {
+  width: min(900px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: auto 1fr auto 1fr auto;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.tournamentProgressStep {
+  min-width: 0;
+  display: grid;
+  place-items: center;
+  gap: 0.35rem;
+  text-align: center;
+  opacity: 0.35;
+  filter: grayscale(1);
+  transition:
+    opacity 180ms ease,
+    filter 180ms ease,
+    transform 180ms ease;
+}
+
+.tournamentProgressStep > span {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(246, 241, 232, 0.22);
+  border-radius: 50%;
+  background: #090909;
+  color: rgba(246, 241, 232, 0.72);
+  font-size: 0.72rem;
+  font-weight: 950;
+}
+
+.tournamentProgressStep strong {
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.tournamentProgressStep.isActive {
+  opacity: 1;
+  filter: none;
+  transform: translateY(-2px);
+}
+
+.tournamentProgressStep.isActive > span {
+  border-color: rgba(255, 0, 92, 0.72);
+  box-shadow:
+    3px 3px 0 rgba(255, 0, 92, 0.72),
+    -2px -2px 0 rgba(0, 255, 180, 0.68),
+    0 0 18px rgba(0, 255, 180, 0.2);
+}
+
+.tournamentProgressStep.isComplete {
+  opacity: 0.82;
+  filter: none;
+}
+
+.tournamentProgressStep.isComplete > span {
+  border-color: rgba(0, 255, 180, 0.65);
+  color: rgba(0, 255, 180, 0.95);
+}
+
+.tournamentProgressStep.isComplete > span::before {
+  content: "✓";
+}
+
+.tournamentProgressStep.isComplete > span {
+  font-size: 0;
+}
+
+.tournamentProgressStep.isComplete > span::before {
+  font-size: 0.85rem;
+}
+
+.tournamentProgressLine {
+  height: 2px;
+  border-radius: 999px;
+  background: rgba(246, 241, 232, 0.12);
+  overflow: hidden;
+}
+
+.tournamentProgressLine.isComplete {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 255, 180, 0.9),
+    rgba(255, 0, 92, 0.72)
+  );
+  box-shadow:
+    0 0 8px rgba(0, 255, 180, 0.5),
+    0 0 15px rgba(255, 0, 92, 0.2);
+}
+
+@media (max-width: 600px) {
+  .tournamentProgress {
+    gap: 0.35rem;
+  }
+
+  .tournamentProgressStep strong {
+    font-size: 0.5rem;
+    letter-spacing: 0.08em;
+  }
+
+  .tournamentProgressStep > span {
+    width: 32px;
+    height: 32px;
+  }
+}
