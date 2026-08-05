@@ -1176,6 +1176,10 @@ function App() {
 
           <h2>Tournament Champion</h2>
 
+          <div className="championEmblem" aria-hidden="true">
+  <span>★</span>
+</div>
+
           <h1>{winner.name}</h1>
 
           <p className="championMessage">
