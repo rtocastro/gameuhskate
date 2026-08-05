@@ -72,6 +72,8 @@ function App() {
   const [lastCompletedMatchId, setLastCompletedMatchId] = useState(null);
   const [viewingCompletedBracket, setViewingCompletedBracket] =
     useState(false);
+    const [bracketUpdateMessage, setBracketUpdateMessage] =
+  useState("");
 
   const [tournamentHistory, setTournamentHistory] = useState({
     quarterfinal: [],
@@ -137,6 +139,7 @@ function App() {
       semifinal: [],
       final: [],
     });
+    setBracketUpdateMessage("");
   }
 
   function goToScreen(nextScreen) {
@@ -265,6 +268,27 @@ function App() {
     setRoundIntro(round);
     goToScreen("tournamentRoundIntro");
   }
+
+  function showUpdatedBracket() {
+  const completedRoundName =
+    tournamentRound === "quarterfinal"
+      ? "Quarterfinal"
+      : tournamentRound === "semifinal"
+      ? "Semifinal"
+      : "Final";
+
+  setBracketUpdateMessage(
+    `${completedRoundName} Match ${
+      currentTournamentMatch + 1
+    } Recorded`
+  );
+
+  goToScreen("tournamentBracketUpdating");
+
+  setTimeout(() => {
+    goToScreen("tournamentBracket");
+  }, 850);
+}
 
   function advanceTournamentRound() {
     const roundComplete = tournamentMatches.every(
@@ -913,6 +937,31 @@ function App() {
       )}
 
 
+{screen === "tournamentBracketUpdating" && (
+  <section className="horizontalScreen bracketUpdatingScreen">
+    <p className="miniLabel">
+      Game-Uh-Skate Tournament
+    </p>
+
+    <div className="bracketUpdatingContent">
+      <span className="updatingStatus">
+        Updating
+      </span>
+
+      <h1>Bracket</h1>
+
+      <div
+        className="bracketLoadingRail"
+        aria-hidden="true"
+      >
+        <span />
+      </div>
+
+      <p>{bracketUpdateMessage}</p>
+    </div>
+  </section>
+)}
+
 
       {screen === "tournamentBracket" && (
         <section className="horizontalScreen tournamentBracketScreen">
@@ -1177,7 +1226,7 @@ function App() {
 
           <button
             className="primaryButton"
-            onClick={() => goToScreen("tournamentBracket")}
+            onClick={showUpdatedBracket}
           >
             View Updated Bracket
           </button>
