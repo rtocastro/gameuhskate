@@ -928,6 +928,7 @@ function App() {
               matches={tournamentHistory.quarterfinal}
               activeRound={tournamentRound}
               lastCompletedMatchId={lastCompletedMatchId}
+              hasIncomingWinner={false}
             />
 
             <TournamentRoundColumn
@@ -936,6 +937,9 @@ function App() {
               matches={tournamentHistory.semifinal}
               activeRound={tournamentRound}
               lastCompletedMatchId={lastCompletedMatchId}
+              hasIncomingWinner={
+                lastCompletedMatchId?.startsWith("quarterfinal")
+              }
             />
 
             <TournamentRoundColumn
@@ -944,6 +948,9 @@ function App() {
               matches={tournamentHistory.final}
               activeRound={tournamentRound}
               lastCompletedMatchId={lastCompletedMatchId}
+              hasIncomingWinner={
+                lastCompletedMatchId?.startsWith("semifinal")
+              }
             />
           </div>
 
@@ -1194,6 +1201,7 @@ function TournamentRoundColumn({
   matches,
   activeRound,
   lastCompletedMatchId,
+  hasIncomingWinner,
 }) {
   const nextMatchIndex = matches.findIndex(
     (match) => !match.winner
@@ -1202,7 +1210,8 @@ function TournamentRoundColumn({
   return (
     <section
       className={`bracketRoundColumn bracketRoundColumn-${round} ${activeRound === round ? "isActiveRound" : ""
-        } ${matches.length === 0 ? "isLockedRound" : ""}`}
+        } ${matches.length === 0 ? "isLockedRound" : ""} ${hasIncomingWinner ? "hasIncomingWinner" : ""
+        }`}
     >
       <header className="bracketRoundHeader">
         <span>{title}</span>
@@ -1326,11 +1335,10 @@ function TournamentMatchCard({
       </div>
 
       {match.winner && (
-<footer
-  className={`matchAdvance ${
-    isLatestWinner ? "matchAdvanceAnimated" : ""
-  }`}
->
+        <footer
+          className={`matchAdvance ${isLatestWinner ? "matchAdvanceAnimated" : ""
+            }`}
+        >
           <span className="advanceLabel">
             Advancing
           </span>

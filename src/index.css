@@ -17,3 +17,55 @@ body {
   color: #f6f1e8;
   font-family: Inter, system-ui, sans-serif;
 }
+
+/* ========================================
+   NEXT ROUND POWER-ON
+======================================== */
+
+.bracketRoundColumn.hasIncomingWinner {
+  animation: incomingRoundPower 0.9s 0.65s ease-out both;
+}
+
+.bracketRoundColumn.hasIncomingWinner .bracketRoundHeader {
+  animation: incomingHeaderFlash 0.75s 0.72s ease-out both;
+}
+
+@keyframes incomingRoundPower {
+  0% {
+    opacity: 0.45;
+    filter: grayscale(0.7) brightness(0.7);
+    transform: scale(0.985);
+  }
+
+  45% {
+    opacity: 1;
+    filter: grayscale(0) brightness(1.35);
+    transform: scale(1.015);
+    box-shadow:
+      0 0 40px rgba(0, 255, 180, 0.22),
+      0 0 65px rgba(255, 0, 92, 0.16);
+  }
+
+  100% {
+    opacity: 1;
+    filter: grayscale(0) brightness(1);
+    transform: scale(1);
+  }
+}
+
+@keyframes incomingHeaderFlash {
+  0% {
+    border-bottom-color: rgba(246, 241, 232, 0.1);
+  }
+
+  50% {
+    border-bottom-color: rgba(0, 255, 180, 0.9);
+    text-shadow:
+      0 0 18px rgba(0, 255, 180, 0.7),
+      0 0 28px rgba(255, 0, 92, 0.35);
+  }
+
+  100% {
+    border-bottom-color: rgba(246, 241, 232, 0.1);
+  }
+}
