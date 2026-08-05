@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import "./App.css";
 
 const LETTERS = ["S", "K", "A", "T", "E"];
@@ -78,6 +78,23 @@ function App() {
     semifinal: [],
     final: [],
   });
+
+  useEffect(() => {
+  if (
+    screen !== "tournamentBracket" ||
+    !lastCompletedMatchId
+  ) {
+    return;
+  }
+
+  const animationTimer = setTimeout(() => {
+    setLastCompletedMatchId(null);
+  }, 1800);
+
+  return () => {
+    clearTimeout(animationTimer);
+  };
+}, [screen, lastCompletedMatchId]);
 
   const activeTournamentMatch =
     tournamentMatches[currentTournamentMatch];
