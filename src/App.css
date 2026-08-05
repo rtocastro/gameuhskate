@@ -2714,3 +2714,127 @@ button:active,
     line-height: 1.4;
   }
 }
+
+/* ========================================
+   MATCH ADVANCE CINEMATIC
+======================================== */
+
+.matchAdvanceAnimated {
+  animation:
+    advanceReveal 0.9s
+    cubic-bezier(0.18, 0.9, 0.22, 1)
+    both;
+}
+
+.matchAdvanceAnimated .advanceWinner {
+  animation:
+    advanceWinnerPop 0.65s
+    0.2s
+    cubic-bezier(0.2, 1.25, 0.35, 1)
+    both;
+}
+
+.matchAdvanceAnimated .advanceArrow {
+  animation:
+    advanceArrowTravel 0.65s
+    0.35s
+    ease-out
+    both;
+}
+
+@keyframes advanceReveal {
+  from {
+    opacity: 0;
+    transform: translateX(-28px) scale(0.94);
+    filter: blur(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes advanceWinnerPop {
+  from {
+    opacity: 0;
+    transform: scale(0.78) skewX(-8deg);
+  }
+
+  70% {
+    opacity: 1;
+    transform: scale(1.12) skewX(2deg);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) skewX(0);
+  }
+}
+
+@keyframes advanceArrowTravel {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ========================================
+   WINNER CONNECTOR PULSE
+======================================== */
+
+.bracketMatchNode.hasWinner .bracketExitRail {
+  overflow: visible;
+}
+
+.bracketMatchNode.hasWinner .bracketExitRail::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 22px;
+  height: 6px;
+  border-radius: 999px;
+  background: #f6f1e8;
+  transform: translate(-100%, -50%);
+  opacity: 0;
+  filter: blur(1px);
+  box-shadow:
+    0 0 8px rgba(246, 241, 232, 0.95),
+    0 0 16px rgba(0, 255, 180, 0.85),
+    0 0 26px rgba(255, 0, 92, 0.55);
+}
+
+.bracketMatchNode.hasWinner
+  .tournamentMatch.isLatestWinner
+  + .bracketExitRail::before {
+  animation: connectorPulseTravel 0.85s 0.35s ease-out both;
+}
+
+@keyframes connectorPulseTravel {
+  0% {
+    left: 0;
+    opacity: 0;
+    transform: translate(-100%, -50%) scaleX(0.6);
+  }
+
+  18% {
+    opacity: 1;
+  }
+
+  75% {
+    opacity: 1;
+  }
+
+  100% {
+    left: 100%;
+    opacity: 0;
+    transform: translate(0, -50%) scaleX(1.15);
+  }
+}

@@ -1326,12 +1326,10 @@ function TournamentMatchCard({
       </div>
 
       {match.winner && (
-        <footer
-    className={`matchAdvance ${
-        isLatestWinner
-            ? "matchAdvanceAnimated"
-            : ""
-    }`}
+<footer
+  className={`matchAdvance ${
+    isLatestWinner ? "matchAdvanceAnimated" : ""
+  }`}
 >
           <span className="advanceLabel">
             Advancing
