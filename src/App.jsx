@@ -143,6 +143,32 @@ function App() {
     setViewingCompletedBracket(false);
   }
 
+  function rematchGame() {
+    const resetPlayers = players.map((player, index) => ({
+      ...player,
+      letters: 0,
+      eliminated: false,
+      eliminatedPlace: null,
+      order: index,
+    }));
+
+    setPlayers(resetPlayers);
+    setCurrentIndex(0);
+    setSetterId(null);
+    setAttemptQueue([]);
+    setWinner(null);
+    setPlacements([]);
+
+    playSound("click");
+
+    if (gameMode === "easy") {
+      goToScreen("easyMode");
+      return;
+    }
+
+    goToScreen("game");
+  }
+
   function goToScreen(nextScreen) {
     setIsTransitioning(true);
 
@@ -592,11 +618,13 @@ function App() {
   }
 
   function startRegularMode() {
+    setGameMode("regular");
     setCurrentIndex(pendingStartIndex);
     goToScreen("game");
   }
 
   function startEasyMode() {
+    setGameMode("easy");
     setCurrentIndex(pendingStartIndex);
     goToScreen("easyMode");
   }
@@ -1291,8 +1319,26 @@ function App() {
           )}
 
           <div className="winnerButtons">
-            <button className="primaryButton" onClick={resetAll}>Play Another Game?</button>
-            <a className="linkButton" href="https://www.instagram.com/witchcountyspellcasters/" target="_blank" rel="noreferrer" onClick={resetAll}>
+            <button
+              className="primaryButton rematchButton"
+              onClick={rematchGame}
+            >
+              Rematch
+            </button>
+
+            <button
+              className="newGameButton"
+              onClick={resetAll}
+            >
+              New Game
+            </button>
+
+            <a
+              className="linkButton"
+              href="https://www.instagram.com/witchcountyspellcasters/"
+              target="_blank"
+              rel="noreferrer"
+            >
               WCSC
             </a>
           </div>

@@ -638,25 +638,51 @@ input:focus {
 }
 
 .easyUndoButton {
-  position: static;
-  width: fit-content;
-  max-width: 100%;
-  margin: 0;
-  padding: 0.48rem 0.7rem;
-  border: 1px solid rgba(246, 241, 232, 0.25);
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.48);
+  position: relative;
+  z-index: 10;
+
+  width: 64px;
+  height: 64px;
+  min-width: 64px;
+  min-height: 64px;
+
+  display: grid;
+  place-items: center;
+
+  padding: 0;
+
+  border: 2px solid rgba(246, 241, 232, 0.35);
+  border-radius: 50%;
+
+  background: rgba(0, 0, 0, 0.72);
   color: #f6f1e8;
-  font-size: clamp(0.58rem, 2.4vw, 0.76rem);
-  font-weight: 900;
+
+  font-weight: 950;
+
+  box-shadow:
+    3px 3px 0 rgba(255, 0, 92, 0.7),
+    -2px -2px 0 rgba(0, 255, 180, 0.65);
+
+  touch-action: manipulation;
+}
+
+.easyUndoButton span {
+  position: relative;
+  z-index: 2;
+  font-size: 2rem;
   line-height: 1;
-  letter-spacing: 0.055em;
-  text-transform: uppercase;
-  box-shadow: none;
 }
 
 .easyUndoButton:active {
-  transform: scale(0.95);
+  transform: scale(0.9);
+  filter: brightness(1.35);
+}
+
+.tournamentEasyPlayer .easyUndoButton {
+  width: 72px;
+  height: 72px;
+  min-width: 72px;
+  min-height: 72px;
 }
 
 .tapHint {
@@ -3523,4 +3549,19 @@ button:active,
     width: 32px;
     height: 32px;
   }
+}
+
+.newGameButton {
+  border: 1px solid rgba(246, 241, 232, 0.22);
+  border-radius: 999px;
+  padding: 1rem 1.4rem;
+  background: rgba(255, 255, 255, 0.06);
+  color: #f6f1e8;
+  font-weight: 900;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.rematchButton {
+  min-width: 150px;
 }
