@@ -637,54 +637,6 @@ input:focus {
   line-height: 1;
 }
 
-.easyUndoButton {
-  position: relative;
-  z-index: 10;
-
-  width: 64px;
-  height: 64px;
-  min-width: 64px;
-  min-height: 64px;
-
-  display: grid;
-  place-items: center;
-
-  padding: 0;
-
-  border: 2px solid rgba(246, 241, 232, 0.35);
-  border-radius: 50%;
-
-  background: rgba(0, 0, 0, 0.72);
-  color: #f6f1e8;
-
-  font-weight: 950;
-
-  box-shadow:
-    3px 3px 0 rgba(255, 0, 92, 0.7),
-    -2px -2px 0 rgba(0, 255, 180, 0.65);
-
-  touch-action: manipulation;
-}
-
-.easyUndoButton span {
-  position: relative;
-  z-index: 2;
-  font-size: 2rem;
-  line-height: 1;
-}
-
-.easyUndoButton:active {
-  transform: scale(0.9);
-  filter: brightness(1.35);
-}
-
-.tournamentEasyPlayer .easyUndoButton {
-  width: 72px;
-  height: 72px;
-  min-width: 72px;
-  min-height: 72px;
-}
-
 .tapHint {
   position: static;
   display: block;
@@ -1314,23 +1266,6 @@ button:active,
   line-height: 1;
 }
 
-.tournamentEasyPlayer .easyUndoButton::before {
-  content: none;
-}
-
-.tournamentEasyPlayer .easyUndoButton span {
-  position: relative;
-  z-index: 2;
-  display: block;
-  font-size: 1.8rem;
-  line-height: 1;
-}
-
-.tournamentEasyPlayer .easyUndoButton::before {
-  content: "↶";
-  font-size: 1.8rem;
-  line-height: 1;
-}
 
 .tournamentEasyPlayer .tapHint {
   position: relative;
@@ -3564,4 +3499,90 @@ button:active,
 
 .rematchButton {
   min-width: 150px;
+}
+
+.easyUndoButton .undoArrow {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.easyUndoButton:disabled {
+  opacity: 0.25;
+  box-shadow: none;
+  cursor: default;
+}
+
+/* ========================================
+   UNDO BUTTON
+======================================== */
+
+.easyUndoButton {
+  position: relative;
+  z-index: 10;
+
+  width: auto;
+  min-width: 120px;
+  min-height: 54px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  align-self: flex-start;
+
+  padding: 0.75rem 1rem;
+
+  border: 1px solid rgba(246, 241, 232, 0.3);
+  border-radius: 999px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 0, 92, 0.12),
+      rgba(0, 255, 180, 0.08)
+    ),
+    rgba(5, 5, 5, 0.88);
+
+  color: #f6f1e8;
+
+  font-size: 0.72rem;
+  font-weight: 950;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  box-shadow:
+    3px 3px 0 rgba(255, 0, 92, 0.6),
+    -2px -2px 0 rgba(0, 255, 180, 0.55);
+
+  touch-action: manipulation;
+
+  transition:
+    transform 120ms ease,
+    filter 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.easyUndoButton .undoArrow {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.easyUndoButton:hover {
+  filter: brightness(1.15);
+}
+
+.easyUndoButton:active {
+  transform: translate(2px, 2px) scale(0.97);
+
+  box-shadow:
+    1px 1px 0 rgba(255, 0, 92, 0.6),
+    -1px -1px 0 rgba(0, 255, 180, 0.55);
+}
+
+.easyUndoButton:disabled {
+  opacity: 0.25;
+  box-shadow: none;
+  cursor: default;
 }

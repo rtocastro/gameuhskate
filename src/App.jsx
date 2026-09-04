@@ -927,14 +927,15 @@ function App() {
 
               <button
                 className="easyUndoButton"
-                aria-label={`Undo letter for ${player.name}`}
-                title="Undo letter"
                 onClick={(event) => {
                   event.stopPropagation();
-                  undoTournamentLetter(player.id);
+                  undoEasyLetter(player.id);
                 }}
+                disabled={player.letters === 0}
+                aria-label={`Undo last letter for ${player.name}`}
               >
-                <span aria-hidden="true">↶</span>
+                <span className="undoArrow" aria-hidden="true">↶</span>
+                <span>Undo</span>
               </button>
 
               <span className="tapHint">
