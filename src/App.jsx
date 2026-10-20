@@ -70,6 +70,8 @@ function App() {
     try { window.localStorage.setItem(THEME_STORAGE_KEY, theme); } catch { /* Storage unavailable */ }
   }, [theme]);
 
+
+  const [themeMenuOpen, setThemeMenuOpen] = useState(false);
   const [screen, setScreen] = useState("landing");
   const [mode, setMode] = useState(null); // coin | boards
   const [names, setNames] = useState(["", ""]);
@@ -753,26 +755,72 @@ function App() {
             <h1>GAME<br />-UH-<br />SKATE</h1>
             <p>Tap anywhere to begin</p>
           </div>
-          <div className="themePicker" onClick={(event) => event.stopPropagation()}>
-            <span className="themePickerLabel">COLORWAY / SELECT THEME</span>
-            <div className="themePickerOptions" role="group" aria-label="Color theme">
-              {THEMES.map((option) => (
-                <button
-                  key={option.id}
-                  type="button"
-                  className={`themeOption ${theme === option.id ? "isSelected" : ""}`}
-                  aria-pressed={theme === option.id}
-                  onClick={() => { setTheme(option.id); playSound("click"); }}
-                >
-                  <span className="themeSwatches" aria-hidden="true">
-                    <i style={{ background: option.primary }} />
-                    <i style={{ background: option.secondary }} />
-                  </span>
-                  <span>{option.name}</span>
-                </button>
-              ))}
-            </div>
+
+          <div
+            className={`themePicker ${themeMenuOpen ? "isOpen" : ""}`}
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="themePickerToggle"
+              aria-expanded={themeMenuOpen}
+              aria-controls="theme-picker-options"
+              onClick={() => {
+                setThemeMenuOpen((open) => !open);
+                playSound("click");
+              }}
+            >
+              <span className="themePickerToggleLabel">THEME</span>
+
+              <span className="themeSwatches" aria-hidden="true">
+                <i
+                  style={{
+                    background: THEMES.find((item) => item.id === theme)?.primary
+                  }}
+                />
+                <i
+                  style={{
+                    background: THEMES.find((item) => item.id === theme)?.secondary
+                  }}
+                />
+              </span>
+
+              <span className="themePickerChevron" aria-hidden="true">
+                {themeMenuOpen ? "−" : "+"}
+              </span>
+            </button>
+
+            {themeMenuOpen && (
+              <div
+                id="theme-picker-options"
+                className="themePickerOptions"
+                role="group"
+                aria-label="Color theme"
+              >
+                {THEMES.map((option) => (
+                  <button
+                    key={option.id}
+                    type="button"
+                    className={`themeOption ${theme === option.id ? "isSelected" : ""
+                      }`}
+                    aria-pressed={theme === option.id}
+                    onClick={() => {
+                      setTheme(option.id);
+                      setThemeMenuOpen(false);
+                      playSound("click");
+                    }}
+                  >
+                    <span className="themeSwatches" aria-hidden="true">
+                      <i style={{ background: option.primary }} />
+                      <i style={{ background: option.secondary }} />
+                    </span>
+                    <span>{option.name}</span>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
+
         </section>
       )}
 
