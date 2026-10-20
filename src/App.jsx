@@ -3,6 +3,15 @@ import "./App.css";
 
 const LETTERS = ["S", "K", "A", "T", "E"];
 const MAX_PLAYERS = 10;
+const THEMES = [
+  { id: "classic", name: "Neon Classic", primary: "#00FFB4", secondary: "#FF005C" },
+  { id: "ice", name: "Ice Blue", primary: "#00CFFF", secondary: "#F7A8FF" },
+  { id: "sunset", name: "Sunset Session", primary: "#FFB000", secondary: "#FF562B" },
+  { id: "toxic", name: "Toxic Arcade", primary: "#A7FF28", secondary: "#8C67FF" },
+  { id: "zombie", name: "Zombie", primary: "#00A86B", secondary: "#008CFF" },
+];
+const THEME_STORAGE_KEY = "gameuhskate-theme";
+
 
 
 function playSound(type = "click") {
@@ -49,6 +58,18 @@ function createPlayer(name, order = 0) {
 }
 
 function App() {
+  const [theme, setTheme] = useState(() => {
+    try {
+      const saved = window.localStorage.getItem(THEME_STORAGE_KEY);
+      return THEMES.some((item) => item.id === saved) ? saved : "classic";
+    } catch {
+      return "classic";
+    }
+  });
+  useEffect(() => {
+    try { window.localStorage.setItem(THEME_STORAGE_KEY, theme); } catch { /* Storage unavailable */ }
+  }, [theme]);
+
   const [screen, setScreen] = useState("landing");
   const [mode, setMode] = useState(null); // coin | boards
   const [names, setNames] = useState(["", ""]);
@@ -718,7 +739,7 @@ function App() {
 
 
   return (
-    <main className={`app screen-${screen} ${isTransitioning ? "isTransitioning" : ""}`}>
+    <main data-theme={theme} className={`app screen-${screen} ${isTransitioning ? "isTransitioning" : ""}`}>
       {screen === "landing" && (
         <section
           className="landing"
@@ -731,6 +752,26 @@ function App() {
             <div className="scanlines" />
             <h1>GAME<br />-UH-<br />SKATE</h1>
             <p>Tap anywhere to begin</p>
+          </div>
+          <div className="themePicker" onClick={(event) => event.stopPropagation()}>
+            <span className="themePickerLabel">COLORWAY / SELECT THEME</span>
+            <div className="themePickerOptions" role="group" aria-label="Color theme">
+              {THEMES.map((option) => (
+                <button
+                  key={option.id}
+                  type="button"
+                  className={`themeOption ${theme === option.id ? "isSelected" : ""}`}
+                  aria-pressed={theme === option.id}
+                  onClick={() => { setTheme(option.id); playSound("click"); }}
+                >
+                  <span className="themeSwatches" aria-hidden="true">
+                    <i style={{ background: option.primary }} />
+                    <i style={{ background: option.secondary }} />
+                  </span>
+                  <span>{option.name}</span>
+                </button>
+              ))}
+            </div>
           </div>
         </section>
       )}
@@ -1189,8 +1230,9 @@ function App() {
                   className="easyUndoButton"
                   onClick={(event) => {
                     event.stopPropagation();
-                    undoEasyLetter(player.id);
+                    undoTournamentLetter(player.id);
                   }}
+                  disabled={player.letters === 0}
                 >
                   Undo Letter
                 </button>

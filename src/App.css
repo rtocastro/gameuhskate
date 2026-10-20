@@ -1,3 +1,34 @@
+/* Theme tokens. Change the data-theme on .app to recolor every screen. */
+.app {
+  --accent-primary: #00ffb4;
+  --accent-secondary: #ff005c;
+  --accent-primary-rgb: 0 255 180;
+  --accent-secondary-rgb: 255 0 92;
+  --theme-bg: #050505;
+  --theme-bg-raised: #151515;
+  --theme-text: #f6f1e8;
+}
+.app[data-theme="ice"] {
+  --accent-primary: #00cfff; --accent-secondary: #f7a8ff;
+  --accent-primary-rgb: 0 207 255; --accent-secondary-rgb: 247 168 255;
+  --theme-bg: #081323; --theme-bg-raised: #14243a; --theme-text: #e8f8ff;
+}
+.app[data-theme="sunset"] {
+  --accent-primary: #ffb000; --accent-secondary: #ff562b;
+  --accent-primary-rgb: 255 176 0; --accent-secondary-rgb: 255 86 43;
+  --theme-bg: #1b1109; --theme-bg-raised: #302012; --theme-text: #fff0d0;
+}
+.app[data-theme="toxic"] {
+  --accent-primary: #a7ff28; --accent-secondary: #8c67ff;
+  --accent-primary-rgb: 167 255 40; --accent-secondary-rgb: 140 103 255;
+  --theme-bg: #0d160b; --theme-bg-raised: #1c2915; --theme-text: #f1ffe2;
+}
+.app[data-theme="zombie"] {
+  --accent-primary: #00a86b; --accent-secondary: #008cff;
+  --accent-primary-rgb: 0 168 107; --accent-secondary-rgb: 0 140 255;
+  --theme-bg: #07191c; --theme-bg-raised: #10282c; --theme-text: #e8f5f0;
+}
+
 button,
 input,
 a {
@@ -13,9 +44,9 @@ button {
   min-height: 100dvh;
   overflow: hidden;
   background:
-    radial-gradient(circle at 20% 10%, rgba(255, 0, 90, 0.18), transparent 28%),
-    radial-gradient(circle at 80% 20%, rgba(0, 255, 170, 0.12), transparent 30%),
-    linear-gradient(135deg, #050505, #151515 45%, #050505);
+    radial-gradient(circle at 20% 10%, rgb(var(--accent-secondary-rgb) / 0.18), transparent 28%),
+    radial-gradient(circle at 80% 20%, rgb(var(--accent-primary-rgb) / 0.12), transparent 30%),
+    linear-gradient(135deg, var(--theme-bg), var(--theme-bg-raised) 45%, var(--theme-bg));
 }
 
 /* LANDING */
@@ -27,7 +58,7 @@ button {
   place-items: center;
   text-align: center;
   cursor: pointer;
-  background: #050505;
+  background: var(--theme-bg);
 }
 
 .heroLoop {
@@ -40,13 +71,13 @@ button {
   overflow: hidden;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 25%),
-    linear-gradient(315deg, rgba(255, 0, 80, 0.12), transparent 35%),
+    linear-gradient(315deg, rgb(var(--accent-secondary-rgb) / 0.12), transparent 35%),
     repeating-linear-gradient(
       45deg,
       #101010 0px,
       #101010 12px,
-      #151515 12px,
-      #151515 24px
+      var(--theme-bg-raised) 12px,
+      var(--theme-bg-raised) 24px
     );
 }
 
@@ -59,7 +90,7 @@ button {
     transparent,
     rgba(255, 255, 255, 0.16),
     transparent,
-    rgba(0, 255, 180, 0.12),
+    rgb(var(--accent-primary-rgb) / 0.12),
     transparent
   );
   animation: spin 9s linear infinite;
@@ -101,10 +132,10 @@ button {
   line-height: 0.78;
   letter-spacing: -0.1em;
   text-transform: uppercase;
-  color: #f6f1e8;
+  color: var(--theme-text);
   text-shadow:
-    4px 4px 0 #ff005c,
-    -3px -3px 0 rgba(0, 255, 180, 0.75),
+    4px 4px 0 var(--accent-secondary),
+    -3px -3px 0 rgb(var(--accent-primary-rgb) / 0.75),
     0 0 28px rgba(255, 255, 255, 0.2);
   animation: glitchNudge 2.4s infinite steps(1);
 }
@@ -139,7 +170,7 @@ button {
   position: relative;
   overflow: hidden;
   border: 1px solid rgba(246, 241, 232, 0.18);
-  color: #f6f1e8;
+  color: var(--theme-text);
   border-radius: 28px;
   padding: 2rem;
   display: flex;
@@ -179,13 +210,13 @@ button {
 
 .coinCard {
   box-shadow:
-    0 20px 80px rgba(255, 0, 92, 0.12),
+    0 20px 80px rgb(var(--accent-secondary-rgb) / 0.12),
     inset 0 0 0 1px rgba(255, 255, 255, 0.04);
 }
 
 .boardCard {
   box-shadow:
-    0 20px 80px rgba(0, 255, 180, 0.1),
+    0 20px 80px rgb(var(--accent-primary-rgb) / 0.1),
     inset 0 0 0 1px rgba(255, 255, 255, 0.04);
 }
 
@@ -243,8 +274,8 @@ button {
   text-transform: uppercase;
   letter-spacing: -0.06em;
   text-shadow:
-    3px 3px 0 rgba(255, 0, 92, 0.75),
-    -2px -2px 0 rgba(0, 255, 180, 0.55);
+    3px 3px 0 rgb(var(--accent-secondary-rgb) / 0.75),
+    -2px -2px 0 rgb(var(--accent-primary-rgb) / 0.55);
 }
 
 .nameGrid {
@@ -280,9 +311,9 @@ input {
 }
 
 input:focus {
-  border-color: rgba(0, 255, 180, 0.7);
+  border-color: rgb(var(--accent-primary-rgb) / 0.7);
   box-shadow:
-    0 0 0 3px rgba(0, 255, 180, 0.12),
+    0 0 0 3px rgb(var(--accent-primary-rgb) / 0.12),
     inset 0 0 20px rgba(0, 0, 0, 0.28);
 }
 
@@ -301,14 +332,14 @@ input:focus {
   border-radius: 999px;
   padding: 1rem 1.4rem;
   text-decoration: none;
-  color: #050505;
-  background: #f6f1e8;
+  color: var(--theme-bg);
+  background: var(--theme-text);
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.07em;
   box-shadow:
-    4px 4px 0 #ff005c,
-    -3px -3px 0 rgba(0, 255, 180, 0.85);
+    4px 4px 0 var(--accent-secondary),
+    -3px -3px 0 rgb(var(--accent-primary-rgb) / 0.85);
   transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
@@ -324,8 +355,8 @@ input:focus {
 .linkButton:active {
   transform: translate(2px, 2px);
   box-shadow:
-    2px 2px 0 #ff005c,
-    -1px -1px 0 rgba(0, 255, 180, 0.85);
+    2px 2px 0 var(--accent-secondary),
+    -1px -1px 0 rgb(var(--accent-primary-rgb) / 0.85);
 }
 
 /* COIN */
@@ -407,8 +438,8 @@ input:focus {
 }
 
 .scoreRow.active {
-  outline: 2px solid rgba(0, 255, 180, 0.85);
-  box-shadow: 0 0 30px rgba(0, 255, 180, 0.12);
+  outline: 2px solid rgb(var(--accent-primary-rgb) / 0.85);
+  box-shadow: 0 0 30px rgb(var(--accent-primary-rgb) / 0.12);
 }
 
 .scoreRow.out {
@@ -436,7 +467,7 @@ input:focus {
   right: -2px;
   top: 50%;
   height: 3px;
-  background: #ff005c;
+  background: var(--accent-secondary);
   transform: rotate(-12deg);
 }
 
@@ -460,8 +491,8 @@ input:focus {
   text-transform: uppercase;
   letter-spacing: -0.075em;
   text-shadow:
-    4px 4px 0 #ff005c,
-    -3px -3px 0 rgba(0, 255, 180, 0.75);
+    4px 4px 0 var(--accent-secondary),
+    -3px -3px 0 rgb(var(--accent-primary-rgb) / 0.75);
 }
 
 .actionPanel {
@@ -478,12 +509,12 @@ input:focus {
 }
 
 .successButton {
-  background: #f6f1e8;
+  background: var(--theme-text);
 }
 
 .missButton {
   background: #1b1b1b;
-  color: #f6f1e8;
+  color: var(--theme-text);
   border: 1px solid rgba(246, 241, 232, 0.18);
 }
 
@@ -493,9 +524,9 @@ input:focus {
   place-items: center;
   text-align: center;
   background:
-    radial-gradient(circle, rgba(0, 255, 180, 0.14), transparent 45%),
-    radial-gradient(circle at 20% 20%, rgba(255, 0, 92, 0.18), transparent 28%),
-    #050505;
+    radial-gradient(circle, rgb(var(--accent-primary-rgb) / 0.14), transparent 45%),
+    radial-gradient(circle at 20% 20%, rgb(var(--accent-secondary-rgb) / 0.18), transparent 28%),
+    var(--theme-bg);
 }
 
 .winnerScreen h1 {
@@ -505,8 +536,8 @@ input:focus {
   letter-spacing: -0.09em;
   text-transform: uppercase;
   text-shadow:
-    5px 5px 0 #ff005c,
-    -4px -4px 0 rgba(0, 255, 180, 0.75);
+    5px 5px 0 var(--accent-secondary),
+    -4px -4px 0 rgb(var(--accent-primary-rgb) / 0.75);
 }
 
 .winnerScreen h2 {
@@ -525,7 +556,7 @@ input:focus {
 
 .linkButton {
   background: transparent;
-  color: #f6f1e8;
+  color: var(--theme-text);
   border: 1px solid rgba(246, 241, 232, 0.22);
 }
 
@@ -553,15 +584,15 @@ input:focus {
   background:
     radial-gradient(
       circle at 20% 20%,
-      rgba(255, 0, 92, 0.14),
+      rgb(var(--accent-secondary-rgb) / 0.14),
       transparent 32%
     ),
     radial-gradient(
       circle at 80% 80%,
-      rgba(0, 255, 180, 0.12),
+      rgb(var(--accent-primary-rgb) / 0.12),
       transparent 32%
     ),
-    #050505;
+    var(--theme-bg);
 }
 
 .easyPlayerZone {
@@ -625,8 +656,8 @@ input:focus {
   text-overflow: ellipsis;
   white-space: nowrap;
   text-shadow:
-    2px 2px 0 #ff005c,
-    -2px -2px 0 rgba(0, 255, 180, 0.8);
+    2px 2px 0 var(--accent-secondary),
+    -2px -2px 0 rgb(var(--accent-primary-rgb) / 0.8);
 }
 
 .easyPlayerInfo .letters {
@@ -901,11 +932,11 @@ button:active,
 
 @keyframes activePulse {
   from {
-    box-shadow: 0 0 20px rgba(0, 255, 180, 0.1);
+    box-shadow: 0 0 20px rgb(var(--accent-primary-rgb) / 0.1);
   }
 
   to {
-    box-shadow: 0 0 35px rgba(0, 255, 180, 0.28);
+    box-shadow: 0 0 35px rgb(var(--accent-primary-rgb) / 0.28);
   }
 }
 
@@ -933,9 +964,9 @@ button:active,
     linear-gradient(
       to bottom,
       transparent 0%,
-      rgba(255, 0, 92, 0.28) 18%,
+      rgb(var(--accent-secondary-rgb) / 0.28) 18%,
       transparent 32%,
-      rgba(0, 255, 180, 0.22) 55%,
+      rgb(var(--accent-primary-rgb) / 0.22) 55%,
       transparent 72%
     ),
     repeating-linear-gradient(
@@ -988,7 +1019,7 @@ button:active,
   content: "GAME -UH- SKATE";
   position: absolute;
   inset: 0;
-  color: rgba(0, 255, 180, 0.35);
+  color: rgb(var(--accent-primary-rgb) / 0.35);
   transform: translate(4px, -3px);
   z-index: -1;
   clip-path: inset(40% 0 35% 0);
@@ -1047,7 +1078,7 @@ button::before,
   width: 0;
   height: 0;
   border-radius: 999px;
-  background: rgba(0, 255, 180, 0.35);
+  background: rgb(var(--accent-primary-rgb) / 0.35);
   transform: translate(-50%, -50%);
   opacity: 0;
   z-index: -1;
@@ -1090,15 +1121,15 @@ button:active,
   background:
     radial-gradient(
       circle at 20% 20%,
-      rgba(255, 0, 92, 0.16),
+      rgb(var(--accent-secondary-rgb) / 0.16),
       transparent 30%
     ),
     radial-gradient(
       circle at 80% 80%,
-      rgba(0, 255, 180, 0.14),
+      rgb(var(--accent-primary-rgb) / 0.14),
       transparent 32%
     ),
-    #050505;
+    var(--theme-bg);
 }
 
 .tournamentMatchHeader {
@@ -1125,8 +1156,8 @@ button:active,
   letter-spacing: -0.045em;
   text-transform: uppercase;
   text-shadow:
-    2px 2px 0 rgba(255, 0, 92, 0.8),
-    -2px -2px 0 rgba(0, 255, 180, 0.65);
+    2px 2px 0 rgb(var(--accent-secondary-rgb) / 0.8),
+    -2px -2px 0 rgb(var(--accent-primary-rgb) / 0.65);
 }
 
 .tournamentEasyPlayers {
@@ -1148,15 +1179,15 @@ button:active,
   height: 54px;
   border: 2px solid rgba(246, 241, 232, 0.7);
   border-radius: 50%;
-  background: #050505;
-  color: #f6f1e8;
+  background: var(--theme-bg);
+  color: var(--theme-text);
   font-size: 0.82rem;
   font-weight: 950;
   letter-spacing: 0.1em;
   transform: translate(-50%, -50%) rotate(-5deg);
   box-shadow:
-    3px 3px 0 #ff005c,
-    -3px -3px 0 rgba(0, 255, 180, 0.9);
+    3px 3px 0 var(--accent-secondary),
+    -3px -3px 0 rgb(var(--accent-primary-rgb) / 0.9);
   pointer-events: none;
 }
 
@@ -1192,11 +1223,11 @@ button:active,
 }
 
 .tournamentEasyPlayer:first-child {
-  border-bottom-color: rgba(255, 0, 92, 0.45);
+  border-bottom-color: rgb(var(--accent-secondary-rgb) / 0.45);
 }
 
 .tournamentEasyPlayer:last-child {
-  border-top-color: rgba(0, 255, 180, 0.4);
+  border-top-color: rgb(var(--accent-primary-rgb) / 0.4);
 }
 
 .tournamentEasyPlayer::before {
@@ -1254,8 +1285,8 @@ button:active,
   text-transform: uppercase;
   white-space: nowrap;
   text-shadow:
-    4px 4px 0 #ff005c,
-    -3px -3px 0 rgba(0, 255, 180, 0.82);
+    4px 4px 0 var(--accent-secondary),
+    -3px -3px 0 rgb(var(--accent-primary-rgb) / 0.82);
 }
 
 .tournamentEasyPlayerInfo .letters {
@@ -1290,12 +1321,12 @@ button:active,
   }
 
   .tournamentEasyPlayer:first-child {
-    border-right-color: rgba(255, 0, 92, 0.45);
+    border-right-color: rgb(var(--accent-secondary-rgb) / 0.45);
     border-bottom-color: rgba(246, 241, 232, 0.08);
   }
 
   .tournamentEasyPlayer:last-child {
-    border-left-color: rgba(0, 255, 180, 0.4);
+    border-left-color: rgb(var(--accent-primary-rgb) / 0.4);
     border-top-color: rgba(246, 241, 232, 0.08);
   }
 
@@ -1317,9 +1348,9 @@ button:active,
   gap: 1.25rem;
   overflow-y: auto;
   background:
-    radial-gradient(circle at 15% 15%, rgba(255, 0, 92, 0.16), transparent 28%),
-    radial-gradient(circle at 85% 85%, rgba(0, 255, 180, 0.12), transparent 30%),
-    #050505;
+    radial-gradient(circle at 15% 15%, rgb(var(--accent-secondary-rgb) / 0.16), transparent 28%),
+    radial-gradient(circle at 85% 85%, rgb(var(--accent-primary-rgb) / 0.12), transparent 30%),
+    var(--theme-bg);
 }
 
 .tournamentBracketScreen > h2 {
@@ -1330,8 +1361,8 @@ button:active,
   text-align: center;
   text-transform: uppercase;
   text-shadow:
-    3px 3px 0 rgba(255, 0, 92, 0.75),
-    -2px -2px 0 rgba(0, 255, 180, 0.55);
+    3px 3px 0 rgb(var(--accent-secondary-rgb) / 0.75),
+    -2px -2px 0 rgb(var(--accent-primary-rgb) / 0.55);
 }
 
 .tournamentBracket {
@@ -1359,11 +1390,11 @@ button:active,
 }
 
 .tournamentMatch.isComplete {
-  --rail-color: rgba(0, 255, 180, 0.85);
+  --rail-color: rgb(var(--accent-primary-rgb) / 0.85);
 
-  border-color: rgba(0, 255, 180, 0.35);
+  border-color: rgb(var(--accent-primary-rgb) / 0.35);
   box-shadow:
-    0 0 32px rgba(0, 255, 180, 0.12),
+    0 0 32px rgb(var(--accent-primary-rgb) / 0.12),
     0 18px 55px rgba(0, 0, 0, 0.42);
 }
 
@@ -1401,7 +1432,7 @@ button:active,
 }
 
 .isComplete .matchStatus {
-  color: rgba(0, 255, 180, 0.9);
+  color: rgb(var(--accent-primary-rgb) / 0.9);
 }
 
 .matchPlayers {
@@ -1450,14 +1481,14 @@ button:active,
 
 .matchPlayerSlot.isWinner {
   background:
-    radial-gradient(circle at center, rgba(0, 255, 180, 0.12), transparent 70%);
+    radial-gradient(circle at center, rgb(var(--accent-primary-rgb) / 0.12), transparent 70%);
 }
 
 .matchPlayerSlot.isWinner .playerName {
-  color: #f6f1e8;
+  color: var(--theme-text);
   text-shadow:
-    2px 2px 0 #ff005c,
-    -2px -2px 0 rgba(0, 255, 180, 0.85);
+    2px 2px 0 var(--accent-secondary),
+    -2px -2px 0 rgb(var(--accent-primary-rgb) / 0.85);
 }
 
 .matchPlayerSlot.isLoser {
@@ -1468,9 +1499,9 @@ button:active,
 .winnerMark {
   width: fit-content;
   padding: 0.28rem 0.5rem;
-  border: 1px solid rgba(0, 255, 180, 0.5);
+  border: 1px solid rgb(var(--accent-primary-rgb) / 0.5);
   border-radius: 999px;
-  color: rgba(0, 255, 180, 0.95);
+  color: rgb(var(--accent-primary-rgb) / 0.95);
   font-size: 0.58rem;
   font-weight: 950;
   letter-spacing: 0.12em;
@@ -1525,8 +1556,8 @@ button:active,
   justify-content: center;
   gap: 0.55rem;
   padding: 0.7rem 1rem;
-  border-top: 1px solid rgba(0, 255, 180, 0.16);
-  background: rgba(0, 255, 180, 0.045);
+  border-top: 1px solid rgb(var(--accent-primary-rgb) / 0.16);
+  background: rgb(var(--accent-primary-rgb) / 0.045);
   animation: advancingReveal 0.45s ease both;
 }
 
@@ -1538,7 +1569,7 @@ button:active,
 }
 
 .matchAdvance strong {
-  color: rgba(0, 255, 180, 0.95);
+  color: rgb(var(--accent-primary-rgb) / 0.95);
   text-transform: uppercase;
 }
 
@@ -1661,12 +1692,12 @@ button:active,
   text-align: center;
   cursor: pointer;
   background:
-    radial-gradient(circle, rgba(0, 255, 180, 0.14), transparent 42%),
-    radial-gradient(circle at 20% 20%, rgba(255, 0, 92, 0.2), transparent 30%),
+    radial-gradient(circle, rgb(var(--accent-primary-rgb) / 0.14), transparent 42%),
+    radial-gradient(circle at 20% 20%, rgb(var(--accent-secondary-rgb) / 0.2), transparent 30%),
     repeating-linear-gradient(
       -15deg,
-      #050505 0,
-      #050505 14px,
+      var(--theme-bg) 0,
+      var(--theme-bg) 14px,
       #0d0d0d 14px,
       #0d0d0d 28px
     );
@@ -1694,8 +1725,8 @@ button:active,
   letter-spacing: -0.1em;
   text-transform: uppercase;
   text-shadow:
-    7px 7px 0 #ff005c,
-    -5px -5px 0 rgba(0, 255, 180, 0.85);
+    7px 7px 0 var(--accent-secondary),
+    -5px -5px 0 rgb(var(--accent-primary-rgb) / 0.85);
   animation:
     tournamentTitleDrop 0.65s cubic-bezier(0.2, 1.5, 0.4, 1) both,
     glitchNudge 2s infinite steps(1);
@@ -1725,10 +1756,10 @@ button:active,
 /* NEXT TO SKATE */
 
 .tournamentMatch.isNextMatch {
-  border-color: rgba(255, 0, 92, 0.55);
+  border-color: rgb(var(--accent-secondary-rgb) / 0.55);
   box-shadow:
-    0 0 28px rgba(255, 0, 92, 0.2),
-    0 0 60px rgba(0, 255, 180, 0.08),
+    0 0 28px rgb(var(--accent-secondary-rgb) / 0.2),
+    0 0 60px rgb(var(--accent-primary-rgb) / 0.08),
     0 18px 55px rgba(0, 0, 0, 0.45);
   animation:
     bracketMatchIn 0.42s ease both,
@@ -1738,21 +1769,21 @@ button:active,
 .tournamentMatch.isNextMatch .matchRail {
   background: linear-gradient(
     to bottom,
-    #ff005c,
-    rgba(0, 255, 180, 0.9)
+    var(--accent-secondary),
+    rgb(var(--accent-primary-rgb) / 0.9)
   );
   box-shadow:
-    0 0 14px rgba(255, 0, 92, 0.8),
-    0 0 25px rgba(0, 255, 180, 0.45);
+    0 0 14px rgb(var(--accent-secondary-rgb) / 0.8),
+    0 0 25px rgb(var(--accent-primary-rgb) / 0.45);
 }
 
 .tournamentMatch.isNextMatch .matchStatus {
-  color: #f6f1e8;
+  color: var(--theme-text);
 }
 
 .tournamentMatch.isNextMatch .matchStatus::before {
   content: "NEXT • ";
-  color: #ff005c;
+  color: var(--accent-secondary);
 }
 
 @keyframes nextMatchPulse {
@@ -1789,7 +1820,7 @@ button:active,
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(0, 255, 180, 0.28),
+    rgb(var(--accent-primary-rgb) / 0.28),
     rgba(255, 255, 255, 0.16),
     transparent
   );
@@ -1861,16 +1892,16 @@ button:active,
 }
 
 .tournamentMatch.isLatestWinner .advanceWinner {
-  color: rgba(0, 255, 180, 0.98);
+  color: rgb(var(--accent-primary-rgb) / 0.98);
   text-transform: uppercase;
   text-shadow:
-    2px 2px 0 rgba(255, 0, 92, 0.75),
-    0 0 14px rgba(0, 255, 180, 0.5);
+    2px 2px 0 rgb(var(--accent-secondary-rgb) / 0.75),
+    0 0 14px rgb(var(--accent-primary-rgb) / 0.5);
   animation: winnerSlideIn 0.5s cubic-bezier(0.2, 1.2, 0.35, 1) both;
 }
 
 .advanceArrow {
-  color: #f6f1e8;
+  color: var(--theme-text);
   font-size: 1.1rem;
   font-weight: 900;
   animation: advanceArrowPulse 0.9s ease-in-out infinite alternate;
@@ -1911,19 +1942,19 @@ button:active,
 
 @keyframes completedRailFlash {
   0% {
-    box-shadow: 0 0 6px rgba(0, 255, 180, 0.25);
+    box-shadow: 0 0 6px rgb(var(--accent-primary-rgb) / 0.25);
     filter: brightness(1);
   }
 
   45% {
     box-shadow:
-      0 0 24px rgba(0, 255, 180, 0.9),
-      0 0 42px rgba(255, 0, 92, 0.4);
+      0 0 24px rgb(var(--accent-primary-rgb) / 0.9),
+      0 0 42px rgb(var(--accent-secondary-rgb) / 0.4);
     filter: brightness(1.45);
   }
 
   100% {
-    box-shadow: 0 0 18px rgba(0, 255, 180, 0.55);
+    box-shadow: 0 0 18px rgb(var(--accent-primary-rgb) / 0.55);
     filter: brightness(1);
   }
 }
@@ -1977,10 +2008,10 @@ button:active,
 }
 
 .bracketRoundColumn.isActiveRound {
-  border-color: rgba(255, 0, 92, 0.42);
+  border-color: rgb(var(--accent-secondary-rgb) / 0.42);
   box-shadow:
-    0 0 32px rgba(255, 0, 92, 0.12),
-    0 0 48px rgba(0, 255, 180, 0.07);
+    0 0 32px rgb(var(--accent-secondary-rgb) / 0.12),
+    0 0 48px rgb(var(--accent-primary-rgb) / 0.07);
 }
 
 .bracketRoundColumn.isLockedRound {
@@ -2015,8 +2046,8 @@ button:active,
 
 .bracketRoundColumn.isActiveRound .bracketRoundHeader span {
   text-shadow:
-    2px 2px 0 rgba(255, 0, 92, 0.75),
-    -2px -2px 0 rgba(0, 255, 180, 0.65);
+    2px 2px 0 rgb(var(--accent-secondary-rgb) / 0.75),
+    -2px -2px 0 rgb(var(--accent-primary-rgb) / 0.65);
 }
 
 .bracketRoundMatches {
@@ -2135,21 +2166,21 @@ button:active,
 .bracketMatchNode.hasWinner .bracketExitRail {
   background: linear-gradient(
     90deg,
-    rgba(0, 255, 180, 0.95),
-    rgba(255, 0, 92, 0.8)
+    rgb(var(--accent-primary-rgb) / 0.95),
+    rgb(var(--accent-secondary-rgb) / 0.8)
   );
   box-shadow:
-    0 0 9px rgba(0, 255, 180, 0.65),
-    0 0 18px rgba(255, 0, 92, 0.24);
+    0 0 9px rgb(var(--accent-primary-rgb) / 0.65),
+    0 0 18px rgb(var(--accent-secondary-rgb) / 0.24);
   animation: bracketRailPowerOn 0.55s ease-out both;
 }
 
 .bracketMatchNode.hasWinner .bracketExitRail::after {
-  background: #f6f1e8;
+  background: var(--theme-text);
   box-shadow:
     0 0 8px rgba(246, 241, 232, 0.9),
-    0 0 16px rgba(0, 255, 180, 0.75),
-    0 0 25px rgba(255, 0, 92, 0.45);
+    0 0 16px rgb(var(--accent-primary-rgb) / 0.75),
+    0 0 25px rgb(var(--accent-secondary-rgb) / 0.45);
 }
 
 @keyframes bracketRailPowerOn {
@@ -2234,12 +2265,12 @@ button:active,
     .bracketMatchNode:nth-child(even).hasWinner::after {
     background: linear-gradient(
       to bottom,
-      rgba(0, 255, 180, 0.9),
-      rgba(255, 0, 92, 0.75)
+      rgb(var(--accent-primary-rgb) / 0.9),
+      rgb(var(--accent-secondary-rgb) / 0.75)
     );
     box-shadow:
-      0 0 10px rgba(0, 255, 180, 0.55),
-      0 0 18px rgba(255, 0, 92, 0.22);
+      0 0 10px rgb(var(--accent-primary-rgb) / 0.55),
+      0 0 18px rgb(var(--accent-secondary-rgb) / 0.22);
   }
 
   .bracketRoundColumn-quarterfinal
@@ -2248,12 +2279,12 @@ button:active,
     .bracketMatchNode:nth-child(odd).hasWinner::before {
     background: linear-gradient(
       90deg,
-      rgba(0, 255, 180, 0.9),
-      rgba(255, 0, 92, 0.75)
+      rgb(var(--accent-primary-rgb) / 0.9),
+      rgb(var(--accent-secondary-rgb) / 0.75)
     );
     box-shadow:
-      0 0 10px rgba(0, 255, 180, 0.55),
-      0 0 18px rgba(255, 0, 92, 0.22);
+      0 0 10px rgb(var(--accent-primary-rgb) / 0.55),
+      0 0 18px rgb(var(--accent-secondary-rgb) / 0.22);
   }
 }
 
@@ -2281,13 +2312,13 @@ button:active,
       transparent
     ),
     #101010;
-  color: #f6f1e8;
+  color: var(--theme-text);
   font-size: 3.5rem;
   font-weight: 950;
   line-height: 1;
   box-shadow:
-    4px 4px 0 rgba(255, 0, 92, 0.85),
-    -3px -3px 0 rgba(0, 255, 180, 0.75);
+    4px 4px 0 rgb(var(--accent-secondary-rgb) / 0.85),
+    -3px -3px 0 rgb(var(--accent-primary-rgb) / 0.75);
   touch-action: manipulation;
 }
 
@@ -2315,7 +2346,7 @@ button:active,
   background:
     radial-gradient(
       circle,
-      rgba(0, 255, 180, 0.13),
+      rgb(var(--accent-primary-rgb) / 0.13),
       transparent 70%
     ),
     rgba(255, 255, 255, 0.055);
@@ -2326,8 +2357,8 @@ button:active,
   font-size: clamp(3rem, 12vw, 5.5rem);
   line-height: 0.75;
   text-shadow:
-    3px 3px 0 #ff005c,
-    -2px -2px 0 rgba(0, 255, 180, 0.85);
+    3px 3px 0 var(--accent-secondary),
+    -2px -2px 0 rgb(var(--accent-primary-rgb) / 0.85);
 }
 
 .playerCountDisplay span {
@@ -2465,25 +2496,25 @@ button:active,
   gap: 0.3rem;
   overflow: hidden;
   padding: 1.1rem;
-  border: 1px solid rgba(0, 255, 180, 0.55);
+  border: 1px solid rgb(var(--accent-primary-rgb) / 0.55);
   border-radius: 24px;
   background:
     linear-gradient(
       135deg,
-      rgba(0, 255, 180, 0.09),
+      rgb(var(--accent-primary-rgb) / 0.09),
       transparent 45%
     ),
     linear-gradient(
       315deg,
-      rgba(255, 0, 92, 0.1),
+      rgb(var(--accent-secondary-rgb) / 0.1),
       transparent 45%
     ),
     #0b0b0b;
-  color: #f6f1e8;
+  color: var(--theme-text);
   box-shadow:
-    4px 4px 0 rgba(255, 0, 92, 0.82),
-    -3px -3px 0 rgba(0, 255, 180, 0.78),
-    0 0 28px rgba(0, 255, 180, 0.1);
+    4px 4px 0 rgb(var(--accent-secondary-rgb) / 0.82),
+    -3px -3px 0 rgb(var(--accent-primary-rgb) / 0.78),
+    0 0 28px rgb(var(--accent-primary-rgb) / 0.1);
 }
 
 .tournamentButton strong {
@@ -2505,7 +2536,7 @@ button:active,
   top: 0.65rem;
   right: 0.75rem;
   padding: 0.28rem 0.45rem;
-  border: 1px solid rgba(255, 0, 92, 0.45);
+  border: 1px solid rgb(var(--accent-secondary-rgb) / 0.45);
   border-radius: 999px;
   color: rgba(255, 255, 255, 0.7);
   font-size: 0.5rem;
@@ -2517,11 +2548,11 @@ button:active,
 
 .tournamentButton:hover {
   transform: translateY(-2px);
-  border-color: rgba(0, 255, 180, 0.85);
+  border-color: rgb(var(--accent-primary-rgb) / 0.85);
   box-shadow:
-    5px 5px 0 rgba(255, 0, 92, 0.9),
-    -4px -4px 0 rgba(0, 255, 180, 0.88),
-    0 0 38px rgba(0, 255, 180, 0.18);
+    5px 5px 0 rgb(var(--accent-secondary-rgb) / 0.9),
+    -4px -4px 0 rgb(var(--accent-primary-rgb) / 0.88),
+    0 0 38px rgb(var(--accent-primary-rgb) / 0.18);
 }
 
 .modePromptScreen .helperText {
@@ -2558,14 +2589,14 @@ button:active,
   border: 1px solid rgba(246, 241, 232, 0.2);
   border-radius: 999px;
   background: rgba(0, 0, 0, 0.48);
-  color: #f6f1e8;
+  color: var(--theme-text);
   font-size: 0.68rem;
   font-weight: 900;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   box-shadow:
-    3px 3px 0 rgba(255, 0, 92, 0.72),
-    -2px -2px 0 rgba(0, 255, 180, 0.68);
+    3px 3px 0 rgb(var(--accent-secondary-rgb) / 0.72),
+    -2px -2px 0 rgb(var(--accent-primary-rgb) / 0.68);
 }
 
 .bracketBackButton:hover {
@@ -2762,14 +2793,14 @@ button:active,
   width: 22px;
   height: 6px;
   border-radius: 999px;
-  background: #f6f1e8;
+  background: var(--theme-text);
   transform: translate(-100%, -50%);
   opacity: 0;
   filter: blur(1px);
   box-shadow:
     0 0 8px rgba(246, 241, 232, 0.95),
-    0 0 16px rgba(0, 255, 180, 0.85),
-    0 0 26px rgba(255, 0, 92, 0.55);
+    0 0 16px rgb(var(--accent-primary-rgb) / 0.85),
+    0 0 26px rgb(var(--accent-secondary-rgb) / 0.55);
 }
 
 .bracketMatchNode.hasWinner
@@ -2815,15 +2846,15 @@ button:active,
   background:
     radial-gradient(
       circle at center,
-      rgba(0, 255, 180, 0.14),
+      rgb(var(--accent-primary-rgb) / 0.14),
       transparent 42%
     ),
     radial-gradient(
       circle at 25% 25%,
-      rgba(255, 0, 92, 0.17),
+      rgb(var(--accent-secondary-rgb) / 0.17),
       transparent 30%
     ),
-    #050505;
+    var(--theme-bg);
 }
 
 .bracketUpdatingScreen::before {
@@ -2850,7 +2881,7 @@ button:active,
 }
 
 .updatingStatus {
-  color: rgba(0, 255, 180, 0.9);
+  color: rgb(var(--accent-primary-rgb) / 0.9);
   font-size: 0.72rem;
   font-weight: 950;
   letter-spacing: 0.24em;
@@ -2865,8 +2896,8 @@ button:active,
   letter-spacing: -0.09em;
   text-transform: uppercase;
   text-shadow:
-    6px 6px 0 #ff005c,
-    -4px -4px 0 rgba(0, 255, 180, 0.82);
+    6px 6px 0 var(--accent-secondary),
+    -4px -4px 0 rgb(var(--accent-primary-rgb) / 0.82);
   animation: updatingBracketGlitch 0.7s steps(2) both;
 }
 
@@ -2895,15 +2926,15 @@ button:active,
   border-radius: inherit;
   background: linear-gradient(
     90deg,
-    #ff005c,
-    #f6f1e8,
-    rgba(0, 255, 180, 0.95)
+    var(--accent-secondary),
+    var(--theme-text),
+    rgb(var(--accent-primary-rgb) / 0.95)
   );
   transform-origin: left;
   animation: bracketLoadingFill 0.78s ease-out both;
   box-shadow:
-    0 0 12px rgba(0, 255, 180, 0.75),
-    0 0 22px rgba(255, 0, 92, 0.4);
+    0 0 12px rgb(var(--accent-primary-rgb) / 0.75),
+    0 0 22px rgb(var(--accent-secondary-rgb) / 0.4);
 }
 
 @keyframes bracketLoadingFill {
@@ -2972,16 +3003,16 @@ button:active,
   100% {
     filter: brightness(1);
     box-shadow:
-      0 0 28px rgba(255, 0, 92, 0.18),
-      0 0 55px rgba(0, 255, 180, 0.07),
+      0 0 28px rgb(var(--accent-secondary-rgb) / 0.18),
+      0 0 55px rgb(var(--accent-primary-rgb) / 0.07),
       0 18px 55px rgba(0, 0, 0, 0.45);
   }
 
   50% {
     filter: brightness(1.08);
     box-shadow:
-      0 0 34px rgba(255, 0, 92, 0.26),
-      0 0 68px rgba(0, 255, 180, 0.12),
+      0 0 34px rgb(var(--accent-secondary-rgb) / 0.26),
+      0 0 68px rgb(var(--accent-primary-rgb) / 0.12),
       0 18px 55px rgba(0, 0, 0, 0.45);
   }
 }
@@ -3005,9 +3036,9 @@ button:active,
     conic-gradient(
       from 0deg,
       transparent,
-      rgba(0, 255, 180, 0.16),
+      rgb(var(--accent-primary-rgb) / 0.16),
       transparent 32%,
-      rgba(255, 0, 92, 0.17),
+      rgb(var(--accent-secondary-rgb) / 0.17),
       transparent 68%
     );
   animation: championSpotlightSpin 10s linear infinite;
@@ -3046,13 +3077,13 @@ button:active,
   background:
     radial-gradient(
       circle,
-      rgba(0, 255, 180, 0.2),
+      rgb(var(--accent-primary-rgb) / 0.2),
       transparent 65%
     ),
     #080808;
   box-shadow:
-    6px 6px 0 rgba(255, 0, 92, 0.82),
-    -4px -4px 0 rgba(0, 255, 180, 0.76),
+    6px 6px 0 rgb(var(--accent-secondary-rgb) / 0.82),
+    -4px -4px 0 rgb(var(--accent-primary-rgb) / 0.76),
     0 0 34px rgba(246, 241, 232, 0.16);
   animation:
     championEmblemDrop 0.8s
@@ -3081,8 +3112,8 @@ button:active,
 .championEmblem span {
   font-size: clamp(2rem, 7vw, 4rem);
   text-shadow:
-    3px 3px 0 rgba(255, 0, 92, 0.85),
-    -2px -2px 0 rgba(0, 255, 180, 0.85);
+    3px 3px 0 rgb(var(--accent-secondary-rgb) / 0.85),
+    -2px -2px 0 rgb(var(--accent-primary-rgb) / 0.85);
   animation: championStarPulse 1.4s ease-in-out infinite alternate;
 }
 
@@ -3272,11 +3303,11 @@ button:active,
     border: 1px solid rgba(246, 241, 232, 0.2);
     border-radius: 50%;
     background: #080808;
-    color: rgba(0, 255, 180, 0.9);
+    color: rgb(var(--accent-primary-rgb) / 0.9);
     transform: translateX(-50%);
     box-shadow:
-      2px 2px 0 rgba(255, 0, 92, 0.7),
-      -2px -2px 0 rgba(0, 255, 180, 0.6);
+      2px 2px 0 rgb(var(--accent-secondary-rgb) / 0.7),
+      -2px -2px 0 rgb(var(--accent-primary-rgb) / 0.6);
   }
 
   .bracketRoundHeader span {
@@ -3319,22 +3350,22 @@ button:active,
     ),
     radial-gradient(
       circle at 15% 25%,
-      rgba(255, 0, 92, 0.13),
+      rgb(var(--accent-secondary-rgb) / 0.13),
       transparent 30%
     ),
     radial-gradient(
       circle at 85% 80%,
-      rgba(0, 255, 180, 0.11),
+      rgb(var(--accent-primary-rgb) / 0.11),
       transparent 32%
     ),
-    #050505;
+    var(--theme-bg);
 }
 
 .tournamentBracketScreen.isBracketRecap > h2::after {
   content: "Complete Tournament";
   display: block;
   margin-top: 0.65rem;
-  color: rgba(0, 255, 180, 0.78);
+  color: rgb(var(--accent-primary-rgb) / 0.78);
   font-size: 0.65rem;
   font-weight: 900;
   letter-spacing: 0.18em;
@@ -3353,7 +3384,7 @@ button:active,
 }
 
 .isBracketRecap .tournamentMatch.isComplete {
-  border-color: rgba(0, 255, 180, 0.38);
+  border-color: rgb(var(--accent-primary-rgb) / 0.38);
 }
 
 .isBracketRecap .tournamentMatch.isNextMatch {
@@ -3364,8 +3395,8 @@ button:active,
   background:
     linear-gradient(
       135deg,
-      rgba(255, 0, 92, 0.12),
-      rgba(0, 255, 180, 0.1)
+      rgb(var(--accent-secondary-rgb) / 0.12),
+      rgb(var(--accent-primary-rgb) / 0.1)
     ),
     rgba(0, 0, 0, 0.72);
 }
@@ -3423,11 +3454,11 @@ button:active,
 }
 
 .tournamentProgressStep.isActive > span {
-  border-color: rgba(255, 0, 92, 0.72);
+  border-color: rgb(var(--accent-secondary-rgb) / 0.72);
   box-shadow:
-    3px 3px 0 rgba(255, 0, 92, 0.72),
-    -2px -2px 0 rgba(0, 255, 180, 0.68),
-    0 0 18px rgba(0, 255, 180, 0.2);
+    3px 3px 0 rgb(var(--accent-secondary-rgb) / 0.72),
+    -2px -2px 0 rgb(var(--accent-primary-rgb) / 0.68),
+    0 0 18px rgb(var(--accent-primary-rgb) / 0.2);
 }
 
 .tournamentProgressStep.isComplete {
@@ -3436,8 +3467,8 @@ button:active,
 }
 
 .tournamentProgressStep.isComplete > span {
-  border-color: rgba(0, 255, 180, 0.65);
-  color: rgba(0, 255, 180, 0.95);
+  border-color: rgb(var(--accent-primary-rgb) / 0.65);
+  color: rgb(var(--accent-primary-rgb) / 0.95);
 }
 
 .tournamentProgressStep.isComplete > span::before {
@@ -3462,12 +3493,12 @@ button:active,
 .tournamentProgressLine.isComplete {
   background: linear-gradient(
     90deg,
-    rgba(0, 255, 180, 0.9),
-    rgba(255, 0, 92, 0.72)
+    rgb(var(--accent-primary-rgb) / 0.9),
+    rgb(var(--accent-secondary-rgb) / 0.72)
   );
   box-shadow:
-    0 0 8px rgba(0, 255, 180, 0.5),
-    0 0 15px rgba(255, 0, 92, 0.2);
+    0 0 8px rgb(var(--accent-primary-rgb) / 0.5),
+    0 0 15px rgb(var(--accent-secondary-rgb) / 0.2);
 }
 
 @media (max-width: 600px) {
@@ -3491,7 +3522,7 @@ button:active,
   border-radius: 999px;
   padding: 1rem 1.4rem;
   background: rgba(255, 255, 255, 0.06);
-  color: #f6f1e8;
+  color: var(--theme-text);
   font-weight: 900;
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -3539,12 +3570,12 @@ button:active,
   background:
     linear-gradient(
       135deg,
-      rgba(255, 0, 92, 0.12),
-      rgba(0, 255, 180, 0.08)
+      rgb(var(--accent-secondary-rgb) / 0.12),
+      rgb(var(--accent-primary-rgb) / 0.08)
     ),
     rgba(5, 5, 5, 0.88);
 
-  color: #f6f1e8;
+  color: var(--theme-text);
 
   font-size: 0.72rem;
   font-weight: 950;
@@ -3553,8 +3584,8 @@ button:active,
   text-transform: uppercase;
 
   box-shadow:
-    3px 3px 0 rgba(255, 0, 92, 0.6),
-    -2px -2px 0 rgba(0, 255, 180, 0.55);
+    3px 3px 0 rgb(var(--accent-secondary-rgb) / 0.6),
+    -2px -2px 0 rgb(var(--accent-primary-rgb) / 0.55);
 
   touch-action: manipulation;
 
@@ -3577,8 +3608,8 @@ button:active,
   transform: translate(2px, 2px) scale(0.97);
 
   box-shadow:
-    1px 1px 0 rgba(255, 0, 92, 0.6),
-    -1px -1px 0 rgba(0, 255, 180, 0.55);
+    1px 1px 0 rgb(var(--accent-secondary-rgb) / 0.6),
+    -1px -1px 0 rgb(var(--accent-primary-rgb) / 0.55);
 }
 
 .easyUndoButton:disabled {
@@ -3618,8 +3649,8 @@ button:active,
     white-space: nowrap;
 
     box-shadow:
-      2px 2px 0 rgba(255, 0, 92, 0.6),
-      -2px -2px 0 rgba(0, 255, 180, 0.5);
+      2px 2px 0 rgb(var(--accent-secondary-rgb) / 0.6),
+      -2px -2px 0 rgb(var(--accent-primary-rgb) / 0.5);
   }
 
   .easyUndoButton > span {
@@ -3638,5 +3669,62 @@ button:active,
     opacity: 0.42;
     border-color: rgba(246, 241, 232, 0.18);
     box-shadow: none;
+  }
+}
+/* Landing-screen colorway selector */
+.landing { position: relative; }
+.themePicker {
+  position: absolute; z-index: 40;
+  bottom: max(1.25rem, env(safe-area-inset-bottom));
+  left: 50%; transform: translateX(-50%);
+  width: min(94vw, 680px);
+  padding: .7rem .8rem;
+  background: rgb(0 0 0 / .83);
+  border: 1px solid rgb(var(--accent-primary-rgb) / .4);
+  border-radius: 14px;
+  box-shadow: 3px 3px 0 rgb(var(--accent-secondary-rgb) / .45);
+  text-align: center;
+}
+.themePickerLabel { display: block; margin-bottom: .55rem; color: var(--theme-text); font-size: .65rem; font-weight: 900; letter-spacing: .16em; }
+.themePickerOptions { display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem; }
+.themeOption {
+  display: inline-flex; flex-direction: column; align-items: center; gap: .25rem;
+  min-height: 52px; min-width: 92px; padding: .4rem .55rem;
+  color: var(--theme-text); background: rgb(255 255 255 / .05);
+  border: 1px solid rgb(255 255 255 / .18); border-radius: 9px;
+  font-size: .65rem; font-weight: 850; letter-spacing: .02em;
+  touch-action: manipulation;
+}
+.themeOption.isSelected { border-color: var(--accent-primary); background: rgb(var(--accent-primary-rgb) / .15); box-shadow: inset 0 0 0 1px var(--accent-primary); }
+.themeOption:focus-visible { outline: 3px solid var(--accent-secondary); outline-offset: 2px; }
+.themeSwatches { display: flex; gap: 4px; }
+.themeSwatches i { display: block; width: 16px; height: 9px; border-radius: 2px; }
+@media (max-width: 600px) {
+  .themePicker { bottom: max(.75rem, env(safe-area-inset-bottom)); padding: .55rem; }
+  .themePickerOptions { gap: .3rem; }
+  .themeOption { min-width: 0; flex: 1 1 29%; min-height: 46px; padding: .35rem .2rem; font-size: .58rem; }
+  .themePickerLabel { font-size: .56rem; }
+}
+@media (max-height: 540px) and (orientation: landscape) {
+  .themePicker { bottom: .35rem; width: min(90vw, 750px); padding: .3rem; }
+  .themePickerLabel { margin-bottom: .2rem; }
+  .themeOption { min-height: 34px; flex-direction: row; justify-content: center; }
+}
+
+/* THEME SELECTOR — TOP POSITION */
+.landing .themePicker {
+  position: absolute;
+  top: max(1rem, env(safe-area-inset-top));
+  bottom: auto;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 40;
+}
+
+/* Keep the selector comfortably positioned on mobile */
+@media (max-width: 600px) {
+  .landing .themePicker {
+    top: max(0.75rem, env(safe-area-inset-top));
+    bottom: auto;
   }
 }
